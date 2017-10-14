@@ -3,10 +3,12 @@ class User
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable,
+         authentication_keys: [:username]
+
 
   ## Database authenticatable
-  field :email,              type: String, default: ""
+  field :username,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
 
   ## Recoverable
@@ -33,4 +35,11 @@ class User
   # field :failed_attempts, type: Integer, default: 0 # Only if lock strategy is :failed_attempts
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
+  def email_required?
+    false
+  end
+
+  def email_changed?
+    false
+  end  
 end
