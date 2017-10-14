@@ -155,3 +155,13 @@ test:
         read:
           mode: :primary
         max_pool_size: 1
+production:
+  clients:
+    default:
+      database: civ_clone_mongo_productions
+      hosts:
+        - ENV["MONGODB_URI"]
+      options:
+        read:
+          mode: :primary
+        max_pool_size: 1
