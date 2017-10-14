@@ -14,8 +14,21 @@ class User
   has_many :players
 
   def games
-    Game.all.to_a.each_with_object(Mongoid::Criteria.new(Game)) do |game, criteria|
-      game.players.to_a.each { |player| criteria << game; break if player.user == self }
+    Game.all.to_a.each_with_object([]) do |game, array|
+      game.players.each do |player|
+        if player.user == self
+          array << game 
+          break
+        end
+      end
+    end
+  end
+
+  def in_game?(game, game_state_criteria = false)
+    if game_state_criteria
+      games.select { |game| game.state == game_state_criteria }.include?(game)
+    else
+      games.include?(game)
     end
   end
 end
