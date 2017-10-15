@@ -40,6 +40,9 @@ class User
 
   # Can the user join a given game
   def can_join_game?(game)
-    true
+    game.state == "lobby" &&
+    game.number_of_players(role: "player") < Game.max_players &&
+    games(game_state: "ongoing").empty? &&
+    games(game_state: "lobby").empty?
   end
 end
