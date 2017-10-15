@@ -48,8 +48,8 @@ class User
 
   # Removes to user from the lobby they're in
   def leave_lobby
-    if games(game_state: "lobby").any?
-      game = games(game_state: "lobby")[0]
+    if lobby
+      game = lobby
       if game.number_of_players == 1
         game.destroy!
       elsif game.host == self
@@ -62,5 +62,10 @@ class User
     else
       false
     end
+  end
+
+  # Returns the lobby that the user is in (if any)
+  def lobby
+    games(game_state: "lobby").any? ? games(game_state: "lobby") : false
   end
 end
