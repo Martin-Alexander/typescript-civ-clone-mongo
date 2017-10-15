@@ -32,4 +32,14 @@ class User
   def in_game?(game)
     games.include?(game)
   end
+
+  # Creates a new player for a given game
+  def join_game(game)
+    Player.create!(user: self, game: game) if can_join_game?(game)
+  end
+
+  # Can the user join a given game
+  def can_join_game?(game)
+    true
+  end
 end
