@@ -52,7 +52,7 @@ class User
       game = games(game_state: "lobby")[0]
       if game.number_of_players == 1
         game.destroy!
-      elsif games(game_state: "lobby", host: true).any?
+      elsif game.host == self
         Player.where(user: self, game: game).destroy!
         Player.where(game: game).first.update! host: true
       else

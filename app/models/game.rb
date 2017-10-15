@@ -18,4 +18,9 @@ class Game
     players.each { |player| counter += 1 if filters[:role].nil? || filters[:role] == player.role }
     counter
   end
+
+  # Returns the host of the game as a user
+  def host
+    players.each { |player| return player.user if player.host }
+  end
 end
