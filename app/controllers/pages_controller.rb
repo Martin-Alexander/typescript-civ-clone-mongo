@@ -6,6 +6,8 @@ class PagesController < ApplicationController
   end
 
   def lobby
+    @lobby = Game.find(params[:id])
+    @players = @lobby.players.sort_by { |player| player.host ? 0 : 1 }
   end
 
   private
