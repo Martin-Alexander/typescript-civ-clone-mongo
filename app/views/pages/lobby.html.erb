@@ -6,3 +6,7 @@
   <br>
   <%= render "player_listing", player: player %>
 <% end %>
+
+<div>
+  <%= link_to "Switch Role [player/observer]", swap_role_path(@current_player), method: :post %>
+</div>
