@@ -17,10 +17,10 @@ class User
   def games(filters = {})
     filtered_games = filters[:game_state] ? Game.where(state: filters[:game_state]) : Game.all
     filtered_games.to_a.each_with_object([]) do |game, array|
-      filtered_players = filters[:role] ? game.players.select { |player| player.role == filters[:role]} : game.players
-      filtered_players = filters[:host].nil? ? filtered_players : filtered_players.select { |player| player.host == filters[:host] }
-      filtered_players.each do |player|
-        if player.user == self
+      game.players.each do |player|
+        if player.user == self &&
+        (filters[:role].nil? || player.role == filters[:role]) && 
+        (filters[:host].nil? || player.host == filters[:host])
           array << game 
           break
         end
