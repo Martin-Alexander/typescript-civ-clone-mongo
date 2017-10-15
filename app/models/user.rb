@@ -53,10 +53,10 @@ class User
       if game.number_of_players == 1
         game.destroy!
       elsif game.host == self
-        Player.where(user: self, game: game).destroy!
+        Player.where(user: self, game: game).destroy
         Player.where(game: game).first.update! host: true
       else
-        Player.where(user: self, game: game).destroy!
+        Player.where(user: self, game: game).destroy
       end
       true
     else
