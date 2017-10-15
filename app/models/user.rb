@@ -66,6 +66,6 @@ class User
 
   # Returns the lobby that the user is in (if any)
   def lobby
-    games(game_state: "lobby").any? ? games(game_state: "lobby") : false
+    games(game_state: "lobby").any? ? games(game_state: "lobby")[0] : false
   end
 end
