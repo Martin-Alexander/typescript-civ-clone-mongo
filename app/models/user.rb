@@ -35,12 +35,7 @@ class User
 
   # Creates a new player for a given game
   def join_game(game)
-    if can_join_game?(game)
-      Player.create!(user: self, game: game) 
-      true
-    else
-      false
-    end
+    Player.create!(user: self, game: game) 
   end
 
   # Can the user join a given game
@@ -49,5 +44,23 @@ class User
     game.number_of_players(role: "player") < Game.max_players &&
     games(game_state: "ongoing").empty? &&
     games(game_state: "lobby").empty?
+  end
+
+  # Removes to user from the lobby they're in
+  def leave_lobby
+    if games(game_state: "lobby").any?
+      game = games(game_state: "lobby")[0]
+      if game.number_of_players == 1
+        game.destroy!
+      elsif games(game_state: "lobby", host: true).any?
+        Player.where(user: self, game: game).destroy!
+        Player.where(game: game).first.update! host: true
+      else
+        Player.where(user: self, game: game).destroy!
+      end
+      true
+    else
+      false
+    end
   end
 end
