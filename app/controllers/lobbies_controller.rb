@@ -6,7 +6,9 @@ class LobbiesController < ApplicationController
 
   def join
     game = Game.find(params[:id])
-    current_user.join_game(game) if current_user.can_join_game?(game)
-    redirect_to lobby_path(game)
+    if current_user.can_join_game?(game)
+      current_user.join_game(game) 
+      redirect_to lobby_path(game)
+    end
   end
 end
