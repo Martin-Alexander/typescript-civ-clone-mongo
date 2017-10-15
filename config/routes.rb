@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   get "/lobby/:id", to: "pages#lobby", as: "lobby"
   post "/lobby/leave", to: "lobbies#leave", as: "leave_lobby"
   post "/lobby/:id/join", to: "lobbies#join", as: "join_lobby"
+  post "/player/:id/swap_role", to: "players#swap_role", as: "swap_role"
 end
