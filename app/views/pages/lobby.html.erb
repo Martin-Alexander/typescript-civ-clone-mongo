@@ -1,2 +1,3 @@
 <%= render "shared/header" %>
 <h1>Lobby <%= params[:id] %></h1>
+<%= link_to "Leave Lobby", leave_lobby_path, method: :post %>
