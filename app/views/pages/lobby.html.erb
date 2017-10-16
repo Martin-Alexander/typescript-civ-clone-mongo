@@ -5,8 +5,14 @@
 <% @players.each do |player| %>
   <br>
   <%= render "player_listing", player: player %>
+  <br>
 <% end %>
 
 <div>
   <%= link_to "Switch Role [player/observer]", swap_role_path(@current_player), method: :post %>
 </div>
+<br>
+<div>
+  <%= link_to("Start Game", start_path(@lobby), method: :post) if @current_player.host %>
+</div>
+
