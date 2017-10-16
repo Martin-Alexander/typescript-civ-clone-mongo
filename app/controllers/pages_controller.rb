@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   before_action :keep_user_in_lobby
 
   def home
-    @games = Game.all
+    @games = Game.all_lobbies
   end
 
   def lobby
