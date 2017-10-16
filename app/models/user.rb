@@ -28,6 +28,10 @@ class User
     end
   end
 
+  def ongoing_game_playing_in
+    games(state: "ongoing", role: "player").any? ? games(state: "ongoing", role: "player")[0] : false
+  end
+
   # Is the user in a specific game (filter)
   def in_game?(game)
     games.include?(game)
