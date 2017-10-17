@@ -14,6 +14,6 @@ class PagesController < ApplicationController
   def game
     @game = Game.find(params[:id])
     @players = @game.players
-    @current_player = @players.select { |player| player.user = current_user }.first
+    @current_player = current_user.player_of_game(@game)
   end
 end
