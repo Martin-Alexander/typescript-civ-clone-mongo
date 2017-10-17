@@ -28,6 +28,22 @@ class User
     end
   end
 
+  # For a given game returns the user's player
+  def player_of_game(game)
+    game.players.select { |player| player.user == self }.first
+  end
+
+  # Returns the user's player that's in a lobby (if any)
+  def player_in_lobby
+    lobby.players.select { |player| player.user == self }.first rescue false
+  end
+
+  # Returns the users's player that's in an ongoing game (if any)
+  def player_in_ongoing_game
+    ongoing_game.players.select { |player| player.user == self }.first rescue false
+  end
+
+  # Returns the ongoing game the user is in (if any)
   def ongoing_game
     games(game_state: "ongoing", role: "player").any? ? games(game_state: "ongoing", role: "player")[0] : false
   end
