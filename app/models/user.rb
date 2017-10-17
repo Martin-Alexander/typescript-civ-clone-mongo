@@ -79,8 +79,9 @@ class User
     Player.create!(user: self, game: game) 
   end
 
-  def leave_game(game = ongoing_game)
-    game.player(self).destroy
+  # Changes player role to 'dead_player'
+  def resign(game = ongoing_game)
+    game.player(self).role = "dead_player"
   end
 
   # Removes to user from the lobby they're in
