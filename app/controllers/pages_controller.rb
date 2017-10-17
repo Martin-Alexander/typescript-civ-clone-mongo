@@ -14,7 +14,7 @@ class PagesController < ApplicationController
 
   def game
     @game = Game.find(params[:id])
-    redirect_to home_home_path unless current_user.in_game?(@game)
+    redirect_to home_path unless current_user.in_game?(@game)
     @players = @game.players
     @current_player = current_user.player_of_game(@game)
   end

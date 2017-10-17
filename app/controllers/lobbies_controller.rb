@@ -15,5 +15,6 @@ class LobbiesController < ApplicationController
   def start
     game = Game.find(params[:id])
     game.start if current_user && game.ready_to_start?
+    redirect_to game_path(game)
   end
 end

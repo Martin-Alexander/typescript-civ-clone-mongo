@@ -1,5 +1,11 @@
 class GamesController < ApplicationController
   def leave
-    current_user.resign(Game.find(params[:id]))
+    game = Game.find(params[:id])
+    if game.player(current_user).role == "player"
+      current_user.resign(game)
+    else
+      current_user.leave_game(game)
+      redirect_to home_path
+    end
   end
 end
