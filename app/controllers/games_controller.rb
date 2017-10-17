@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
   def leave
-    # Do nothing ATM
+    current_user.resign(Game.find(params[:id]))
   end
 end
