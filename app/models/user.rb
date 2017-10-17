@@ -49,7 +49,7 @@ class User
 
   # Returns the user's player that's in a lobby (if any)
   def player_in_lobby
-    lobbe.player(self) rescue false
+    lobby.player(self) rescue false
   end
 
   # Returns the users's player that's in an ongoing game (if any)
