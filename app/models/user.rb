@@ -79,7 +79,7 @@ class User
     Player.create!(user: self, game: game) 
   end
 
-  def resign(game = ongoing_game)
+  def leave_game(game = ongoing_game)
     game.player(self).destroy
   end
 
