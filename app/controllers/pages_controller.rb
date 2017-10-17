@@ -12,5 +12,8 @@ class PagesController < ApplicationController
   end
 
   def game
+    @game = Game.find(params[:id])
+    @players = @game.players
+    @current_player = @players.find { |player| player.user = current_user }
   end
 end

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
     if current_user.lobby && "pages#lobby/#{current_user.lobby.id}" != route_with_id
       redirect_to lobby_path(current_user.lobby)
     elsif current_user.ongoing_game && "pages#game/#{current_user.ongoing_game.id}" != route_with_id
-      # redirect_to game_path(current_user.ongoing_game)
+      redirect_to game_path(current_user.ongoing_game)
     end
   end
 
