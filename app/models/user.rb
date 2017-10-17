@@ -28,7 +28,7 @@ class User
     end
   end
 
-  def ongoing_game_playing_in
+  def ongoing_game
     games(state: "ongoing", role: "player").any? ? games(state: "ongoing", role: "player")[0] : false
   end
 

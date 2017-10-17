@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  before_action :keep_user_on_page
+
   def home
     @games = Game.all_lobbies
   end
@@ -7,5 +9,8 @@ class PagesController < ApplicationController
     @lobby = Game.find(params[:id])
     @players = @lobby.players.sort_by { |player| player.host ? 0 : 1 }
     @current_player = Player.where(game: @lobby, user: current_user).first
+  end
+
+  def game
   end
 end
