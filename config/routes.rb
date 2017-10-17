@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   post "/player/:id/swap_role", to: "players#swap_role", as: "swap_role"
   post "/lobby/:id/start", to: "lobbies#start", as: "start"
   get "/game/:id", to: "pages#game", as: "game"
+  post "/game/:id/leave", to: "games#leave", as: "leave_game"
 end

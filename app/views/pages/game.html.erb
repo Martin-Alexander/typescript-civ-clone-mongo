@@ -10,4 +10,4 @@
   <% end %>
 </ul>
 
-<%= link_to @current_player.role == "player" ? "Resign" : "Leave", home_path %> 
+<%= link_to @current_player.role == "player" ? "Resign" : "Leave", leave_game_path(@game), method: :post %> 
