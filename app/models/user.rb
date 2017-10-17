@@ -81,7 +81,7 @@ class User
 
   # Changes player role to 'dead_player'
   def resign(game = ongoing_game)
-    game.player(self).role = "dead_player"
+    game.player(self).update(role: "dead_player")
   end
 
   # Removes to user from the lobby they're in
