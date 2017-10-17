@@ -74,6 +74,13 @@ class User
 
   # ==== Action methods ====
 
+  # Creates a new game with the user as a player and 
+  def create_game
+    new_game = Game.create(game_state: "lobby")
+    Player.create(user: self, game: new_game, role: "player", host: true)
+    new_game
+  end
+
   # Creates a new player for a given game
   def join_game(game)
     Player.create!(user: self, game: game) 
