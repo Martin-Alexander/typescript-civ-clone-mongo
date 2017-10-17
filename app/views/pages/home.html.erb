@@ -5,3 +5,7 @@
   <%= render "game_listing", game: game %>
   <br>
 <% end %>
+
+<div>
+  <%= link_to "Host Game", create_game_path, method: :post %>
+</div>

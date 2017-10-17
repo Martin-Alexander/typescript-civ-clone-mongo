@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
   def create
-    redirect_to game_path(current_user.create_game)
+    new_game = current_user.create_game
+    redirect_to game_path(new_game)
   end
 
   def start
