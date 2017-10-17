@@ -76,7 +76,7 @@ class User
 
   # Creates a new game with the user as a player and 
   def create_game
-    new_game = Game.create(game_state: "lobby")
+    new_game = Game.create(state: "lobby")
     Player.create(user: self, game: new_game, role: "player", host: true)
     new_game
   end
