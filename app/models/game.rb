@@ -24,6 +24,11 @@ class Game
     counter
   end
 
+  # Returns the player for a given user
+  def player(user)
+    players.select { |player| player.user == user }.first
+  end
+
   # Returns the host of the game as a user
   def host
     players.each { |player| return player.user if player.host }
