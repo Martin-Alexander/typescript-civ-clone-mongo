@@ -1,0 +1,13 @@
+<h1>"Game": <%= @game.id %></h1>
+
+<ul>
+  <% @players.each do |player| %>
+    <li>
+      <div><%= player.user.username %></div>
+      <div><%= player.role %></div>
+      <div><%= player.host ? "host" : "" %></div>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to @current_player.role == "player" ? "Resign" : "Leave", leave_game_path(@game), method: :post %> 
