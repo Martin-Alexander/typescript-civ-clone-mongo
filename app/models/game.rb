@@ -36,10 +36,12 @@ class Game
     players.each { |player| return player.user if player.host }
   end
 
+  # Returns whether or not the game has the right number/type of players for game to start
   def ready_to_start?
     number_of_players(role: "player") > 1
   end
 
+  # Updates game state to 'ongoing'
   def start
     update!(state: "ongoing")
   end
