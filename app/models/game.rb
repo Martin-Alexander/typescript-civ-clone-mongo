@@ -14,6 +14,11 @@ class Game
     6
   end
 
+  # Returns the dimension on the board such that each players "gets" 72 squares
+  def board_size
+    Math::sqrt(number_of_players(role: "player") * 72).to_i
+  end
+
   # Returns all games that're in the 'lobby state'
   def self.all_lobbies
     Game.where(state: "lobby")
