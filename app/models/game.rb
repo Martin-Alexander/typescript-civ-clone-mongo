@@ -45,4 +45,44 @@ class Game
   def start
     update!(state: "ongoing")
   end
+
+  # Generates a blank board based on setting
+  # TEST MODE
+  def generate_game_data
+    generate_global_squares
+    generate_game_players
+    generate_vision_squares
+  end
+
+  private
+
+  # Generates global squares
+  # TEST MODE
+  def generate_global_squares
+    (0..9).each do |y_coord|
+      (0..9).each do |x_coord|
+        Square::Global.create x: x_coord, y: y_coord, board: self
+      end
+    end
+  end
+
+  # Generates game players
+  # TEST MODE
+  def generate_game_players
+    players.each do |player|
+      GamePlayer.create game: self
+    end
+  end
+
+  # Generates vision squares for each game player
+  # TEST MODE
+  def generate_vision_squares
+    game_players.each do |game_player|
+      (0..9).each do |y_coord|
+        (0..9).each do |x_coord|
+          Square::Vision.create x: x_coord, y: y_coord, board: game_player
+        end
+      end
+    end
+  end
 end
