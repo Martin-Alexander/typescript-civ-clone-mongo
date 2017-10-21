@@ -2,6 +2,8 @@ class Game
   include Mongoid::Document
 
   has_many :players
+  embeds_many :game_players
+  embeds_many :global_squares
 
   field :state, type: String
 
