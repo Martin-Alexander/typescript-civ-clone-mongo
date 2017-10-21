@@ -23,4 +23,9 @@ Player.create! user: chloe, game: chloe_game, host: true
 
 puts " - Game and players created"
 
+new_game.start
+new_game.generate_game_data
+  
+puts " - Game started"
+
 puts "Done"
