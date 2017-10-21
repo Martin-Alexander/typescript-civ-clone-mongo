@@ -3,7 +3,7 @@ class Game
 
   has_many :players
   embeds_many :game_players
-  embeds_many :global_squares
+  embeds_many :squares, class_name: "Square::Global"
 
   field :state, type: String
 

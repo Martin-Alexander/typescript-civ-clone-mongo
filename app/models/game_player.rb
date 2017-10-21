@@ -1,5 +1,6 @@
 class GamePlayer
   include Mongoid::Document
 
-  embeds_many :vision_squares
+  embedded_in :game
+  embeds_many :vision_squares, class_name: "Square::Vision"
 end
