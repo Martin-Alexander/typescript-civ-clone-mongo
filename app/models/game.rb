@@ -83,10 +83,8 @@ class Game
   # TEST MODE
   def generate_vision_squares
     game_players.each do |game_player|
-      (0..9).each do |y_coord|
-        (0..9).each do |x_coord|
-          Square::Vision.create x: x_coord, y: y_coord, board: game_player
-        end
+      squares.each do |square|
+        Square::Vision.create x: square.x, y: square.x, board: game_player
       end
     end
   end
