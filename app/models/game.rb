@@ -64,8 +64,8 @@ class Game
   # Generates global squares
   # TEST MODE
   def generate_global_squares
-    (0..9).each do |y_coord|
-      (0..9).each do |x_coord|
+    (0..board_size).each do |y_coord|
+      (0..board_size).each do |x_coord|
         Square::Global.create x: x_coord, y: y_coord, board: self
       end
     end
