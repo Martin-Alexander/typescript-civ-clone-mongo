@@ -6,6 +6,7 @@ class GamesController < ApplicationController
 
   def start
     game = Game.find(params[:id])
+    game.generate_game_data
     game.start if game.ready_to_start? && game.host == current_user
     redirect_to game_path(game)
   end
