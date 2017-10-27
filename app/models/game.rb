@@ -1,5 +1,6 @@
 class Game
   include Mongoid::Document
+  include BoardGeneration
 
   has_many :players
   embeds_many :game_players
@@ -57,35 +58,6 @@ class Game
     generate_global_squares
     generate_game_players
     generate_vision_squares
-  end
-
-  private
-
-  # Generates global squares
-  # TEST MODE
-  def generate_global_squares
-    (0..board_size).each do |y_coord|
-      (0..board_size).each do |x_coord|
-        Square::Global.create x: x_coord, y: y_coord, board: self
-      end
-    end
-  end
-
-  # Generates game players
-  # TEST MODE
-  def generate_game_players
-    players.each do |player|
-      GamePlayer.create game: self
-    end
-  end
-
-  # Generates vision squares for each game player
-  # TEST MODE
-  def generate_vision_squares
-    game_players.each do |game_player|
-      squares.each do |square|
-        Square::Vision.create x: square.x, y: square.x, board: game_player
-      end
-    end
+    generate_initial_player_placement
   end
 end
