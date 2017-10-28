@@ -1,8 +1,8 @@
-const Renderer = (gameData) => {
+function Renderer(gameData) {
   this.gameData = gameData;
 }
 
-Renderer.prototype.createCanvas = (parentElement) => {
+Renderer.prototype.createCanvas = function(parentElement) {
   const canvas = document.createElement("canvas");
   parentElement.insertAdjacentElement("beforebegin", canvas);
 }
