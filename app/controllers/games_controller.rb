@@ -22,6 +22,10 @@ class GamesController < ApplicationController
   def input
     current_user = User.find(params[:user_id])
     game = Game.find(params[:game_id])
-    byebug
+
+    # This will eventually be the single endpoint for the game logic API
+    # but for now it will just implement a move for testing purposes
+
+    # game.move(params[:move_from], parmas[:move_to])
   end
 end

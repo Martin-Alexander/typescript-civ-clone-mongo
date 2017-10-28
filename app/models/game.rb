@@ -1,6 +1,7 @@
 class Game
   include Mongoid::Document
   include BoardGeneration
+  include GameLogic
 
   has_many :players
   embeds_many :game_players
@@ -13,11 +14,6 @@ class Game
   # Maximum number of players to a game
   def self.max_players
     6
-  end
-
-  # Returns the dimension on the board such that each players "gets" 72 squares
-  def board_size
-    Math::sqrt(number_of_players(role: "player") * 72).to_i
   end
 
   # Returns all games that're in the 'lobby state'
