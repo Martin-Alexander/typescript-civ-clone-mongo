@@ -10,8 +10,9 @@ module BoardGeneration
   # Generates global squares
   # TEST MODE
   def generate_global_squares
-    (0..board_size).each do |y_coord|
-      (0..board_size).each do |x_coord|
+    update!(size: board_size)
+    (0..size).each do |y_coord|
+      (0..size).each do |x_coord|
         Square::Global.create x: x_coord, y: y_coord, board: self
       end
     end
