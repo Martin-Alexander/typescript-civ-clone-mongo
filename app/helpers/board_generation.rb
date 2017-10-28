@@ -38,7 +38,7 @@ module BoardGeneration
   # Generates initlia player placement
   # TEST MODE
   def generate_initial_player_placement
-    for i in (1..players.length)
+    for i in (1..game_players.length)
       loop do 
         selected_square = squares.sample
         if selected_square.player.zero?

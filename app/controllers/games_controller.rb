@@ -26,6 +26,6 @@ class GamesController < ApplicationController
     # This will eventually be the single endpoint for the game logic API
     # but for now it will just implement a move for testing purposes
 
-    # game.move(params[:move_from], parmas[:move_to])
+    game.move(params[:move_from], params[:move_to])
   end
 end

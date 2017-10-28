@@ -1,6 +1,7 @@
 class Game
   include Mongoid::Document
   include BoardGeneration
+  include BoardHelpers
   include GameLogic
 
   has_many :players
