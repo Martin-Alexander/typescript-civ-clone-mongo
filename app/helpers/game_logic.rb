@@ -4,5 +4,6 @@ module GameLogic
       square(to).update!(player: square(from).player)
       square(from).update!(player: 0)
     end
+    return [square(from).to_json, square(to).to_json]
   end
 end
