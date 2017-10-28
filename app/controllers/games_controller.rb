@@ -1,4 +1,7 @@
 class GamesController < ApplicationController
+  skip_before_action :authenticate_user!, only: [ :input ]
+  skip_before_action :verify_authenticity_token, only: [ :input ]
+
   def create
     new_game = current_user.create_game
     redirect_to game_path(new_game)
@@ -17,5 +20,7 @@ class GamesController < ApplicationController
   end
 
   def input
+    current_user = User.find(params[:user_id])
+    byebug
   end
 end
