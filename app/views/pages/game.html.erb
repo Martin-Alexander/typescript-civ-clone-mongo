@@ -1,4 +1,4 @@
-<h1>"Game": <%= @game.id %></h1>
+<h1>Game: <%= @game.id %></h1>
 
 <ul>
   <% @players.each do |player| %>
@@ -11,3 +11,14 @@
 </ul>
 
 <%= link_to @current_player.role == "player" ? "Resign" : "Leave", leave_game_path(@game), method: :post %> 
+
+<div>
+  <% @game.squares.each do |square| %>
+    <span>(<%= square.x %>, <%= square.y %>) Player: <%= square.player %>, </span>  
+  <% end %>
+</div>
+
+<script>
+  const userId = "<%= current_user.id %>";
+  const gameId = "<%= @game.id %>";
+</script>

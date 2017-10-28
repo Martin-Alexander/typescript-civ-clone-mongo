@@ -1,7 +1,12 @@
 class Game
   include Mongoid::Document
+  include BoardGeneration
+  include BoardHelpers
+  include GameLogic
 
   has_many :players
+  embeds_many :game_players
+  embeds_many :squares, class_name: "Square::Global"
 
   field :state, type: String
 
@@ -34,11 +39,22 @@ class Game
     players.each { |player| return player.user if player.host }
   end
 
+  # Returns whether or not the game has the right number/type of players for game to start
   def ready_to_start?
     number_of_players(role: "player") > 1
   end
 
+  # Updates game state to 'ongoing'
   def start
     update!(state: "ongoing")
+  end
+
+  # Generates a blank board based on setting
+  # TEST MODE
+  def generate_game_data
+    generate_global_squares
+    generate_game_players
+    generate_vision_squares
+    generate_initial_player_placement
   end
 end
