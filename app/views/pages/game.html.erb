@@ -1,27 +1,30 @@
-<h1>Game: <%= @game.id %></h1>
+<!-- <h1>Game: <%# @game.id %></h1>
 
 <ul>
-  <% @players.each do |player| %>
+  <%# @players.each do |player| %>
     <li>
-      <div><%= player.user.username %></div>
-      <div><%= player.role %></div>
-      <div><%= player.host ? "host" : "" %></div>
+      <div><%# player.user.username %></div>
+      <div><%# player.role %></div>
+      <div><%# player.host ? "host" : "" %></div>
     </li>
-  <% end %>
-</ul>
+  <%# end %>
+</ul> -->
 
-<%= link_to @current_player.role == "player" ? "Resign" : "Leave", leave_game_path(@game), method: :post %> 
+<div><%= link_to @current_player.role == "player" ? "Resign" : "Leave", leave_game_path(@game), method: :post %></div>
 
-<div>
-  <% @game.squares.each do |square| %>
-    <span>(<%= square.x %>, <%= square.y %>) Player: <%= square.player %>, </span>  
-  <% end %>
-</div>
+<!-- <div>
+  <%# @game.squares.each do |square| %>
+    <span>(<%# square.x %>, <%# square.y %>) Player: <%# square.player %>, </span>  
+  <%# end %>
+</div> -->
+
+<div id="canvas-container"></div>
 
 <script>
-  const userId = "<%= current_user.id %>";
-  const gameId = "<%= @game.id %>";
-  const gameData = JSON.parse("<%= j @game.to_json.html_safe %>");
+  var userId = "<%= current_user.id %>";
+  var gameId = "<%= @game.id %>";
+  var rawGameData = "<%= j @game.to_json.html_safe %>";
 </script>
 
-<%= javascript_pack_tag "channel_subscription" %>
+<%= javascript_pack_tag "initialization" %>
+<%= javascript_pack_tag "board_renderer" %>

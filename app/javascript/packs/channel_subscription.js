@@ -1,5 +1,5 @@
 App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
-  received: function(data) {
+  received: (data) => {
     const fromSquare = JSON.parse(data.result[0]);
     const toSquare = JSON.parse(data.result[1]);
     const fromIndex = (fromSquare.y * 14) + fromSquare.x;
