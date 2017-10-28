@@ -21,4 +21,5 @@
 <script>
   const userId = "<%= current_user.id %>";
   const gameId = "<%= @game.id %>";
+  const gameData = JSON.parse("<%= j @game.to_json.html_safe %>");
 </script>
