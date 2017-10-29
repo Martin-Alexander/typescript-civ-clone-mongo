@@ -5,6 +5,7 @@ function Renderer(gameData) {
 Renderer.prototype.createCanvas = function(parentElement) {
   this.canvas = document.createElement("canvas");
   parentElement.insertAdjacentElement("beforebegin", this.canvas);
+  this.setCanvasSize();
   window.addEventListener("resize", (event) => {
     this.setCanvasSize();
   });
