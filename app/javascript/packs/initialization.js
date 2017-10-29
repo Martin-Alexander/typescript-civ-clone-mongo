@@ -8,3 +8,7 @@ window.renderer = new Renderer(gameData);
 renderer.createCanvas(document.getElementById("canvas-container"));
 
 window.mouseTile = {};
+
+window.setInterval(function() {
+  renderer.renderBoard();
+}, 60);
