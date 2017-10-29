@@ -1,9 +1,7 @@
 function GameData(rawGameData) {
   const parsedData = JSON.parse(rawGameData);
   Object.keys(parsedData).forEach((key) => {
-    if (typeof parsedData[key] != "function") {
-      this[key] = parsedData[key];
-    }
+    this[key] = parsedData[key];
   });
 }
 
