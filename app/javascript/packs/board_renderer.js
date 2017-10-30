@@ -14,7 +14,7 @@ function renderBoard(_gameData, parentElement) {
   [canvas, context] = initializeCanvasContext(parentElement);
   window.setInterval(function() {
     drawAllSquares();
-  }, 100);
+  }, 1);
 }
 
 function initializeCanvasContext(parentElement) {
@@ -60,7 +60,8 @@ function drawSquare(square) {
 function clearCanvas() {
   context.save();
   context.setTransform(1, 0, 0, 1, 0, 0);
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "rgba(255, 255, 255, 0.3)";
+  context.fillRect(0, 0, canvas.width, canvas.height)
   context.restore();  
 }
 
