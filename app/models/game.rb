@@ -56,6 +56,18 @@ class Game
     generate_global_squares
     generate_game_players
     generate_vision_squares
-    generate_initial_player_placement
+    generate_initial_unit_placement
+  end
+
+  def convert_to_json
+    json_game = JSON.parse(to_json)
+    json_game["squares"].each do |square|
+      square["units"] = []
+      if square["combat_units"]
+        square["combat_units"].each { |u| square["units"] << u.dup }
+        square.delete("combat_units")
+      end
+    end
+    JSON.generate(json_game)
   end
 end

@@ -21,8 +21,8 @@ module BoardGeneration
   # Generates game players
   # TEST MODE
   def generate_game_players
-    players.each do |player|
-      GamePlayer.create game: self
+    players.each_with_index do |player, i|
+      GamePlayer.create game: self, number: i + 1
     end
   end
 
@@ -31,19 +31,19 @@ module BoardGeneration
   def generate_vision_squares
     game_players.each do |game_player|
       squares.each do |square|
-        Square::Vision.create x: square.x, y: square.x, board: game_player
+        Square::Vision.create! x: square.x, y: square.x, board: game_player
       end
     end
   end
 
   # Generates initlia player placement
   # TEST MODE
-  def generate_initial_player_placement
-    for i in (1..game_players.length)
+  def generate_initial_unit_placement
+    game_players.each do |game_player|
       loop do 
         selected_square = squares.sample
-        if selected_square.player.zero?
-          selected_square.update!(player: i)
+        if selected_square.units.empty?
+          Unit::Combat.create! player_number: game_player.number, square: selected_square
           break
         end
       end 
