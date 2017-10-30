@@ -1,19 +1,18 @@
-// Fix window.mouseTile. Maybe from buffer argument on like 8. I dunno...
+import { UI } from "./ui_state"
 
 window.addEventListener("mousemove", function(event) {
   if (mousedown) {
-    offset.x -= (mousePosition.x - event.clientX) / scale;
-    offset.y -= (mousePosition.y - event.clientY) / scale;
+    UI.offset.x -= (UI.mousePosition.x - event.clientX) / UI.scale;
+    UI.offset.y -= (UI.mousePosition.y - event.clientY) / UI.scale;
   }
-  convertToTileISO({ x: event.clientX, y: event.clientY }, offset, window.mouseTile);
-  mousePosition = { x: event.clientX, y: event.clientY };
+  convertToTileISO({ x: event.clientX, y: event.clientY }, UI.offset, UI.mouseTile);
+  UI.mousePosition = { x: event.clientX, y: event.clientY };
 });
 
-window.mousePosition = {};
 window.mousedown = false;
 
 window.addEventListener("click", function(event) {
-  console.log(mouseTile);
+  console.log(UI.mouseTile);
 });
 
 
@@ -25,18 +24,10 @@ window.addEventListener("mouseup", function(event) {
   mousedown = false;
 });
 
-// window.addEventListener("wheel", function(event) {
-//   if (event.deltaY > 0) {
-//     scale = scale / 1.1;
-//   } else {
-//     scale = scale * 1.1;
-//   }
-// });
-
-function convertToTileISO(rawMouseCoords, offset, buffer) {
+function convertToTileISO(rawMouseCoords, buffer) {
   const offsetCoords = {
-    x: rawMouseCoords.x - offset.x,
-    y: rawMouseCoords.y - offset.y
+    x: rawMouseCoords.x - UI.offset.x,
+    y: rawMouseCoords.y - UI.offset.y
   }
 
   const isoCoords = { 
@@ -45,9 +36,9 @@ function convertToTileISO(rawMouseCoords, offset, buffer) {
   };
   
   const tileBoundCoords = {
-    x: Math.floor(isoCoords.x / tileHeight),
-    y: Math.floor(isoCoords.y / tileHeight)
+    x: Math.floor(isoCoords.x / UI.tileHeight),
+    y: Math.floor(isoCoords.y / UI.tileHeight)
   }
 
-  window.mouseTile = tileBoundCoords;
+  UI.mouseTile = tileBoundCoords;
 }

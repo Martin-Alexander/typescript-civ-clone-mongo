@@ -1,52 +1,70 @@
-function Renderer(gameData) {
-  this.gameData = gameData;
-  this.playerLookup = {
+import { UI } from "./ui_state"
+
+var canvas, context, gameData;
+
+function renderBoard(_gameData, parentElement) {
+  gameData = _gameData;
+  [canvas, context] = initializeCanvasContext(parentElement);
+  window.setInterval(function() {
+    drawAllSquares();
+  }, 100);
+}
+
+function initializeCanvasContext(parentElement) {
+  canvas = document.createElement("canvas");
+  parentElement.insertAdjacentElement("beforebegin", canvas);
+  manageCanvasSize();
+  return [canvas, canvas.getContext("2d")];
+}
+
+function manageCanvasSize() {
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  window.addEventListener("resize", (event) => {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+  });
+}
+
+function drawAllSquares() {
+  clearCanvas();
+  gameData.squares.forEach((square) => {
+    drawSquare(square);
+  });
+}
+
+function drawSquare(square) {
+  context.save();
+  context.translate(
+    (square.x - square.y) * (UI.tileWidth / 2) + (canvas.width / 2) + UI.offset.x, 
+    ((square.y + square.x) * UI.tileHeight / 2) + UI.offset.y
+  );
+  context.beginPath();
+  context.moveTo(0, 0);
+  context.lineTo(UI.tileWidth / 2, UI.tileHeight / 2);
+  context.lineTo(0, UI.tileHeight);
+  context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
+  context.closePath();
+  context.fillStyle = squareColor(square);
+  context.fill();
+  context.restore();     
+}
+
+function squareColor(square) {
+  const playerLookup = {
     0: "black",
     1: "red",
     2: "blue",
     3: "green"
   }
+  return playerLookup[square.player];
 }
 
-Renderer.prototype.createCanvas = function(parentElement) {
-  this.canvas = document.createElement("canvas");
-  this.context = this.canvas.getContext("2d")
-  parentElement.insertAdjacentElement("beforebegin", this.canvas);
-  this.setCanvasSize();
-  window.addEventListener("resize", () => { this.setCanvasSize(); });
+function clearCanvas() {
+  context.save();
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.restore();  
 }
 
-Renderer.prototype.setCanvasSize = function() {
-  this.canvas.height = window.innerHeight;
-  this.canvas.width = window.innerWidth;
-}
-
-Renderer.prototype.renderBoard = function() {
-  this.clearCanvas();
-  this.gameData.squares.forEach((square) => {
-    this.drawSquare(square.x, square.y, this.playerLookup[square.player]);
-  });
-}
-
-Renderer.prototype.drawSquare = function(x, y, color) {
-  this.context.save();
-  this.context.translate((x - y) * (tileWidth / 2) + (this.canvas.width / 2) + offset.x, ((y + x) * tileHeight / 2) + offset.y);
-  this.context.beginPath();
-  this.context.moveTo(0, 0);
-  this.context.lineTo(tileWidth / 2, tileHeight / 2);
-  this.context.lineTo(0, tileHeight);
-  this.context.lineTo(-tileWidth / 2, tileHeight / 2);
-  this.context.closePath();
-  this.context.fillStyle = color;
-  this.context.fill();
-  this.context.restore();     
-}
-
-Renderer.prototype.clearCanvas = function() {
-  this.context.save();
-  this.context.setTransform(1, 0, 0, 1, 0, 0);
-  this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  this.context.restore();
-}
-
-export { Renderer }
+export { renderBoard }
