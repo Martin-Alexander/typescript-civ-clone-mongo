@@ -1,9 +1,7 @@
 function Renderer(gameData) {
   this.gameData = gameData;
-  this.tileHeight = 30;
-  this.tileWidth = 60;
   this.playerLookup = {
-    0: "grey",
+    0: "black",
     1: "red",
     2: "blue",
     3: "green"
@@ -32,12 +30,12 @@ Renderer.prototype.renderBoard = function() {
 
 Renderer.prototype.drawSquare = function(x, y, color) {
   this.context.save();
-  this.context.translate((x - y) * (this.tileWidth / 2) + (this.canvas.width / 2), (y + x) * this.tileHeight / 2);
+  this.context.translate((x - y) * (tileWidth / 2) + (this.canvas.width / 2) + offset.x, ((y + x) * tileHeight / 2) + offset.y);
   this.context.beginPath();
   this.context.moveTo(0, 0);
-  this.context.lineTo(this.tileWidth / 2, this.tileHeight / 2);
-  this.context.lineTo(0, this.tileHeight);
-  this.context.lineTo(-this.tileWidth / 2, this.tileHeight / 2);
+  this.context.lineTo(tileWidth / 2, tileHeight / 2);
+  this.context.lineTo(0, tileHeight);
+  this.context.lineTo(-tileWidth / 2, tileHeight / 2);
   this.context.closePath();
   this.context.fillStyle = color;
   this.context.fill();
