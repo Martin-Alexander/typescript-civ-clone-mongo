@@ -1,44 +1,58 @@
 import { UI } from "./ui_state";
+import { inputController } from "./input_controller";
 
-// Internal state: Is the left mouse button down or up
-var mousedown = false;
-window.addEventListener("mousedown", function() { mousedown = true; });
-window.addEventListener("mouseup", function() { mousedown = false; });
+const mouse = {
+  down: false,
+  positionOnLastDown: null,
+  rawPosition: null,
+  rawIsoPosition: null
+};
 
-// Internal state: raw mouse coordinates
-var rawMousePosition, rawIsoMousePosition;
+window.addEventListener("mousedown", function() { 
+  mouse.down = true; 
+  mouse.positionOnLastDown = {
+    x: mouse.rawPosition.x,
+    y: mouse.rawPosition.y
+  };
+});
+
+window.addEventListener("mouseup", function() { 
+  mouse.down = false; 
+  if (haveSameCoords(mouse.rawPosition, mouse.positionOnLastDown)) {
+    inputController.click();
+  }
+});
 
 window.addEventListener("mousemove", function(event) {
-  if (mousedown) {
-    UI.offset.x -= (rawMousePosition.x - event.clientX);
-    UI.offset.y -= (rawMousePosition.y - event.clientY);
+  if (mouse.down) {
+    UI.offset.x -= (mouse.rawPosition.x - event.clientX);
+    UI.offset.y -= (mouse.rawPosition.y - event.clientY);
   }
   setMousePosition(event);
 });
 
 function setMousePosition(event) {
-  rawMousePosition = { 
+  mouse.rawPosition = { 
     x: event.clientX, 
     y: event.clientY 
   };
 
   const offsetCoords = {
-    x: rawMousePosition.x - UI.offset.x,
-    y: rawMousePosition.y - UI.offset.y
+    x: mouse.rawPosition.x - UI.offset.x,
+    y: mouse.rawPosition.y - UI.offset.y
   };
 
-  rawIsoMousePosition = { 
+  mouse.rawIsoPosition = { 
     x: ((offsetCoords.x - window.innerWidth / 2) + 2 * offsetCoords.y) / 2 ,
     y: (2 * offsetCoords.y - (offsetCoords.x - window.innerWidth / 2)) / 2
   };
   
   UI.tileMousePosition = {
-    x: Math.floor(rawIsoMousePosition.x / UI.tileHeight),
-    y: Math.floor(rawIsoMousePosition.y / UI.tileHeight)
+    x: Math.floor(mouse.rawIsoPosition.x / UI.tileHeight),
+    y: Math.floor(mouse.rawIsoPosition.y / UI.tileHeight)
   };
 }
 
-// Currently for debugging purposes
-window.addEventListener("click", function() {
-  console.log(UI.tileMousePosition);
-});
+function haveSameCoords(a, b) {
+  return a.x === b.x && a.y === b.y;
+}
