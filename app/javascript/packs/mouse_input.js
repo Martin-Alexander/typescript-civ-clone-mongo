@@ -1,4 +1,6 @@
-import { UI } from "./ui_state"
+import { UI } from "./ui_state";
+
+var mousedown = false;
 
 window.addEventListener("mousemove", function(event) {
   if (mousedown) {
@@ -9,26 +11,24 @@ window.addEventListener("mousemove", function(event) {
   UI.mousePosition = { x: event.clientX, y: event.clientY };
 });
 
-window.mousedown = false;
-
-window.addEventListener("click", function(event) {
+window.addEventListener("click", function() {
   console.log(UI.mouseTile);
 });
 
 
-window.addEventListener("mousedown", function(event) {
+window.addEventListener("mousedown", function() {
   mousedown = true;
 });
 
-window.addEventListener("mouseup", function(event) {
+window.addEventListener("mouseup", function() {
   mousedown = false;
 });
 
-function convertToTileISO(rawMouseCoords, buffer) {
+function convertToTileISO(rawMouseCoords) {
   const offsetCoords = {
     x: rawMouseCoords.x - UI.offset.x,
     y: rawMouseCoords.y - UI.offset.y
-  }
+  };
 
   const isoCoords = { 
     x: ((offsetCoords.x - window.innerWidth / 2) + 2 * offsetCoords.y) / 2 ,
@@ -38,7 +38,7 @@ function convertToTileISO(rawMouseCoords, buffer) {
   const tileBoundCoords = {
     x: Math.floor(isoCoords.x / UI.tileHeight),
     y: Math.floor(isoCoords.y / UI.tileHeight)
-  }
+  };
 
   UI.mouseTile = tileBoundCoords;
 }

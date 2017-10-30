@@ -1,3 +1,7 @@
+/*global App*/
+/*global gameId*/
+/*global gameData*/
+
 App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
   received: (data) => {
     const fromSquare = JSON.parse(data.result[0]);

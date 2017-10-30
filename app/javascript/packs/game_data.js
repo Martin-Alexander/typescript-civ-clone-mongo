@@ -10,9 +10,9 @@ GameData.prototype.square = function(col, row = false) {
   if (row === false) {
     square = this.squares[col];
   } else {
-    square = this.squares[row * this.size + col]
+    square = this.squares[row * this.size + col];
   }
   return square;
-}
+};
 
-export { GameData }
+export { GameData };

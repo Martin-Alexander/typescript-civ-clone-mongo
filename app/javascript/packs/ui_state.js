@@ -4,6 +4,6 @@ const UI = {
   offset: { x: 0, y: 0 },
   scale: 1,
   mouseTile: {}
-}
+};
 
-export { UI }
+export { UI };

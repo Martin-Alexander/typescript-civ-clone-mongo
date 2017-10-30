@@ -1,4 +1,4 @@
-import { UI } from "./ui_state"
+import { UI } from "./ui_state";
 
 var canvas, context, gameData;
 
@@ -20,7 +20,7 @@ function initializeCanvasContext(parentElement) {
 function manageCanvasSize() {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
-  window.addEventListener("resize", (event) => {
+  window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
   });
@@ -56,7 +56,7 @@ function squareColor(square) {
     1: "red",
     2: "blue",
     3: "green"
-  }
+  };
   return playerLookup[square.player];
 }
 
@@ -67,4 +67,4 @@ function clearCanvas() {
   context.restore();  
 }
 
-export { renderBoard }
+export { renderBoard };
