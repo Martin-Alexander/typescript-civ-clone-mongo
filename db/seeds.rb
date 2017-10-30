@@ -1,3 +1,5 @@
+require 'highline/import'
+
 puts "Seeding..."
 
 User.destroy_all
@@ -22,5 +24,13 @@ Player.create! user: frankie, game: new_game
 Player.create! user: chloe, game: chloe_game, host: true
 
 puts " - Game and players created"
+
+answer = ask("Start game? [y/n] ")
+if answer == "y"
+  new_game.start
+  puts " - Game started"
+  new_game.generate_game_data
+  puts " - Board data generated"
+end
 
 puts "Done"
