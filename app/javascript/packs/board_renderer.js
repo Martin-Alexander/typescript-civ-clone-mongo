@@ -1,6 +1,13 @@
 import { UI } from "./ui_state";
 
-var canvas, context, gameData;
+var gameData, canvas, context;
+
+const playerColorLookup = {
+  0: "black",
+  1: "red",
+  2: "blue",
+  3: "green"
+};
 
 function renderBoard(_gameData, parentElement) {
   gameData = _gameData;
@@ -45,19 +52,9 @@ function drawSquare(square) {
   context.lineTo(0, UI.tileHeight);
   context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
   context.closePath();
-  context.fillStyle = squareColor(square);
+  context.fillStyle = playerColorLookup[square.player];
   context.fill();
   context.restore();     
-}
-
-function squareColor(square) {
-  const playerLookup = {
-    0: "black",
-    1: "red",
-    2: "blue",
-    3: "green"
-  };
-  return playerLookup[square.player];
 }
 
 function clearCanvas() {
