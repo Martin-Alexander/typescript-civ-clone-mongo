@@ -1,6 +1,6 @@
 import { GameData } from "./game_data";
 import { renderBoard } from "./board_renderer";
-import "./mouse_input";
+import "./event_handling";
 
 /* global rawGameData */
 
