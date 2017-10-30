@@ -1,13 +1,8 @@
 /* global rawGameData */
 
-function GameData(rawGameData) {
-  const parsedData = JSON.parse(rawGameData);
-  Object.keys(parsedData).forEach((key) => {
-    this[key] = parsedData[key];
-  });
-}
+const gameData = JSON.parse(rawGameData);
 
-GameData.prototype.square = function(col, row = false) {
+gameData.square = function(col, row = false) {
   let square;
   if (row === false) {
     square = this.squares[col];
@@ -16,7 +11,5 @@ GameData.prototype.square = function(col, row = false) {
   }
   return square;
 };
-
-const gameData = new GameData(rawGameData);
 
 export { gameData };
