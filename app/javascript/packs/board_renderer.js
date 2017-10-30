@@ -2,13 +2,6 @@ import { UI } from "./ui_state";
 
 var gameData, canvas, context;
 
-const playerColorLookup = {
-  0: "black",
-  1: "red",
-  2: "blue",
-  3: "green"
-};
-
 function renderBoard(_gameData, parentElement) {
   gameData = _gameData;
   [canvas, context] = initializeCanvasContext(parentElement);
@@ -52,7 +45,7 @@ function drawSquare(square) {
   context.lineTo(0, UI.tileHeight);
   context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
   context.closePath();
-  context.fillStyle = playerColorLookup[square.player];
+  context.fillStyle = square.color();
   context.fill();
   context.restore();     
 }

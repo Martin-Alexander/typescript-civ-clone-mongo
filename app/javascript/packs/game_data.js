@@ -1,6 +1,14 @@
+import { Square } from "./square";
+
 /* global rawGameData */
 
 const gameData = JSON.parse(rawGameData);
+
+gameData.initialize = function() {
+  for (let i = 0; i < this.squares.length; i++) {
+    this.squares[i] = new Square(this.squares[i]);
+  }
+}
 
 gameData.square = function(col, row = false) {
   let square;
@@ -11,5 +19,7 @@ gameData.square = function(col, row = false) {
   }
   return square;
 };
+
+gameData.initialize();
 
 export { gameData };
