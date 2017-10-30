@@ -1,9 +1,9 @@
 module GameLogic
   def move(from, to)
-    unless square(from).player.zero?
-      square(to).update!(player: square(from).player)
-      square(from).update!(player: 0)
+    unless find_square(from).player.zero?
+      find_square(to).update!(player: find_square(from).player)
+      find_square(from).update!(player: 0)
     end
-    return [square(from).to_json, square(to).to_json]
+    return [find_square(from).to_json, find_square(to).to_json]
   end
 end
