@@ -14,7 +14,7 @@ function renderBoard(_gameData, parentElement) {
   [canvas, context] = initializeCanvasContext(parentElement);
   window.setInterval(function() {
     drawAllSquares();
-  }, 1);
+  }, 10);
 }
 
 function initializeCanvasContext(parentElement) {
