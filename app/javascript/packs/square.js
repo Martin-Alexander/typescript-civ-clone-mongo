@@ -1,6 +1,10 @@
 function Square(rawSquareObject) {
   Object.keys(rawSquareObject).forEach((property) => {
-    this[property] = rawSquareObject[property];
+    if (property == "combat_units") {
+      this.units = rawSquareObject[property];
+    } else {
+      this[property] = rawSquareObject[property];
+    }
   });
 }
 

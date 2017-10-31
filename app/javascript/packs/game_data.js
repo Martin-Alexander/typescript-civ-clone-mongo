@@ -20,6 +20,10 @@ gameData.square = function(col, row = false) {
   return square;
 };
 
+gameData.replaceSquare = function(square) {
+  this.squares[square.y * (this.size + 1) + square.x] = square;
+}
+
 gameData.initialize();
 
-export { gameData };
+window.gameData = gameData

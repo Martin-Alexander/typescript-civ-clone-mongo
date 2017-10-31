@@ -25,9 +25,8 @@ class GamesController < ApplicationController
 
     # This will eventually be the single endpoint for the game logic API
     # but for now it will just implement a move for testing purposes
-
     ActionCable.server.broadcast "game_channel_#{game.id}", {
-      result: game.move(params[:move_from], params[:move_to])
+      result: game.move(game.squares.find(params[:move_from]), game.squares.find(params[:move_to]))
     }
   end
 end

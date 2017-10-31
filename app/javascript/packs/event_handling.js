@@ -33,17 +33,17 @@ window.addEventListener("mousemove", function(event) {
 });
 
 window.addEventListener("wheel", function(event) {
-  const zoomSpeed = 1.05
+  const zoomSpeed = 1.1
   if (event.deltaY < 0) {
     UI.tileHeight *= zoomSpeed;
     UI.tileWidth *= zoomSpeed;
-    UI.offset.x = (UI.offset.x * zoomSpeed) - (mouse.centerRelativePosition.x / 20);
-    UI.offset.y = (UI.offset.y * zoomSpeed) - (mouse.centerRelativePosition.y / 20);
+    UI.offset.x = (UI.offset.x * zoomSpeed) - (mouse.centerRelativePosition.x / 10);
+    UI.offset.y = (UI.offset.y * zoomSpeed) - (mouse.centerRelativePosition.y / 10);
   } else {
     UI.tileHeight /= zoomSpeed;
     UI.tileWidth /= zoomSpeed;
-    UI.offset.x = (UI.offset.x / zoomSpeed) + (mouse.centerRelativePosition.x / 21);
-    UI.offset.y = (UI.offset.y / zoomSpeed) + (mouse.centerRelativePosition.y / 21);
+    UI.offset.x = (UI.offset.x / zoomSpeed) + (mouse.centerRelativePosition.x / 11);
+    UI.offset.y = (UI.offset.y / zoomSpeed) + (mouse.centerRelativePosition.y / 11);
   }
 });
 
