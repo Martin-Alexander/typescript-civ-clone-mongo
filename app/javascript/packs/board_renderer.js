@@ -37,7 +37,7 @@ function drawSquare(square) {
   context.save();
   context.translate(
     (square.x - square.y) * (UI.tileWidth / 2) + (canvas.width / 2) + UI.offset.x, 
-    ((square.y + square.x) * UI.tileHeight / 2) + UI.offset.y
+    ((square.y + square.x) * UI.tileHeight / 2) + UI.offset.y + ((canvas.height - 15 * UI.tileHeight) / 2)
   );
   context.beginPath();
   context.moveTo(0, 0);
@@ -53,7 +53,7 @@ function drawSquare(square) {
 function clearCanvas() {
   context.save();
   context.setTransform(1, 0, 0, 1, 0, 0);
-  context.fillStyle = "rgba(255, 255, 255, 0.3)";
+  context.fillStyle = "rgba(255, 255, 255, 0.5)";
   context.fillRect(0, 0, canvas.width, canvas.height)
   context.restore();  
 }
