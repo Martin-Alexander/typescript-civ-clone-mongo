@@ -2,6 +2,8 @@ function Square(rawSquareObject) {
   Object.keys(rawSquareObject).forEach((property) => {
     if (property == "combat_units") {
       this.units = rawSquareObject[property];
+    } else if (property == "_id") {
+      this.id = rawSquareObject[property]["$oid"]
     } else {
       this[property] = rawSquareObject[property];
     }
