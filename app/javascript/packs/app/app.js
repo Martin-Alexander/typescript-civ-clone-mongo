@@ -13,7 +13,7 @@ const UI = new UserInterface();
 const gameData = new GameData(rawGameData);
 const networkController = new NetworkController(gameData);
 const inputController = new InputController(UI, gameData, networkController);
-const eventRouter = new EventRouter(UI, inputController);
+new EventRouter(UI, inputController);
 const renderer = new Renderer(UI, gameData, parentElement);
 
 gameData.initialize();

@@ -3,7 +3,7 @@ function Square(rawSquareObject) {
     if (property == "combat_units") {
       this.units = rawSquareObject[property];
     } else if (property == "_id") {
-      this.id = rawSquareObject[property]["$oid"]
+      this.id = rawSquareObject[property]["$oid"];
     } else {
       this[property] = rawSquareObject[property];
     }

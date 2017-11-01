@@ -2,6 +2,7 @@ import { Square } from "./models/square";
 
 /*global App*/
 /*global gameId*/
+/*global userId*/
 
 function NetworkController(gameData) {
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
@@ -24,6 +25,6 @@ NetworkController.prototype.send = function(object) {
       data: object,
     })
   });
-}
+};
 
 export { NetworkController };

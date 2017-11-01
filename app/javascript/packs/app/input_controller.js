@@ -1,6 +1,3 @@
-/* global userId */
-/* global gameId */
-
 function InputController(UI, gameData, networkController) {
   this.UI = UI;
   this.gameData = gameData;
