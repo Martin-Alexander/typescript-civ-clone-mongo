@@ -6,7 +6,8 @@ function EventRouter(UI, inputController) {
     positionOnLastDown: null,
     rawPosition: null,
     rawIsoPosition: null,
-    centerRelativePosition: null
+    centerRelativePosition: null,
+    preDragDistance: 0
   };
 
   const self = this;
@@ -27,16 +28,26 @@ function initializeEventListener(self) {
   });
 
   window.addEventListener("mouseup", function() { 
-    mouse.down = false; 
-    if (haveSameCoords(mouse.rawPosition, mouse.positionOnLastDown)) {
+    if (mouse.preDragDistance < 17) {
       inputController.click();
     }
+    mouse.preDragDistance = 0;
+    mouse.down = false; 
   });
 
   window.addEventListener("mousemove", function(event) {
     if (mouse.down) {
-      UI.offset.x -= (mouse.rawPosition.x - event.clientX);
-      UI.offset.y -= (mouse.rawPosition.y - event.clientY);
+      const dragDistance = {
+        x: (mouse.rawPosition.x - event.clientX),
+        y: (mouse.rawPosition.y - event.clientY)
+      };
+      if (mouse.preDragDistance > 17) {
+        UI.offset.x -= dragDistance.x;
+        UI.offset.y -= dragDistance.y;
+      } else {
+        mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
+        console.log(mouse.preDragDistance);
+      }
     }
     setMousePosition(self);
   });
