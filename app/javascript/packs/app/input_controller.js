@@ -1,34 +1,20 @@
 /* global userId */
 /* global gameId */
 
-function InputController(UI, gameData) {
+function InputController(UI, gameData, networkController) {
   this.UI = UI;
   this.gameData = gameData;
+  this.networkController = networkController;
 }
 
 InputController.prototype.click = function() {
   if (this.UI.selectedTile) {
     const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-    move(this.UI.selectedTile, destinationTile);
+    this.networkController.send({ from: this.UI.selectedTile.id, to: destinationTile.id });
     this.UI.selectedTile = null;
   } else {
     this.UI.selectedTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
   }
 };
-
-function move(fromSquare, toSquare) {
-  fetch("http://localhost:3000/game/input", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      user_id: userId,
-      game_id: gameId,
-      move_from: fromSquare["_id"]["$oid"],
-      move_to: toSquare["_id"]["$oid"]
-    })
-  });
-}
 
 export { InputController };

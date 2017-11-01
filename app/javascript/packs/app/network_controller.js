@@ -12,4 +12,18 @@ function NetworkController(gameData) {
   });
 }
 
+NetworkController.prototype.send = function(object) {
+  fetch("http://localhost:3000/game/input", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      user_id: userId,
+      game_id: gameId,
+      data: object,
+    })
+  });
+}
+
 export { NetworkController };
