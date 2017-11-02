@@ -4,11 +4,14 @@ import { Square } from "./models/square";
 /*global gameId*/
 /*global userId*/
 
-function NetworkController(gameData) {
+function NetworkController(gameData, renderer) {
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
     received: (data) => {
-      gameData.replaceSquare(new Square(JSON.parse(data.result[0])));
-      gameData.replaceSquare(new Square(JSON.parse(data.result[1])));
+      const fromSquare = new Square(JSON.parse(data.result[0]))
+      const toSquare = new Square(JSON.parse(data.result[1]))
+      renderer.movieToosyRoosyPoosy(fromSquare, toSquare);
+      gameData.replaceSquare(fromSquare);
+      gameData.replaceSquare(toSquare);
     }
   });
 }

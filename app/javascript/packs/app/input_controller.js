@@ -12,6 +12,7 @@ InputController.prototype.click = function() {
   } else {
     this.UI.selectedTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
   }
+  console.log(this.UI.selectedTile);
 };
 
 export { InputController };

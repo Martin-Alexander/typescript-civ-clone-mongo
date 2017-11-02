@@ -46,7 +46,6 @@ function initializeEventListener(self) {
         UI.offset.y -= dragDistance.y;
       } else {
         mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
-        console.log(mouse.preDragDistance);
       }
     }
     setMousePosition(self);
