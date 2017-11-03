@@ -1,5 +1,9 @@
 module BoardHelpers
-  def find_square(square_number)
-    squares[square_number.to_i]
+  def find_square(col, row = false)
+    if row
+      squares[row * board.board_size + col]
+    else
+      squares[col.to_i]
+    end
   end
 end
