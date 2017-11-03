@@ -17,6 +17,7 @@ module Square
           x >= game.board_size ||
           y >= game.board_size
             array << game.find_square(x, y)
+          end
         end
       end
     end
