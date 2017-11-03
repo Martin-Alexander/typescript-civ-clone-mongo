@@ -1,4 +1,5 @@
 import { Square } from "./models/square";
+import { MoveAnimation } from "./models/move_animation";
 
 /*global App*/
 /*global gameId*/
@@ -9,7 +10,7 @@ function NetworkController(gameData, renderer) {
     received: (data) => {
       const fromSquare = new Square(JSON.parse(data.result[0]))
       const toSquare = new Square(JSON.parse(data.result[1]))
-      renderer.movieToosyRoosyPoosy(fromSquare, toSquare);
+      renderer.addAnimation(new MoveAnimation(fromSquare, toSquare));
       gameData.replaceSquare(fromSquare);
       gameData.replaceSquare(toSquare);
     }

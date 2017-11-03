@@ -4,6 +4,7 @@ function Renderer(UI, gameData, parentElement) {
   this.parentElement = parentElement;
   this.canvas;
   this.context;
+  this.animations = [];
 }
 
 Renderer.prototype.run = function() {
@@ -17,59 +18,21 @@ Renderer.prototype.run = function() {
 
   window.setInterval(function() {
     drawAllSquares(self);
-    
-    if (self.movement) {
-      const fromSquare = self.movement[0];
-      const toSquare = self.movement[1];
-      
-      let counterX, counterY;
-
-      if (fromSquare.x > toSquare.x && fromSquare.y == toSquare.y) {
-        counterX = -1; counterY = -1;
-      } else if (fromSquare.x < toSquare.x && fromSquare.y == toSquare.y) {
-        counterX = 1; counterY = 1;
-      } else if (fromSquare.y > toSquare.y && fromSquare.x == toSquare.x) {
-        counterX = 1; counterY = -1;
-      } else if (fromSquare.y < toSquare.y && fromSquare.x == toSquare.x) {
-        counterX = -1; counterY = 1;
-      } else if (fromSquare.y > toSquare.y && fromSquare.x > toSquare.x) {
-        counterX = 0; counterY = -2;
-      } else if (fromSquare.y > toSquare.y && fromSquare.x < toSquare.x) {
-        counterX = 2; counterY = 0;
-      } else if (fromSquare.y < toSquare.y && fromSquare.x > toSquare.x) {
-        counterX = -2; counterY = 0;
-      } else if (fromSquare.y < toSquare.y && fromSquare.x < toSquare.x) {
-        counterX = 0; counterY = 2;
-      }
-
-      context.save();
-      context.translate(
-        (fromSquare.x - fromSquare.y) * (UI.tileWidth / 2) + (canvas.width / 2) + UI.offset.x, 
-        ((fromSquare.y + fromSquare.x) * UI.tileHeight / 2) + UI.offset.y + ((canvas.height - 15 * UI.tileHeight) / 2)
-      );
-      context.translate(counter * counterX, (counter * counterY) / 2);
-      context.beginPath();
-      context.moveTo(0, 0);
-      context.lineTo(UI.tileWidth / 2, UI.tileHeight / 2);
-      context.lineTo(0, UI.tileHeight);
-      context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
-      context.closePath();
-      context.fillStyle = toSquare.color();
-      context.fill();
-      context.restore();
-      counter += UI.tileHeight / 20;
-      
-      if (counter > UI.tileHeight) { 
-        self.movement = null;
-        counter = 0;
-      }
-    }
+    drawAllAnimations(self);
   }, 10);
 };
 
-Renderer.prototype.movieToosyRoosyPoosy = function(fromSquare, toSquare) {
-  this.movement = [fromSquare, toSquare];
-};
+Renderer.prototype.addAnimation = function(animation) {
+  this.animations.push(animation);
+}
+
+function drawAllAnimations(self) {
+  self.animations.forEach((animation, index) => {
+    if (!animation.draw(self.canvas, self.context, self.UI)) {
+      self.animations.splice(index, 1);
+    };
+  });
+}
 
 function initializeCanvasContext(parentElement) {
   const canvas = document.createElement("canvas");
@@ -110,9 +73,23 @@ function drawSquare(self, square) {
   context.lineTo(0, UI.tileHeight);
   context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
   context.closePath();
-  context.fillStyle = square.color();
+  if (isInProccessOfMoveAnimation(square, self.animations)) {
+    context.fillStyle = "black";
+  } else {
+    context.fillStyle = square.color();
+  }
   context.fill();
   context.restore();     
+}
+
+function isInProccessOfMoveAnimation(square, animations) {
+  let result = false;
+  animations.forEach((animation) => {
+    if (animation.toSquare.x == square.x && animation.toSquare.y == square.y) {
+      result = true;
+    }
+  });
+  return result;
 }
 
 function clearCanvas(self) {
