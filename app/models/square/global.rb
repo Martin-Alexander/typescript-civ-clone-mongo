@@ -6,9 +6,6 @@ module Square
     embeds_many :ships, class_name: "Unit::Ship"
     embeds_many :workers, class_name: "Unit::Worker"
     
-    # Returns a collection of all units in square
-    def units
-      workers + infantry + tanks + ships
-    end
+    field :units, Array
   end
 end
