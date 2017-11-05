@@ -43,7 +43,7 @@ module BoardGeneration
       loop do 
         selected_square = squares.sample
         if selected_square.units.empty?
-          Unit::Combat.create! player_number: game_player.number, square: selected_square
+          selected_square.infantry.create! player_number: game_player.number
           break
         end
       end 
