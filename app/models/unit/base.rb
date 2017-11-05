@@ -8,7 +8,7 @@ module Unit
 
     def move(square)
       unless square.id == _parent.id
-        square.combat_units << self.dup
+        square.infantry << self.dup
         self.delete
       end
     end
