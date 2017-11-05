@@ -61,12 +61,8 @@ class Game
 
   def convert_to_json
     json_game = JSON.parse(to_json)
-    json_game["squares"].each do |square|
-      square["units"] = []
-      if square["combat_units"]
-        square["combat_units"].each { |u| square["units"] << u.dup }
-        square.delete("combat_units")
-      end
+    json_game["squares"].each_with_index do |square_JSON, i|
+      square_JSON["units"] = find_square(i).units.map { |unit| JSON.parse(unit.to_json) }
     end
     JSON.generate(json_game)
   end
