@@ -17,5 +17,13 @@ module EmbedUnits
         end.flatten
       end
     )
+
+    args.each do |unit|
+      Square::Global.class_eval %Q(
+        def create_#{unit.to_s.singularize}(*args)
+          #{unit}.create! args
+        end
+      )
+    end
   end
 end
