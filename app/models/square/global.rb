@@ -6,6 +6,6 @@ module Square
     embeds_many :ships, class_name: "Unit::Ship"
     embeds_many :workers, class_name: "Unit::Worker"
     
-    field :units, Array
+    field :units, type: Array
   end
 end
