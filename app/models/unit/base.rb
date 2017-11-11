@@ -6,9 +6,9 @@ module Unit
     
     # Basic move implemenation
     # TEST MODE
-    def move(square)
-      unless square.id == _parent.id
-        square.infantry << self.dup
+    def move(to_square)
+      if move_valid?(to_square)
+        to_square.infantry << self.dup
         self.delete
       end
     end
@@ -16,8 +16,7 @@ module Unit
     # Basic move validation
     # TEST MODE
     def move_valid?(to_square)
-      from_square = _parent
-      true
+      square.neighbours.include?(to_square)
     end
   end
 end
