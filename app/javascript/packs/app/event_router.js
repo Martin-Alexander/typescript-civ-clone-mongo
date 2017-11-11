@@ -28,7 +28,7 @@ function initializeEventListener(self) {
   });
 
   window.addEventListener("mouseup", function() { 
-    if (mouse.preDragDistance < 17) {
+    if (mouse.preDragDistance < 10) {
       inputController.click();
     }
     mouse.preDragDistance = 0;
@@ -41,7 +41,7 @@ function initializeEventListener(self) {
         x: (mouse.rawPosition.x - event.clientX),
         y: (mouse.rawPosition.y - event.clientY)
       };
-      if (mouse.preDragDistance > 17) {
+      if (mouse.preDragDistance > 10) {
         UI.offset.x -= dragDistance.x;
         UI.offset.y -= dragDistance.y;
       } else {
