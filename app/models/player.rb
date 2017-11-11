@@ -1,4 +1,4 @@
-class Player
+class Player < MongoidModel
   include Mongoid::Document
 
   belongs_to :user

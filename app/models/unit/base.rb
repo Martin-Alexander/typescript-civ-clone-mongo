@@ -1,5 +1,5 @@
 module Unit
-  class Base
+  class Base < MongoidModel
     include Mongoid::Document
 
     embedded_in :square, class_name: "Square::Global"

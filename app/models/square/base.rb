@@ -1,5 +1,5 @@
 module Square
-  class Base
+  class Base < MongoidModel
     include Mongoid::Document
 
     field :x, type: Integer

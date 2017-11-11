@@ -1,4 +1,4 @@
-class GamePlayer
+class GamePlayer < MongoidModel
   include Mongoid::Document
 
   embedded_in :game

@@ -1,4 +1,4 @@
-class User
+class User < MongoidModel
   include Mongoid::Document
 
   devise :database_authenticatable, :registerable,

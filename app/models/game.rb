@@ -1,7 +1,7 @@
-class Game
+class Game < MongoidModel
   include Mongoid::Document
-  include BoardSetup
   include BoardHelpers
+  include BoardSetup
   include GameLogic
   include Lobby
 
