@@ -23,10 +23,6 @@ class MongoidModel
 		output_hash
 	end
 
-	def children_types
-		_children.map { |em| em.class }.uniq
-	end
-
 	def to_hash
 		output = hashify_fields
 		if respond_to?(:get_direct_children)
@@ -35,5 +31,9 @@ class MongoidModel
 			end
 		end
 		return output
+	end
+
+	def to_json
+		JSON.generate(to_hash)
 	end
 end
