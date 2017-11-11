@@ -3,10 +3,12 @@ module Square
     field :x, type: Integer
     field :y, type: Integer
 
+    # Returns GamePlayer if vision square or Game if global square
     def game
       _parent
     end
 
+    # For a given redius returns an array of squares within it
     def neighbours(radius)
       (0..radius).each_with_object([]) do |x, array|
         (0..radius).each do |y|
