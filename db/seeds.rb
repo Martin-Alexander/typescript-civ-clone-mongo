@@ -1,7 +1,7 @@
 def generateUnits(game, quantity)
   print " - Generating units..."
   quantity.times do
-    game.squares.sample.create_infantry player_number: game.game_players.sample.number
+    game.squares.sample.create_unit Square::Global.unit_types.sample, player_number: game.game_players.sample.number
   end
   done
 end
