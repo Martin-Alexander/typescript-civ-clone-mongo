@@ -47,8 +47,7 @@ Player.create! user: chloe, game: chloe_game, host: true
 
 done
 
-
-if ask("Start game? [y/n] ") == "y"
+if ENV["args"].chars.include?("g")
   print " - Starting game..."
   new_game.start
   done
@@ -57,7 +56,7 @@ if ask("Start game? [y/n] ") == "y"
   new_game.generate_game_data
   done
 
-  generateUnits(new_game, 50) if ask("Generate units? [y/n] ") == "y"
+  generateUnits(new_game, 50) if ENV["args"].chars.include?("u")
 end
 
 puts "Done"

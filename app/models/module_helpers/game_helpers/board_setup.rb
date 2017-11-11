@@ -1,4 +1,12 @@
-module BoardGeneration
+module BoardSetup
+  def convert_to_json
+    json_game = JSON.parse(to_json)
+    json_game["squares"].each_with_index do |square_JSON, i|
+      square_JSON["units"] = find_square(i).units.map { |unit| JSON.parse(unit.to_json) }
+      square_JSON.delete("infantry")
+    end
+    JSON.generate(json_game)
+  end
 
   private
 
