@@ -23,7 +23,7 @@
 <script>
   var userId = "<%= current_user.id %>";
   var gameId = "<%= @game.id %>";
-  var rawGameData = "<%= j @game.convert_to_json.html_safe %>";
+  var rawGameData = "<%= j @game.to_json.html_safe %>";
 </script>
 
 <%= javascript_pack_tag "app/app" %>

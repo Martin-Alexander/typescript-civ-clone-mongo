@@ -1,8 +1,4 @@
 module BoardSetup
-  def convert_to_json
-    JSON.generate(to_hash)
-  end
-
   private
 
   # Returns the dimension on the board such that each players "gets" 72 squares
