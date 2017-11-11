@@ -1,10 +1,8 @@
 class User < MongoidModel
-  include Mongoid::Document
-
   devise :database_authenticatable, :registerable,
          :rememberable, authentication_keys: [:username]
 
-  field :username,              type: String, default: ""
+  field :username, type: String, default: ""
   field :encrypted_password, type: String, default: ""
   field :remember_created_at, type: Time
 

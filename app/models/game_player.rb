@@ -1,5 +1,5 @@
 class GamePlayer < MongoidModel
-  include Mongoid::Document
+  direct_children :vision_squares
 
   embedded_in :game
   embeds_many :vision_squares, class_name: "Square::Vision"

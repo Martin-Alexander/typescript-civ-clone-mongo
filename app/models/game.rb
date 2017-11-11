@@ -1,9 +1,10 @@
 class Game < MongoidModel
-  include Mongoid::Document
   include BoardHelpers
   include BoardSetup
   include GameLogic
   include Lobby
+
+  direct_children :game_players, :squares
 
   has_many :players
   embeds_many :game_players

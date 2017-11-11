@@ -1,7 +1,5 @@
 module Unit
   class Base < MongoidModel
-    include Mongoid::Document
-
     embedded_in :square, class_name: "Square::Global"
 
     field :player_number, default: 0
