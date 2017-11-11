@@ -1,6 +1,7 @@
 class MongoidModel
 	include Mongoid::Document
 
+	# Provides a method for declaring an objects children
 	def self.direct_children(*args)
 		class_eval %Q(
 			def get_direct_children
@@ -9,6 +10,7 @@ class MongoidModel
 		)
 	end
 
+	# Returns hash representation of obects fields (but not its embedded children) 
 	def hashify_fields
 		output_hash = {}
 		fields.keys.each do |field_name| 
@@ -23,6 +25,7 @@ class MongoidModel
 		output_hash
 	end
 
+	# Returns hash representation of object and all children recursively
 	def to_hash
 		output = hashify_fields
 		if respond_to?(:get_direct_children)
@@ -33,6 +36,7 @@ class MongoidModel
 		return output
 	end
 
+	# Returns json string of object hash
 	def to_json
 		JSON.generate(to_hash)
 	end
