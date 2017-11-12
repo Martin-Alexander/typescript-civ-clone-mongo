@@ -160,10 +160,10 @@ production:
     default:
       database: civ_clone_mongo_productions
       hosts:
-        - <%= ENV["MONGO_HOST"] =%>
+        - <%= ENV["MONGO_HOST"] %>
       options:
-        user: <%= ENV["MONGO_USER"] =%>
-        password: <%= ENV["MONGO_PASSWORD"] =%>
+        user: <%= ENV["MONGO_USER"] %>
+        password: <%= ENV["MONGO_PASSWORD"] %>
         read:
           mode: :primary
         max_pool_size: 1
