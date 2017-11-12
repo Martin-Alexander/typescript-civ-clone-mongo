@@ -160,7 +160,7 @@ production:
     default:
       database: civ_clone_mongo_productions
       hosts:
-        - ENV["MONGODB_URI"]
+        - mongodb://admin:admin@ds155325.mlab.com:55325
       options:
         read:
           mode: :primary
