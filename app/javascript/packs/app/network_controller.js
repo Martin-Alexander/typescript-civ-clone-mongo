@@ -18,7 +18,7 @@ function NetworkController(gameData, renderer) {
 }
 
 NetworkController.prototype.send = function(object) {
-  fetch("http://localhost:3000/game/input", {
+  fetch("/game/input", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

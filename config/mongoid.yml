@@ -160,10 +160,10 @@ production:
     default:
       database: civ_clone_mongo_productions
       hosts:
-        - ds155325.mlab.com:55325
+        - ENV["MONGO_HOST"]
       options:
-        user: admin
-        password: admin
+        user: ENV["MONGO_USER"]
+        password: ENV["MONGO_PASSWORD"]
         read:
           mode: :primary
         max_pool_size: 1
