@@ -22,13 +22,15 @@ class GamesController < ApplicationController
   def input
     current_user = User.find(params[:user_id])
     game = Game.find(params[:game_id])
-    from_square = params[:data][:from]
-    to_square = params[:data][:to]
+    from_square = game.squares.find(params[:data][:from])
+    to_square = game.squares.find(params[:data][:to])
+
+    AStar.run(game, start: from_square, finish: to_square)
 
     # This will eventually be the single endpoint for the game logic API
     # but for now it will just implement a move for testing purposes
     ActionCable.server.broadcast "game_channel_#{game.id}", {
-      result: game.move(game.squares.find(from_square), game.squares.find(to_square))
+      result: game.move(from_square, to_square)
     }
   end
 end
