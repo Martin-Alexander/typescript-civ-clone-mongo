@@ -1,14 +1,4 @@
 module Lobby
-  # Maximum number of players to a game
-  def self.max_players
-    6
-  end
-
-  # Returns all games that're in the 'lobby state'
-  def self.all_lobbies
-    Game.where(state: "lobby")
-  end
-
   # Returns the number of players (filter by role)
   def number_of_players(filters = {})
     counter = 0

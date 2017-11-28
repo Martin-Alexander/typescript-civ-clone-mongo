@@ -3,6 +3,7 @@ class Game < MongoidModel
   include BoardSetup
   include GameLogic
   include Lobby
+  extend ClassLobby
 
   direct_children :game_players, :squares
 
