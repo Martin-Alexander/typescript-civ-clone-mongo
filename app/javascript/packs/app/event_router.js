@@ -25,6 +25,8 @@ function initializeEventListener(self) {
   });
 
   window.addEventListener("mousedown", function(event) {
+
+    // Left mouse button is clicked
     if (event.button === 0) {
       mouse.down = true;
       mouse.positionOnLastDown = {
@@ -35,6 +37,8 @@ function initializeEventListener(self) {
   });
 
   window.addEventListener("mouseup", function() { 
+
+    // Left mouse button is released
     if (event.button === 0) {
       if (mouse.preDragDistance < 10) {
         inputController.click();
