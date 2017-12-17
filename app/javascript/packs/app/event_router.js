@@ -19,20 +19,29 @@ function initializeEventListener(self) {
   const UI = self.UI;
   const inputController = self.inputController;
 
-  window.addEventListener("mousedown", function() { 
-    mouse.down = true; 
-    mouse.positionOnLastDown = {
-      x: mouse.rawPosition.x,
-      y: mouse.rawPosition.y
-    };
+  document.addEventListener("contextmenu", function(event) {
+    event.preventDefault(); 
+    return false; 
+  });
+
+  window.addEventListener("mousedown", function(event) {
+    if (event.button === 0) {
+      mouse.down = true;
+      mouse.positionOnLastDown = {
+        x: mouse.rawPosition.x,
+        y: mouse.rawPosition.y
+      };
+    } 
   });
 
   window.addEventListener("mouseup", function() { 
-    if (mouse.preDragDistance < 10) {
-      inputController.click();
+    if (event.button === 0) {
+      if (mouse.preDragDistance < 10) {
+        inputController.click();
+      }
+      mouse.preDragDistance = 0;
+      mouse.down = false; 
     }
-    mouse.preDragDistance = 0;
-    mouse.down = false; 
   });
 
   window.addEventListener("mousemove", function(event) {
