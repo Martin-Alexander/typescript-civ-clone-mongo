@@ -44,6 +44,6 @@ MoveAnimation.prototype.draw = function(canvas, context, UI) {
   } else {
     return false;
   }
-}
+};
 
 export { MoveAnimation };

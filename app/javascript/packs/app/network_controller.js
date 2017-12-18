@@ -8,8 +8,8 @@ import { MoveAnimation } from "./models/move_animation";
 function NetworkController(gameData, renderer) {
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
     received: (data) => {
-      const fromSquare = new Square(JSON.parse(data.result[0]))
-      const toSquare = new Square(JSON.parse(data.result[1]))
+      const fromSquare = new Square(JSON.parse(data.result[0]));
+      const toSquare = new Square(JSON.parse(data.result[1]));
       renderer.addAnimation(new MoveAnimation(fromSquare, toSquare));
       gameData.replaceSquare(fromSquare);
       gameData.replaceSquare(toSquare);

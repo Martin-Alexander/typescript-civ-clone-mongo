@@ -4,6 +4,8 @@ import { InputController } from "./input_controller";
 import { Renderer } from "./renderer";
 import { GameData } from "./game_data";
 import { NetworkController } from "./network_controller";
+import { GameDataController } from "./game_data_controller";
+import { AnimationController } from "./animation_controller";
 
 /* global rawGameData */
 

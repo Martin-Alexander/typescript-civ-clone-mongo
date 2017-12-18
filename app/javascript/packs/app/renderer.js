@@ -24,13 +24,13 @@ Renderer.prototype.run = function() {
 
 Renderer.prototype.addAnimation = function(animation) {
   this.animations.push(animation);
-}
+};
 
 function drawAllAnimations(self) {
   self.animations.forEach((animation, index) => {
     if (!animation.draw(self.canvas, self.context, self.UI)) {
       self.animations.splice(index, 1);
-    };
+    }
   });
 }
 
