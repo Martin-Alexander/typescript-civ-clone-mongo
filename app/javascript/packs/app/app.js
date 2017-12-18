@@ -12,9 +12,11 @@ const parentElement = document.getElementById("canvas-container");
 const UI = new UserInterface();
 const gameData = new GameData(rawGameData);
 const renderer = new Renderer(UI, gameData, parentElement);
-const networkController = new NetworkController(gameData, renderer);
+const gameDataController = new GameDataController(gameData);
+const animationController = new AnimationController(renderer);
+const networkController = new NetworkController(gameData, renderer, gameDataController, animationController);
 const inputController = new InputController(UI, gameData, networkController);
-new EventRouter(UI, inputController);
+const eventRouter = new EventRouter(UI, inputController);
 
 gameData.initialize();
 renderer.run();
