@@ -36,7 +36,7 @@ function initializeEventListener(self) {
     } 
   });
 
-  window.addEventListener("mouseup", function() { 
+  window.addEventListener("mouseup", function(event) { 
 
     // Left mouse button is released
     if (event.button === 0) {
@@ -61,7 +61,7 @@ function initializeEventListener(self) {
         mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
       }
     }
-    setMousePosition(self);
+    setMousePosition(self, event);
   });
 
   window.addEventListener("wheel", function(event) {
@@ -80,7 +80,7 @@ function initializeEventListener(self) {
   });
 }
 
-function setMousePosition(self) {
+function setMousePosition(self, event) {
   const mouse = self.mouse;
   const UI = self.UI;
 
