@@ -73,24 +73,20 @@ function drawSquare(self, square) {
   context.lineTo(0, UI.tileHeight);
   context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
   context.closePath();
-  if (isInProccessOfMoveAnimation(square, self.animations)) {
-    context.fillStyle = "black";
-  } else {
-    context.fillStyle = square.color();
-  }
+  context.fillStyle = square.color();
   context.fill();
   context.restore();     
 }
 
-function isInProccessOfMoveAnimation(square, animations) {
-  let result = false;
-  animations.forEach((animation) => {
-    if (animation.toSquare.x == square.x && animation.toSquare.y == square.y) {
-      result = true;
-    }
-  });
-  return result;
-}
+// function isInProccessOfMoveAnimation(square, animations) {
+//   let result = false;
+//   animations.forEach((animation) => {
+//     if (animation.toSquare.x == square.x && animation.toSquare.y == square.y) {
+//       result = true;
+//     }
+//   });
+//   return result;
+// }
 
 function clearCanvas(self) {
   self.context.save();

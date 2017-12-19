@@ -1,4 +1,4 @@
-function MoveAnimation(fromSquare, toSquare) {
+function MoveAnimation(fromSquare, toSquare, color, callback) {
   if (fromSquare.x > toSquare.x && fromSquare.y == toSquare.y) {
     this.xDirection = -1; this.yDirection = -1;
   } else if (fromSquare.x < toSquare.x && fromSquare.y == toSquare.y) {
@@ -19,7 +19,8 @@ function MoveAnimation(fromSquare, toSquare) {
   this.fromSquare = fromSquare;
   this.toSquare = toSquare;
   this.counter = 0;
-  this.color = toSquare.color();
+  this.color = color;
+  this.callback = callback;
 }
 
 MoveAnimation.prototype.draw = function(canvas, context, UI) {
@@ -42,6 +43,7 @@ MoveAnimation.prototype.draw = function(canvas, context, UI) {
   if (this.counter < UI.tileHeight) { 
     return true;
   } else {
+    this.callback();
     return false;
   }
 };

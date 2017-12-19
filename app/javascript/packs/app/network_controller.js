@@ -7,8 +7,10 @@ function NetworkController(gameDataController, animationController) {
       console.log(data);
       switch (data.type) {
         case "piece_move":
-          gameDataController.pieceMove(data);
-          animationController.pieceMove(data);
+          gameDataController.replaceFromSquare(data);
+          animationController.pieceMove(data, () => {
+            gameDataController.replaceToSquare(data);
+          });
           break;
         case "train_piece":
           gameDataController.buildPiece(data);

@@ -12,7 +12,7 @@ function Square(rawSquareObject) {
 
 Square.prototype.color = function() {
   if (this.units.length > 0) {
-    return playerColorLookup[this.units[0].player_number];
+    return playerColorLookup[this.units[this.units.length - 1].player_number];
   }
   return "black";
 };
