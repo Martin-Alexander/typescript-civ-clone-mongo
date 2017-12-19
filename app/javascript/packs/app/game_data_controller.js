@@ -1,14 +1,14 @@
+import { Square } from "./models/square";
+
 function GameDataController(gameData) {
   this.gameData = gameData;
 }
 
 GameDataController.prototype.pieceMove = function(data) {
-  console.log("update gameData with new move");
+  const fromSquare = new Square(JSON.parse(data.new_squares[0]));
+  const toSquare = new Square(JSON.parse(data.new_squares[1]));
+  this.gameData.replaceSquare(fromSquare);
+  this.gameData.replaceSquare(toSquare);
 }
 
 export { GameDataController };
-
-// const fromSquare = new Square(JSON.parse(data.result[0]));
-// const toSquare = new Square(JSON.parse(data.result[1]));
-// gameData.replaceSquare(fromSquare);
-// gameData.replaceSquare(toSquare);
