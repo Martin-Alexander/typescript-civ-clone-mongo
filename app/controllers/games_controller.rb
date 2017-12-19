@@ -18,16 +18,24 @@ class GamesController < ApplicationController
   end
 
   def input
-    game = Game.find(params[:gameId])
-    from_square = game.squares.find(params[:data][:from])
-    to_square = game.squares.find(params[:data][:to])
+    game = Game.find(params[:game_id])
+    send(params[:method].to_sym, game)
+  end
 
+  private
+
+  def piece_move(game)
+    data = params.require(:data).permit(:to, :from).to_h
+    
+    from_square = game.squares.find(data[:from])
+    to_square = game.squares.find(data[:to])
+    
+    # This still is not connected to anything but it does work
     AStar.run(game, start: from_square, finish: to_square)
-
-    # This will eventually be the single endpoint for the game logic API
-    # but for now it will just implement a move for testing purposes
+    
     ActionCable.server.broadcast "game_channel_#{game.id}", {
-      result: game.move(from_square, to_square)
+      type: "piece_move",
+      new_squares: game.move(from_square, to_square)
     }
   end
 end

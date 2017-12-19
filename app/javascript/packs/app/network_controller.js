@@ -19,14 +19,14 @@ function NetworkController(gameDataController, animationController) {
 }
 
 NetworkController.prototype.pieceMove = function(pieceMoveData) {
-  const payload = { type: "pieceMove" };
+  const payload = { method: "piece_move" };
   payload.data = pieceMoveData;
 
   this.send(payload);
 }
 
 NetworkController.prototype.send = function(payload) {
-  payload.gameId = gameId;
+  payload.game_id = gameId;
 
   fetch("/game/input", {
     method: "POST",
