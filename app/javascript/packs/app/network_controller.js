@@ -5,29 +5,39 @@ import { MoveAnimation } from "./models/move_animation";
 /*global gameId*/
 /*global userId*/
 
-function NetworkController(gameData, renderer) {
+function NetworkController(gameDataController, animationController) {
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
     received: (data) => {
-      const fromSquare = new Square(JSON.parse(data.result[0]));
-      const toSquare = new Square(JSON.parse(data.result[1]));
-      renderer.addAnimation(new MoveAnimation(fromSquare, toSquare));
-      gameData.replaceSquare(fromSquare);
-      gameData.replaceSquare(toSquare);
+      console.log(data);
+      // const fromSquare = new Square(JSON.parse(data.result[0]));
+      // const toSquare = new Square(JSON.parse(data.result[1]));
+      // renderer.addAnimation(new MoveAnimation(fromSquare, toSquare));
+      // gameData.replaceSquare(fromSquare);
+      // gameData.replaceSquare(toSquare);
     }
   });
 }
 
-NetworkController.prototype.send = function(object) {
+NetworkController.prototype.pieceMove = function(pieceMoveData) {
+  const payload = { type: "pieceMove" };
+  payload.data = pieceMoveData;
+
+  this.send(payload);
+}
+
+NetworkController.prototype.send = function(payload) {
+  payload.gameId = gameId;
+
   fetch("/game/input", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     },
-    body: JSON.stringify({
-      user_id: userId,
-      game_id: gameId,
-      data: object,
-    })
+    body: JSON.stringify(payload),
+    credentials: "same-origin"
   });
 };
 

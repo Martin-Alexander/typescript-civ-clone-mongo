@@ -1,6 +1,4 @@
 class GamesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [ :input ]
-  skip_before_action :verify_authenticity_token, only: [ :input ]
 
   def create
     new_game = current_user.create_game
@@ -20,8 +18,7 @@ class GamesController < ApplicationController
   end
 
   def input
-    current_user = User.find(params[:user_id])
-    game = Game.find(params[:game_id])
+    game = Game.find(params[:gameId])
     from_square = game.squares.find(params[:data][:from])
     to_square = game.squares.find(params[:data][:to])
 
