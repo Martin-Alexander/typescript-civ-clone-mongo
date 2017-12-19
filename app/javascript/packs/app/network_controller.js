@@ -9,11 +9,26 @@ function NetworkController(gameDataController, animationController) {
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
     received: (data) => {
       console.log(data);
-      // const fromSquare = new Square(JSON.parse(data.result[0]));
-      // const toSquare = new Square(JSON.parse(data.result[1]));
-      // renderer.addAnimation(new MoveAnimation(fromSquare, toSquare));
-      // gameData.replaceSquare(fromSquare);
-      // gameData.replaceSquare(toSquare);
+      switch (data.type) {
+        case "piece_move":
+          gameDataController.pieceMove(data);
+          animationController.pieceMove(data);
+          break;
+        case "train_piece":
+          gameDataController.buildPiece(data);
+          animationController.buildPiece(data);
+          break;
+        case "build_structure":
+          gameDataController.buildStructure(data);
+          animationController.buildStructure(data);
+          break;
+        case "combat":
+          gameDataController.combat(data);
+          animationController.combat(data);
+          break;
+        default:
+          break;
+      }
     }
   });
 }
