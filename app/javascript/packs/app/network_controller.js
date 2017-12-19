@@ -1,9 +1,5 @@
-import { Square } from "./models/square";
-import { MoveAnimation } from "./models/move_animation";
-
 /*global App*/
 /*global gameId*/
-/*global userId*/
 
 function NetworkController(gameDataController, animationController) {
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
