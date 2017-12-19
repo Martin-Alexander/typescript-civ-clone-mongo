@@ -16,7 +16,7 @@ const gameData = new GameData(rawGameData);
 const renderer = new Renderer(UI, gameData, parentElement);
 const gameDataController = new GameDataController(gameData);
 const animationController = new AnimationController(renderer);
-const networkController = new NetworkController(gameData, renderer, gameDataController, animationController);
+const networkController = new NetworkController(gameDataController, animationController);
 const inputController = new InputController(UI, gameData, networkController);
 const eventRouter = new EventRouter(UI, inputController);
 
