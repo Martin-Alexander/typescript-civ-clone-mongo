@@ -70,12 +70,13 @@ function initializeEventListener(self) {
         mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
       }
     }
-
-    if (mouse.right.down) {
+    
+    const oldtileMousePosition = UI.tileMousePosition;
+    setMousePosition(self, event);
+    
+    if (mouse.right.down && !haveSameCoords(oldtileMousePosition, UI.tileMousePosition)) {
       inputController.pathUpdate();
     }
-    
-    setMousePosition(self, event);
   });
 
   window.addEventListener("wheel", function(event) {
