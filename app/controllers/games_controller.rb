@@ -35,6 +35,8 @@ class GamesController < ApplicationController
   end
 
   def a_star
+    set_from_and_two_square
+    
     broadcast({
       type: "a_star",
       path: AStar.run(@game, start: @from_square, finish: @to_square)
@@ -49,6 +51,6 @@ class GamesController < ApplicationController
   end
 
   def broadcast(data)
-    ActionCable.server.broadcast("game_channel_#{game.id}", data)
+    ActionCable.server.broadcast("game_channel_#{@game.id}", data)
   end
 end

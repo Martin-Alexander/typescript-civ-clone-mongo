@@ -16,7 +16,13 @@ InputController.prototype.pathFindBegin = function() {
 
 // Moving the mouse while holding down the right mouse button
 InputController.prototype.pathUpdate = function() {
+  const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
+
   console.log(this.UI.tileMousePosition);
+  this.networkController.aStar({
+    from: this.gameData.square(0).id,
+    to: destinationTile.id
+  });
 };
 
 // Releasing the right mouse button and issuing a unit move or canceling

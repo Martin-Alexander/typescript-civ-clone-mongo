@@ -38,6 +38,13 @@ NetworkController.prototype.pieceMove = function(pieceMoveData) {
   this.send(payload);
 }
 
+NetworkController.prototype.aStar = function(aStarData) {
+  const payload = { method: "a_star" };
+  payload.data = aStarData;
+
+  this.send(payload);
+}
+
 NetworkController.prototype.send = function(payload) {
   payload.game_id = gameId;
 
