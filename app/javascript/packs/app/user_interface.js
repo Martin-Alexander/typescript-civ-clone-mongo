@@ -8,6 +8,7 @@ function UserInterface() {
     unit: null,
     structure: null
   };
+  this.currentPath = null;
 }
 
 export { UserInterface };

@@ -18,31 +18,32 @@ InputController.prototype.selectSquare = function() {
 
 // Pressing the right mouse button to begin unit movement path finding
 InputController.prototype.pathFindBegin = function() {
-  if (this.UI.selection.square) {
-    const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-    
-    this.networkController.aStar({
-      from: this.UI.selection.square.id,
-      to: destinationTile.id
-    });
-  }
+  this.drawPathLine();
 };
 
 // Moving the mouse while holding down the right mouse button
 InputController.prototype.pathUpdate = function() {
-  if (this.UI.selection.square) {  
-    const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-
-    this.networkController.aStar({
-      from: this.UI.selection.square.id,
-      to: destinationTile.id
-    });
-  }
+  this.drawPathLine();
 };
 
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
   this.UI.selection.square = null;
+  this.UI.currentPath = null;
 };
+
+InputController.prototype.drawPathLine = function() {
+  if (this.UI.selection.square) {  
+    const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
+  
+    this.networkController.aStar({
+      from: this.UI.selection.square.id,
+      to: destinationTile.id
+    }, (data) => {
+      this.currentPath = data.path;
+    });
+  }
+
+}
 
 export { InputController };

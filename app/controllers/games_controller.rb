@@ -37,10 +37,14 @@ class GamesController < ApplicationController
   def a_star
     set_from_and_two_square
     
-    broadcast({
-      type: "a_star",
-      path: AStar.run(@game, start: @from_square, finish: @to_square)
-    })
+    respond_to do |format|      
+      format.json { 
+        render json: {
+          type: "a_star",
+          path: AStar.run(@game, start: @from_square, finish: @to_square)
+        }
+      }
+    end
   end
 
   def set_from_and_two_square

@@ -38,17 +38,17 @@ NetworkController.prototype.pieceMove = function(pieceMoveData) {
   this.send(payload);
 }
 
-NetworkController.prototype.aStar = function(aStarData) {
+NetworkController.prototype.aStar = function(aStarData, callback) {
   const payload = { method: "a_star" };
   payload.data = aStarData;
 
-  this.send(payload);
+  this.send(payload, callback);
 }
 
-NetworkController.prototype.send = function(payload) {
+NetworkController.prototype.send = function(payload, callback) {
   payload.game_id = gameId;
 
-  fetch("/game/input", {
+  const response = fetch("/game/input", {
     method: "POST",
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
@@ -58,6 +58,8 @@ NetworkController.prototype.send = function(payload) {
     },
     body: JSON.stringify(payload),
     credentials: "same-origin"
+  }).then(response => response.json()).then((data) => {
+    if (callback) { callback(data); }
   });
 };
 
