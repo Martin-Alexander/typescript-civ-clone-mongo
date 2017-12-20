@@ -6,28 +6,43 @@ function InputController(UI, gameData, networkController) {
 
 // Selecting a square and cycling through units & structures
 InputController.prototype.selectSquare = function() {
-  console.log(this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y));
+  const selectedSquare = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
+  
+  if (this.UI.selection.square == selectedSquare) {
+    this.UI.selection.square = null;
+  } else if (selectedSquare.units.length > 0) {
+    this.UI.selection.square = selectedSquare;
+  }
 };
 
 // Pressing the right mouse button to begin unit movement path finding
 InputController.prototype.pathFindBegin = function() {
-  console.log("path finding mode begins");
+  if (this.UI.selection.square) {
+    const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
+    
+    this.networkController.aStar({
+      from: this.UI.selection.square.id,
+      to: destinationTile.id
+    });
+  }
 };
 
 // Moving the mouse while holding down the right mouse button
 InputController.prototype.pathUpdate = function() {
-  const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
+  if (this.UI.selection.square) {  
+    const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
 
-  console.log(this.UI.tileMousePosition);
-  this.networkController.aStar({
-    from: this.gameData.square(0).id,
-    to: destinationTile.id
-  });
+    this.networkController.aStar({
+      from: this.UI.selection.square.id,
+      to: destinationTile.id
+    });
+  }
 };
 
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
-  console.log("move unit or cancel path finding");
+  this.UI.selection.square = null;
+  console.log("move");
 };
 
 export { InputController };
