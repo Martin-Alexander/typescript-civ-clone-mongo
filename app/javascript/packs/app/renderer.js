@@ -73,7 +73,7 @@ function drawSquare(self, square) {
   context.lineTo(0, UI.tileHeight);
   context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
   context.closePath();
-  context.fillStyle = square.color();
+  context.fillStyle = square.color(self.UI.selection.square);
   context.fill();
   context.restore();     
 }
