@@ -7,7 +7,8 @@ function InputController(UI, gameData, networkController) {
 // Selecting a square and cycling through units & structures
 InputController.prototype.selectSquare = function() {
   const selectedSquare = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-  
+  console.log(selectedSquare);
+
   if (this.UI.selection.square == selectedSquare) {
     this.UI.selection.square = null;
   } else if (selectedSquare.units.length > 0) {
@@ -42,7 +43,6 @@ InputController.prototype.pathUpdate = function() {
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
   this.UI.selection.square = null;
-  console.log("move");
 };
 
 export { InputController };
