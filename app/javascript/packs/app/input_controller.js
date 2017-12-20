@@ -6,7 +6,7 @@ function InputController(UI, gameData, networkController) {
 
 // Selecting a square and cycling through units & structures
 InputController.prototype.selectSquare = function() {
-  console.log("select square");
+  console.log(this.UI.tileMousePosition);
 };
 
 // Pressing the right mouse button to begin unit movement path finding

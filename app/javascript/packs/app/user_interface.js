@@ -3,7 +3,11 @@ function UserInterface() {
   this.tileWidth = 80;
   this.offset = { x: 0, y: 0 };
   this.tileMousePosition = {};
-  this.selectedTile = null;
+  this.selection = {
+    square: null,
+    unit: null,
+    structure: null
+  };
 }
 
 export { UserInterface };
