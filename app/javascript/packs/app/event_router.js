@@ -2,7 +2,8 @@ function EventRouter(UI, inputController) {
   this.UI = UI;
   this.inputController = inputController;
   this.mouse = {
-    down: false,
+    right: { down: false },
+    left: { down: false },
     positionOnLastDown: null,
     rawPosition: null,
     rawIsoPosition: null,
@@ -20,36 +21,44 @@ function initializeEventListener(self) {
   const inputController = self.inputController;
 
   document.addEventListener("contextmenu", function(event) {
-    event.preventDefault(); 
+    event.preventDefault();
     return false; 
   });
 
   window.addEventListener("mousedown", function(event) {
-
-    // Left mouse button is clicked
-    if (event.button === 0) {
-      mouse.down = true;
-      mouse.positionOnLastDown = {
-        x: mouse.rawPosition.x,
-        y: mouse.rawPosition.y
-      };
-    } 
+    switch (event.button) {
+      case 0: // left
+        mouse.left.down = true;
+        mouse.positionOnLastDown = {
+          x: mouse.rawPosition.x,
+          y: mouse.rawPosition.y
+        };
+        break;
+      case 2: // right
+        inputController.pathFindBegin();
+        mouse.right.down = true;
+        break;
+    }
   });
 
   window.addEventListener("mouseup", function(event) { 
-
-    // Left mouse button is released
-    if (event.button === 0) {
-      if (mouse.preDragDistance < 10) {
-        inputController.click();
-      }
-      mouse.preDragDistance = 0;
-      mouse.down = false; 
+    switch (event.button) {
+      case 0: // left
+        if (mouse.preDragDistance < 10) {
+          inputController.selectSquare();
+        }
+        mouse.preDragDistance = 0;
+        mouse.left.down = false; 
+        break;
+      case 2: // right
+        inputController.moveUnit();
+        mouse.right.down = false;
+        break;
     }
   });
 
   window.addEventListener("mousemove", function(event) {
-    if (mouse.down) {
+    if (mouse.left.down) {
       const dragDistance = {
         x: (mouse.rawPosition.x - event.clientX),
         y: (mouse.rawPosition.y - event.clientY)
@@ -61,6 +70,11 @@ function initializeEventListener(self) {
         mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
       }
     }
+
+    if (mouse.right.down) {
+      inputController.pathUpdate();
+    }
+    
     setMousePosition(self, event);
   });
 

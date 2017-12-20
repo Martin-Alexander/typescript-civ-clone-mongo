@@ -4,17 +4,24 @@ function InputController(UI, gameData, networkController) {
   this.networkController = networkController;
 }
 
-InputController.prototype.click = function() {
-  if (this.UI.selectedTile) {
-    const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-    this.networkController.pieceMove({ 
-      from: this.UI.selectedTile.id, 
-      to: destinationTile.id 
-    });
-    this.UI.selectedTile = null;
-  } else {
-    this.UI.selectedTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-  }
+// Selecting a square and cycling through units & structures
+InputController.prototype.selectSquare = function() {
+  console.log("select square");
+};
+
+// Pressing the right mouse button to begin unit movement path finding
+InputController.prototype.pathFindBegin = function() {
+  console.log("path finding mode begins");
+};
+
+// Moving the mouse while holding down the right mouse button
+InputController.prototype.pathUpdate = function() {
+  console.log("path finding...");
+};
+
+// Releasing the right mouse button and issuing a unit move or canceling
+InputController.prototype.moveUnit = function() {
+  console.log("move unit or cancel path finding");
 };
 
 export { InputController };
