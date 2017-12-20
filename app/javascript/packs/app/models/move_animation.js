@@ -39,7 +39,7 @@ MoveAnimation.prototype.draw = function(canvas, context, UI) {
   context.fillStyle = this.color;
   context.fill();
   context.restore();
-  this.counter += UI.tileHeight / 10;
+  this.counter += UI.tileHeight / 2;
   if (this.counter < UI.tileHeight) { 
     return true;
   } else {

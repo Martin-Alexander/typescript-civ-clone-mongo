@@ -19,7 +19,7 @@ Renderer.prototype.run = function() {
   window.setInterval(function() {
     drawAllSquares(self);
     drawAllAnimations(self);
-  }, 10);
+  }, 60);
 };
 
 Renderer.prototype.addAnimation = function(animation) {
@@ -91,7 +91,7 @@ function drawSquare(self, square) {
 function clearCanvas(self) {
   self.context.save();
   self.context.setTransform(1, 0, 0, 1, 0, 0);
-  self.context.fillStyle = "rgba(255, 255, 255, 0.5)";
+  self.context.fillStyle = "rgba(255, 255, 255, 1)";
   self.context.fillRect(0, 0, self.canvas.width, self.canvas.height);
   self.context.restore();  
 }
