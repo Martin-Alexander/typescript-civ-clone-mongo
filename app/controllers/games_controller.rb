@@ -18,24 +18,37 @@ class GamesController < ApplicationController
   end
 
   def input
-    game = Game.find(params[:game_id])
-    send(params[:method].to_sym, game)
+    @game = Game.find(params[:game_id])
+    send(params[:method].to_sym)
   end
 
   private
 
-  def piece_move(game)
-    data = params.require(:data).permit(:to, :from).to_h
+  def piece_move
+    set_from_and_two_square
     
-    from_square = game.squares.find(data[:from])
-    to_square = game.squares.find(data[:to])
-    
-    # This still is not connected to anything but it does work
-    AStar.run(game, start: from_square, finish: to_square)
-    
-    ActionCable.server.broadcast "game_channel_#{game.id}", {
+    broadcast({
       type: "piece_move",
-      new_squares: game.move(from_square, to_square)
-    }
+      new_squares: @game.move(@from_square, @to_square)
+    })
+    
+  end
+
+  def a_star
+    broadcast({
+      type: "a_star",
+      path: AStar.run(@game, start: @from_square, finish: @to_square)
+    })
+  end
+
+  def set_from_and_two_square
+    data = params.require(:data).permit(:to, :from).to_h
+
+    @from_square = @game.squares.find(data[:from])
+    @to_square = @game.squares.find(data[:to])
+  end
+
+  def broadcast(data)
+    ActionCable.server.broadcast("game_channel_#{game.id}", data)
   end
 end
