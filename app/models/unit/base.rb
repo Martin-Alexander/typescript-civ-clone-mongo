@@ -16,7 +16,8 @@ module Unit
     # Basic move validation
     # TEST MODE
     def move_valid?(to_square)
-      square.neighbours.include?(to_square)
+      # square.neighbours.include?(to_square)
+      true
     end
   end
 end

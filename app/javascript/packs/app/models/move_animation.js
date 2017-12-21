@@ -1,26 +1,29 @@
-function MoveAnimation(fromSquare, toSquare, color, callback) {
-  if (fromSquare.x > toSquare.x && fromSquare.y == toSquare.y) {
+function MoveAnimation(animationData, callback) {
+  this.animationData = animationData;
+  this.fromSquare = animationData.path[animationData.index];
+  this.toSquare = animationData.path[animationData.index + 1];
+  this.counter = 0;
+  this.color = animationData.color;
+  this.callback = callback;
+  this.animationController = animationData.animationController;
+
+  if (this.fromSquare.x > this.toSquare.x && this.fromSquare.y == this.toSquare.y) {
     this.xDirection = -1; this.yDirection = -1;
-  } else if (fromSquare.x < toSquare.x && fromSquare.y == toSquare.y) {
+  } else if (this.fromSquare.x < this.toSquare.x && this.fromSquare.y == this.toSquare.y) {
     this.xDirection = 1; this.yDirection = 1;
-  } else if (fromSquare.y > toSquare.y && fromSquare.x == toSquare.x) {
+  } else if (this.fromSquare.y > this.toSquare.y && this.fromSquare.x == this.toSquare.x) {
     this.xDirection = 1; this.yDirection = -1;
-  } else if (fromSquare.y < toSquare.y && fromSquare.x == toSquare.x) {
+  } else if (this.fromSquare.y < this.toSquare.y && this.fromSquare.x == this.toSquare.x) {
     this.xDirection = -1; this.yDirection = 1;
-  } else if (fromSquare.y > toSquare.y && fromSquare.x > toSquare.x) {
+  } else if (this.fromSquare.y > this.toSquare.y && this.fromSquare.x > this.toSquare.x) {
     this.xDirection = 0; this.yDirection = -2;
-  } else if (fromSquare.y > toSquare.y && fromSquare.x < toSquare.x) {
+  } else if (this.fromSquare.y > this.toSquare.y && this.fromSquare.x < this.toSquare.x) {
     this.xDirection = 2; this.yDirection = 0;
-  } else if (fromSquare.y < toSquare.y && fromSquare.x > toSquare.x) {
+  } else if (this.fromSquare.y < this.toSquare.y && this.fromSquare.x > this.toSquare.x) {
     this.xDirection = -2; this.yDirection = 0;
-  } else if (fromSquare.y < toSquare.y && fromSquare.x < toSquare.x) {
+  } else if (this.fromSquare.y < this.toSquare.y && this.fromSquare.x < this.toSquare.x) {
     this.xDirection = 0; this.yDirection = 2;
   }
-  this.fromSquare = fromSquare;
-  this.toSquare = toSquare;
-  this.counter = 0;
-  this.color = color;
-  this.callback = callback;
 }
 
 MoveAnimation.prototype.draw = function(canvas, context, UI) {
@@ -43,7 +46,7 @@ MoveAnimation.prototype.draw = function(canvas, context, UI) {
   if (this.counter < UI.tileHeight) { 
     return true;
   } else {
-    this.callback();
+    this.animationController.loadNextPieceMoveAnimation(this.animationData, this.callback);
     return false;
   }
 };

@@ -31,6 +31,7 @@ class GamesController < ApplicationController
     
     broadcast({
       type: "piece_move",
+      path: AStar.run(@game, start: @from_square, finish: @to_square),
       new_squares: @game.move(@from_square, @to_square)
     })
 
