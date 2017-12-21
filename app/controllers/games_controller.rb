@@ -25,13 +25,18 @@ class GamesController < ApplicationController
   private
 
   def piece_move
+    # byebug
+
     set_from_and_two_square
     
     broadcast({
       type: "piece_move",
       new_squares: @game.move(@from_square, @to_square)
     })
-    
+
+    respond_to do |format|      
+      format.json { render json: { status: "OK" } }
+    end    
   end
 
   def a_star

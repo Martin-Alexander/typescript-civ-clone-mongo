@@ -32,6 +32,13 @@ InputController.prototype.pathUpdate = function() {
 
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
+  const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
+
+  this.networkController.pieceMove({
+    from: this.UI.selection.square.id,
+    to: destinationTile.id
+  });
+
   this.UI.selection.square = null;
   this.UI.currentPath = null;
 };
@@ -43,8 +50,11 @@ InputController.prototype.drawPathLine = function() {
     from: this.UI.selection.square.id,
     to: destinationTile.id
   }, (data) => {
-    this.UI.currentPath = data.path;
+    if (this.UI.selection.square) {
+      this.UI.currentPath = data.path;
+    }
   });
+
 }
 
 export { InputController };

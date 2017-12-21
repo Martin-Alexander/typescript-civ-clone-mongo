@@ -20,7 +20,7 @@ Renderer.prototype.run = function() {
     drawAllSquares(self);
     drawAllAnimations(self);
     drawPathLine(self);
-  }, 60);
+  }, 30);
 };
 
 Renderer.prototype.addAnimation = function(animation) {
@@ -102,7 +102,7 @@ function drawPathLine(self) {
       cumulativeTranslationOffset.y += UI.tileHeight * tranlation.y;
       context.lineTo(cumulativeTranslationOffset.x, cumulativeTranslationOffset.y);
     }
-    
+
     context.strokeStyle = "white";
     context.stroke();
     context.restore();
