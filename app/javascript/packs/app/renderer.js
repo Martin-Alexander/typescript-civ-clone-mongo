@@ -19,6 +19,7 @@ Renderer.prototype.run = function() {
   window.setInterval(function() {
     drawAllSquares(self);
     drawAllAnimations(self);
+    drawPathLine(self);
   }, 60);
 };
 
@@ -78,6 +79,64 @@ function drawSquare(self, square) {
   context.restore();     
 }
 
+function drawPathLine(self) {
+  const canvas = self.canvas;
+  const context = self.context;
+  const UI = self.UI;
+
+  if (UI.currentPath && UI.currentPath.length > 1) { 
+
+    context.save();
+    context.translate(
+      (UI.currentPath[0].x - UI.currentPath[0].y) * (UI.tileWidth / 2) + (canvas.width / 2) + UI.offset.x, 
+      ((UI.currentPath[0].y + UI.currentPath[0].x) * UI.tileHeight / 2) + UI.offset.y + ((canvas.height - 15 * UI.tileHeight) / 2)
+    );
+    context.translate(0, UI.tileHeight / 2);
+    context.beginPath();
+    context.moveTo(0, 0);
+    const cumulativeTranslationOffset = { x: 0, y: 0 };
+
+    for (let i = 0; i < UI.currentPath.length - 1; i++) {
+      const tranlation = pathLineCoordinates(UI.currentPath[i], UI.currentPath[i + 1]);
+      cumulativeTranslationOffset.x += UI.tileWidth * tranlation.x;
+      cumulativeTranslationOffset.y += UI.tileHeight * tranlation.y;
+      context.lineTo(cumulativeTranslationOffset.x, cumulativeTranslationOffset.y);
+    }
+    
+    context.strokeStyle = "white";
+    context.stroke();
+    context.restore();
+  }
+}
+
+function pathLineCoordinates(a, b) {
+  const xTranslation = b.x - a.x;
+  const yTranslation = b.y - a.y;
+
+  const key = xTranslation.toString() + yTranslation.toString();
+
+  const lookUp = {
+    "-1-1": { x: 0,    y: -1 },
+    "0-1":  { x: 0.5,  y: -0.5    },
+    "1-1":  { x: 1,    y: 0  },
+    "10":   { x: 0.5,  y: 0.5    },
+    "11":   { x: 0,    y: 1  },
+    "01":   { x: -0.5, y: 0.5    },
+    "-11":  { x: -1,   y: 0  },
+    "-10":  { x: -0.5, y: -0.5    }
+  }
+
+  return lookUp[key];
+}
+
+function clearCanvas(self) {
+  self.context.save();
+  self.context.setTransform(1, 0, 0, 1, 0, 0);
+  self.context.fillStyle = "rgba(255, 255, 255, 1)";
+  self.context.fillRect(0, 0, self.canvas.width, self.canvas.height);
+  self.context.restore();  
+}
+
 // function isInProccessOfMoveAnimation(square, animations) {
 //   let result = false;
 //   animations.forEach((animation) => {
@@ -88,12 +147,5 @@ function drawSquare(self, square) {
 //   return result;
 // }
 
-function clearCanvas(self) {
-  self.context.save();
-  self.context.setTransform(1, 0, 0, 1, 0, 0);
-  self.context.fillStyle = "rgba(255, 255, 255, 1)";
-  self.context.fillRect(0, 0, self.canvas.width, self.canvas.height);
-  self.context.restore();  
-}
 
 export { Renderer };
