@@ -17,23 +17,29 @@ InputController.prototype.selectSquare = function() {
 
 // Pressing the right mouse button to begin unit movement path finding
 InputController.prototype.pathFindBegin = function() {
-  if (this.UI.selection.square) { this.drawPathLine(); }
+  if (this.UI.selection.square) { 
+    this.drawPathLine();
+  }
 };
 
 // Moving the mouse while holding down the right mouse button
 InputController.prototype.pathUpdate = function() {
-  if (this.UI.selection.square && this.UI.currentPath) { this.drawPathLine(); }
+  if (this.UI.selection.square && this.UI.currentPath) {
+    this.drawPathLine();
+  }
 };
 
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
-  this.networkController.pieceMove({
-    from: this.UI.selection.square.id,
-    to: this.squareClickedOn().id
-  });
+  if (this.UI.selection.square) { 
+    this.networkController.pieceMove({
+      from: this.UI.selection.square.id,
+      to: this.squareClickedOn().id
+    });
 
-  this.UI.selection.square = null;
-  this.UI.currentPath = null;
+    this.UI.selection.square = null;
+    this.UI.currentPath = null;
+  }
 };
 
 // Ask server for AStar path and update UI

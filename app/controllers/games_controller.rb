@@ -1,5 +1,4 @@
 class GamesController < ApplicationController
-
   def create
     new_game = current_user.create_game
     redirect_to game_path(new_game)
@@ -25,8 +24,6 @@ class GamesController < ApplicationController
   private
 
   def piece_move
-    # byebug
-
     set_from_and_two_square
     
     broadcast({
