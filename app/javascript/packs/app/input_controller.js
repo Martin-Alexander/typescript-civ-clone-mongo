@@ -6,8 +6,7 @@ function InputController(UI, gameData, networkController) {
 
 // Selecting a square and cycling through units & structures
 InputController.prototype.selectSquare = function() {
-  const selectedSquare = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-  console.log(selectedSquare);
+  const selectedSquare = this.squareClickedOn();
 
   if (this.UI.selection.square == selectedSquare) {
     this.UI.selection.square = null;
@@ -18,43 +17,40 @@ InputController.prototype.selectSquare = function() {
 
 // Pressing the right mouse button to begin unit movement path finding
 InputController.prototype.pathFindBegin = function() {
-  if (this.UI.selection.square) {
-    this.drawPathLine();
-  }
+  if (this.UI.selection.square) { this.drawPathLine(); }
 };
 
 // Moving the mouse while holding down the right mouse button
 InputController.prototype.pathUpdate = function() {
-  if (this.UI.selection.square && this.UI.currentPath) {
-    this.drawPathLine();
-  }
+  if (this.UI.selection.square && this.UI.currentPath) { this.drawPathLine(); }
 };
 
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
-  const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-
   this.networkController.pieceMove({
     from: this.UI.selection.square.id,
-    to: destinationTile.id
+    to: this.squareClickedOn().id
   });
 
   this.UI.selection.square = null;
   this.UI.currentPath = null;
 };
 
+// Ask server for AStar path and update UI
 InputController.prototype.drawPathLine = function() {
-  const destinationTile = this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
-
   this.networkController.aStar({
     from: this.UI.selection.square.id,
-    to: destinationTile.id
+    to: this.squareClickedOn().id
   }, (data) => {
     if (this.UI.selection.square) {
       this.UI.currentPath = data.path;
     }
   });
+}
 
+// Querries gameData for the square corresponding to the tile that the mouse is over
+InputController.prototype.squareClickedOn = function() {
+  return this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
 }
 
 export { InputController };

@@ -11,11 +11,11 @@ function EventRouter(UI, inputController) {
     preDragDistance: 0
   };
 
-  const self = this;
-  initializeEventListener(self);
-}
+  this.initializeEventListener();
+};
 
-function initializeEventListener(self) {
+EventRouter.prototype.initializeEventListener = function() {
+  const self = this;
   const mouse = self.mouse;
   const UI = self.UI;
   const inputController = self.inputController;
@@ -72,7 +72,7 @@ function initializeEventListener(self) {
     }
     
     const oldtileMousePosition = UI.tileMousePosition;
-    setMousePosition(self, event);
+    self.setMousePosition(event);
     
     if (mouse.right.down && !haveSameCoords(oldtileMousePosition, UI.tileMousePosition)) {
       inputController.pathUpdate();
@@ -95,9 +95,9 @@ function initializeEventListener(self) {
   });
 }
 
-function setMousePosition(self, event) {
-  const mouse = self.mouse;
-  const UI = self.UI;
+EventRouter.prototype.setMousePosition = function(event) {
+  const mouse = this.mouse;
+  const UI = this.UI;
 
   mouse.rawPosition = { 
     x: event.clientX, 

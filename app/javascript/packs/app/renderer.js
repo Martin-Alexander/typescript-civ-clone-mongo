@@ -8,18 +8,14 @@ function Renderer(UI, gameData, parentElement) {
 }
 
 Renderer.prototype.run = function() {
-  [this.canvas, this.context] = initializeCanvasContext(this.parentElement);
+  [this.canvas, this.context] = this.initializeCanvasContext();
 
-  const canvas = this.canvas;
-  const context = this.context;
-  const UI = this.UI;
   const self = this;
-  let counter = 0;
 
   window.setInterval(function() {
-    drawAllSquares(self);
-    drawAllAnimations(self);
-    drawPathLine(self);
+    self.drawAllSquares();
+    self.drawAllAnimations();
+    self.drawPathLine();
   }, 30);
 };
 
@@ -27,22 +23,22 @@ Renderer.prototype.addAnimation = function(animation) {
   this.animations.push(animation);
 };
 
-function drawAllAnimations(self) {
-  self.animations.forEach((animation, index) => {
-    if (!animation.draw(self.canvas, self.context, self.UI)) {
-      self.animations.splice(index, 1);
+Renderer.prototype.drawAllAnimations = function() {
+  this.animations.forEach((animation, index) => {
+    if (!animation.draw(this.canvas, this.context, this.UI)) {
+      this.animations.splice(index, 1);
     }
   });
 }
 
-function initializeCanvasContext(parentElement) {
+Renderer.prototype.initializeCanvasContext = function() {
   const canvas = document.createElement("canvas");
-  parentElement.insertAdjacentElement("beforebegin", canvas);
-  manageCanvasSize(canvas);
+  this.parentElement.insertAdjacentElement("beforebegin", canvas);
+  this.manageCanvasSize(canvas);
   return [canvas, canvas.getContext("2d")];
 }
 
-function manageCanvasSize(canvas) {
+Renderer.prototype.manageCanvasSize = function(canvas) {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   window.addEventListener("resize", () => {
@@ -51,17 +47,17 @@ function manageCanvasSize(canvas) {
   });
 }
 
-function drawAllSquares(self) {
-  clearCanvas(self);
-  self.gameData.squares.forEach((square) => {
-    drawSquare(self, square);
+Renderer.prototype.drawAllSquares = function() {
+  this.clearCanvas();
+  this.gameData.squares.forEach((square) => {
+    this.drawSquare(square);
   });
 }
 
-function drawSquare(self, square) {
-  const canvas = self.canvas;
-  const context = self.context;
-  const UI = self.UI;
+Renderer.prototype.drawSquare = function(square) {
+  const canvas = this.canvas;
+  const context = this.context;
+  const UI = this.UI;
 
   context.save();
   context.translate(
@@ -74,15 +70,15 @@ function drawSquare(self, square) {
   context.lineTo(0, UI.tileHeight);
   context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
   context.closePath();
-  context.fillStyle = square.color(self.UI.selection.square);
+  context.fillStyle = square.color(UI.selection.square);
   context.fill();
   context.restore();     
 }
 
-function drawPathLine(self) {
-  const canvas = self.canvas;
-  const context = self.context;
-  const UI = self.UI;
+Renderer.prototype.drawPathLine = function() {
+  const canvas = this.canvas;
+  const context = this.context;
+  const UI = this.UI;
 
   if (UI.currentPath && UI.currentPath.length > 1) { 
 
@@ -97,7 +93,7 @@ function drawPathLine(self) {
     const cumulativeTranslationOffset = { x: 0, y: 0 };
 
     for (let i = 0; i < UI.currentPath.length - 1; i++) {
-      const tranlation = pathLineCoordinates(UI.currentPath[i], UI.currentPath[i + 1]);
+      const tranlation = this.pathLineCoordinates(UI.currentPath[i], UI.currentPath[i + 1]);
       cumulativeTranslationOffset.x += UI.tileWidth * tranlation.x;
       cumulativeTranslationOffset.y += UI.tileHeight * tranlation.y;
       context.lineTo(cumulativeTranslationOffset.x, cumulativeTranslationOffset.y);
@@ -109,43 +105,32 @@ function drawPathLine(self) {
   }
 }
 
-function pathLineCoordinates(a, b) {
+Renderer.prototype.pathLineCoordinates = function(a, b) {
   const xTranslation = b.x - a.x;
   const yTranslation = b.y - a.y;
 
   const key = xTranslation.toString() + yTranslation.toString();
 
   const lookUp = {
-    "-1-1": { x: 0,    y: -1 },
-    "0-1":  { x: 0.5,  y: -0.5    },
-    "1-1":  { x: 1,    y: 0  },
-    "10":   { x: 0.5,  y: 0.5    },
-    "11":   { x: 0,    y: 1  },
-    "01":   { x: -0.5, y: 0.5    },
-    "-11":  { x: -1,   y: 0  },
-    "-10":  { x: -0.5, y: -0.5    }
+    "-1-1": { x: 0,    y: -1   },
+    "0-1":  { x: 0.5,  y: -0.5 },
+    "1-1":  { x: 1,    y: 0    },
+    "10":   { x: 0.5,  y: 0.5  },
+    "11":   { x: 0,    y: 1    },
+    "01":   { x: -0.5, y: 0.5  },
+    "-11":  { x: -1,   y: 0    },
+    "-10":  { x: -0.5, y: -0.5 }
   }
 
   return lookUp[key];
 }
 
-function clearCanvas(self) {
-  self.context.save();
-  self.context.setTransform(1, 0, 0, 1, 0, 0);
-  self.context.fillStyle = "rgba(255, 255, 255, 1)";
-  self.context.fillRect(0, 0, self.canvas.width, self.canvas.height);
-  self.context.restore();  
+Renderer.prototype.clearCanvas = function() {
+  this.context.save();
+  this.context.setTransform(1, 0, 0, 1, 0, 0);
+  this.context.fillStyle = "rgba(255, 255, 255, 1)";
+  this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  this.context.restore();  
 }
-
-// function isInProccessOfMoveAnimation(square, animations) {
-//   let result = false;
-//   animations.forEach((animation) => {
-//     if (animation.toSquare.x == square.x && animation.toSquare.y == square.y) {
-//       result = true;
-//     }
-//   });
-//   return result;
-// }
-
 
 export { Renderer };

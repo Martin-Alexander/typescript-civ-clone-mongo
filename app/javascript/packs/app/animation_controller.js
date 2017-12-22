@@ -10,8 +10,6 @@ AnimationController.prototype.pieceMove = function(data, callback) {
   const toSquare = new Square(JSON.parse(data.new_squares[1]));
 
   const animationData = {
-    // fromSquareCoords: { x: fromSquare.x, y: fromSquare.y },
-    // toSquareCoords: { x: toSquare.x, y: toSquare.y },
     color: toSquare.color(),
     path: data.path,
     index: 0,
