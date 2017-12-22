@@ -1,10 +1,13 @@
 import { Square } from "./models/square";
 
-function GameData(rawGameData) {
+function GameData(UI, rawGameData) {
+  this.UI = UI;
   const data = JSON.parse(rawGameData);
   Object.keys(data).forEach((property) => {
     this[property] = data[property];
   });
+
+  this.UI.size = this.size;
 }
 
 GameData.prototype.initialize = function() {

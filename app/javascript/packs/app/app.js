@@ -12,7 +12,7 @@ import { AnimationController } from "./animation_controller";
 const parentElement = document.getElementById("canvas-container");
 
 const UI = new UserInterface();
-const gameData = new GameData(rawGameData);
+const gameData = new GameData(UI, rawGameData);
 const renderer = new Renderer(UI, gameData, parentElement);
 const gameDataController = new GameDataController(gameData);
 const animationController = new AnimationController(renderer);

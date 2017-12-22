@@ -26,6 +26,8 @@ EventRouter.prototype.initializeEventListener = function() {
   });
 
   window.addEventListener("mousedown", function(event) {
+    if (self.outOfBounds()) { return false; }
+
     switch (event.button) {
       case 0: // left
         mouse.left.down = true;
@@ -41,7 +43,9 @@ EventRouter.prototype.initializeEventListener = function() {
     }
   });
 
-  window.addEventListener("mouseup", function(event) { 
+  window.addEventListener("mouseup", function(event) {
+    if (self.outOfBounds()) { return false; }
+
     switch (event.button) {
       case 0: // left
         if (mouse.preDragDistance < 10) {
@@ -70,16 +74,20 @@ EventRouter.prototype.initializeEventListener = function() {
         mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
       }
     }
-    
+
     const oldtileMousePosition = UI.tileMousePosition;
     self.setMousePosition(event);
-    
+        
+    if (self.outOfBounds()) { return false; }
+
     if (mouse.right.down && !haveSameCoords(oldtileMousePosition, UI.tileMousePosition)) {
       inputController.pathUpdate();
     }
   });
 
   window.addEventListener("wheel", function(event) {
+    if (self.outOfBounds()) { return false; }
+
     const zoomSpeed = 1.1;
     if (event.deltaY < 0) {
       UI.tileHeight *= zoomSpeed;
@@ -118,11 +126,18 @@ EventRouter.prototype.setMousePosition = function(event) {
     x: ((offsetCoords.x - window.innerWidth / 2) + 2 * offsetCoords.y) / 2 ,
     y: (2 * offsetCoords.y - (offsetCoords.x - window.innerWidth / 2)) / 2 
   };
-  
+
   UI.tileMousePosition = {
     x: Math.floor(mouse.rawIsoPosition.x / UI.tileHeight),
     y: Math.floor(mouse.rawIsoPosition.y / UI.tileHeight)
   };
+}
+
+EventRouter.prototype.outOfBounds = function() {
+  return this.mouse.rawIsoPosition.x / this.UI.tileHeight < 0 ||
+  this.mouse.rawIsoPosition.y / this.UI.tileHeight < 0 ||
+  this.mouse.rawIsoPosition.x / this.UI.tileHeight > this.UI.size + 1||
+  this.mouse.rawIsoPosition.y / this.UI.tileHeight > this.UI.size + 1;
 }
 
 function haveSameCoords(a, b) {
