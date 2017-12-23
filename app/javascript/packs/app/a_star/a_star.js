@@ -63,7 +63,6 @@ AStar.prototype.sortSquares = function(squares) {
 }
 
 AStar.prototype.findPath = function(square) {
-  console.log(square);
   const path = [];
   let currentSquare = square;
 

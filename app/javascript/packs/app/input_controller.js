@@ -10,6 +10,8 @@ function InputController(UI, gameData, networkController) {
 InputController.prototype.selectSquare = function() {
   const selectedSquare = this.squareClickedOn();
 
+  console.log(selectedSquare);
+
   if (this.UI.selection.square == selectedSquare) {
     this.UI.selection.square = null;
   } else if (selectedSquare.units.length > 0) {
@@ -58,8 +60,6 @@ InputController.prototype.drawPathLine = function() {
     start: this.UI.selection.square,
     finish: this.squareClickedOn()
   });
-
-  console.log(this.UI.currentPath);
 }
 
 // Querries gameData for the square corresponding to the tile that the mouse is over

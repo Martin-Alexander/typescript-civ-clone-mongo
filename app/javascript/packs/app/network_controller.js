@@ -4,7 +4,6 @@
 function NetworkController(gameDataController, animationController) {
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
     received: (data) => {
-      console.log(data);
       switch (data.type) {
         case "piece_move":
           gameDataController.replaceFromSquare(data);
