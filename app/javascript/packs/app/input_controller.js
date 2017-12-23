@@ -1,3 +1,5 @@
+import { AStar } from "./a_star/a_star";
+
 function InputController(UI, gameData, networkController) {
   this.UI = UI;
   this.gameData = gameData;
@@ -44,14 +46,20 @@ InputController.prototype.moveUnit = function() {
 
 // Ask server for AStar path and update UI
 InputController.prototype.drawPathLine = function() {
-  this.networkController.aStar({
-    from: this.UI.selection.square.id,
-    to: this.squareClickedOn().id
-  }, (data) => {
-    if (this.UI.selection.square) {
-      this.UI.currentPath = data.path;
-    }
+  // this.networkController.aStar({
+  //   from: this.UI.selection.square.id,
+  //   to: this.squareClickedOn().id
+  // }, (data) => {
+  //   if (this.UI.selection.square) {
+  //     this.UI.currentPath = data.path;
+  //   }
+  // });
+  this.UI.currentPath = AStar.run(this.gameData, { 
+    start: this.UI.selection.square,
+    finish: this.squareClickedOn()
   });
+
+  console.log(this.UI.currentPath);
 }
 
 // Querries gameData for the square corresponding to the tile that the mouse is over
