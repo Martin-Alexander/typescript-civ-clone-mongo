@@ -24,11 +24,8 @@ Renderer.prototype.addAnimation = function(animation) {
 };
 
 Renderer.prototype.drawAllAnimations = function() {
-  this.animations.forEach((animation, index) => {
-    if (!animation.draw(this.canvas, this.context, this.UI)) {
-      this.animations.splice(index, 1);
-    }
-  });
+  this.animations.forEach(animation => animation.draw(this.canvas, this.context, this.UI));
+  this.animations = this.animations.filter(animation => !animation.done);
 }
 
 Renderer.prototype.initializeCanvasContext = function() {

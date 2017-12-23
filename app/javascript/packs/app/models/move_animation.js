@@ -6,6 +6,7 @@ function MoveAnimation(animationData, callback) {
   this.color = animationData.color;
   this.callback = callback;
   this.animationController = animationData.animationController;
+  this.done = false;
 
   if (this.fromSquare.x > this.toSquare.x && this.fromSquare.y == this.toSquare.y) {
     this.xDirection = -1; this.yDirection = -1;
@@ -43,11 +44,9 @@ MoveAnimation.prototype.draw = function(canvas, context, UI) {
   context.fill();
   context.restore();
   this.counter += UI.tileHeight / 2;
-  if (this.counter < UI.tileHeight) { 
-    return true;
-  } else {
+  if (this.counter >= UI.tileHeight) { 
     this.animationController.loadNextPieceMoveAnimation(this.animationData, this.callback);
-    return false;
+    this.done = true;
   }
 };
 
