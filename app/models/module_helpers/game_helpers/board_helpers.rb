@@ -1,6 +1,10 @@
 module BoardHelpers
   # Takes either a square number or a column row number pair and returns the corresponding square
   def find_square(col, row = false)
+    if col.respond_to?(:keys) 
+      row = col[:y] || col["y"]
+      col = col[:x] || col["x"]
+    end
     if row && (row > board_size || col > board_size)
       raise ArgumentError, "Invalid row #{row} or col #{col} for board size of #{board_size}"
     end
