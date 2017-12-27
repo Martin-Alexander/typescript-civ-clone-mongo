@@ -5,6 +5,7 @@ module Unit
     field :player_number, default: 0
     field :moves, default: 2
     
+    # The base movement value of a unit
     def base_moves
       2
     end
@@ -49,6 +50,7 @@ module Unit
       end
     end
 
+    # Unit has more are at least as many as the move path costs
     def has_enough_moves(move_path)
       moves >= move_path.total_move_cost
     end

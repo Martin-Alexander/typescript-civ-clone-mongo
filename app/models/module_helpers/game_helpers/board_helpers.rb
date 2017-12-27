@@ -15,6 +15,7 @@ module BoardHelpers
     end
   end
 
+  # Iterated through each unit and passes to a block
   def each_unit
     squares.each do |square|
       square.each do |unit|
