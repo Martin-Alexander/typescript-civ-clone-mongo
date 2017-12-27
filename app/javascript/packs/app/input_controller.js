@@ -35,7 +35,7 @@ InputController.prototype.pathUpdate = function() {
 
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
-  if (this.UI.selection.square) { 
+  if (this.UI.selection.square && this.UI.currentPath.length > 1) { 
     this.networkController.pieceMove({
       unit: this.UI.selection.square.units[0].id,
       path: this.UI.currentPath

@@ -6,9 +6,9 @@ function NetworkController(gameDataController, animationController) {
     received: (data) => {
       switch (data.type) {
         case "piece_move":
-          gameDataController.replaceFromSquare(data);
+          gameDataController.replaceSquare(data.new_squares[0]);
           animationController.pieceMove(data, () => {
-            gameDataController.replaceToSquare(data);
+            gameDataController.replaceSquare(data.new_squares[1]);
           });
           break;
         case "train_piece":

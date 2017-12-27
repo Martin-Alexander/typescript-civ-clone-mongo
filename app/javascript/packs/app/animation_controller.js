@@ -8,8 +8,8 @@ function AnimationController(renderer) {
 AnimationController.prototype.pieceMove = function(data, callback) {
   if (data.path.length < 2) { return false; }
 
-  const fromSquare = new Square(JSON.parse(data.new_squares[0]));
-  const toSquare = new Square(JSON.parse(data.new_squares[1]));
+  const fromSquare = new Square(data.new_squares[0]);
+  const toSquare = new Square(data.new_squares[1]);
 
   const animationData = {
     color: toSquare.color(),
