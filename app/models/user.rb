@@ -66,7 +66,12 @@ class User < MongoidModel
   def can_join_game?(game)
     game.state == "lobby" &&
     game.number_of_players(role: "player") < Game.max_players &&
-    games(game_state: "ongoing").empty? &&
+    games(game_state: "ongoing", role: "player").empty? &&
+    games(game_state: "lobby").empty?
+  end
+
+  def can_create_game?
+    games(game_state: "ongoing", role: "player").empty? &&
     games(game_state: "lobby").empty?
   end
 
@@ -74,9 +79,11 @@ class User < MongoidModel
 
   # Creates a new game with the user as a player and 
   def create_game
-    new_game = Game.create(state: "lobby")
-    Player.create(user: self, game: new_game, role: "player", host: true)
-    new_game
+    if can_create_game?
+      new_game = Game.create(state: "lobby")
+      Player.create(user: self, game: new_game, role: "player", host: true)
+      return new_game
+    end
   end
 
   # Creates a new player for a given game
