@@ -11,17 +11,8 @@ function NetworkController(gameDataController, animationController) {
             gameDataController.replaceSquare(data.new_squares[1]);
           });
           break;
-        case "train_piece":
-          gameDataController.buildPiece(data);
-          animationController.buildPiece(data);
-          break;
-        case "build_structure":
-          gameDataController.buildStructure(data);
-          animationController.buildStructure(data);
-          break;
-        case "combat":
-          gameDataController.combat(data);
-          animationController.combat(data);
+        case "next_turn":
+          gameDataController.newGameData(data.new_game);
           break;
         default:
           break;

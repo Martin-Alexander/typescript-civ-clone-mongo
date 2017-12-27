@@ -9,4 +9,8 @@ GameDataController.prototype.replaceSquare = function(square) {
   this.gameData.replaceSquare(fromSquare);
 }
 
+GameDataController.prototype.newGameData = function(rawGameData) {
+  this.gameData.newGameData(rawGameData);
+}
+
 export { GameDataController };
