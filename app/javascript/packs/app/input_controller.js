@@ -37,8 +37,8 @@ InputController.prototype.pathUpdate = function() {
 InputController.prototype.moveUnit = function() {
   if (this.UI.selection.square) { 
     this.networkController.pieceMove({
-      from: this.UI.selection.square.id,
-      to: this.squareClickedOn().id
+      unit: this.UI.selection.square.units[0].id,
+      path: this.UI.currentPath
     });
 
     this.UI.selection.square = null;
