@@ -18,7 +18,7 @@ module BoardHelpers
   # Iterated through each unit and passes to a block
   def each_unit
     squares.each do |square|
-      square.each do |unit|
+      square.units.each do |unit|
         yield(unit)
       end
     end
