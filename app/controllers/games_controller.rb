@@ -19,7 +19,7 @@ class GamesController < ApplicationController
   def input
     @game = Game.find(params[:game])
     send(params[:method].to_sym)
-    
+
     respond_to do |format|      
       format.json { render json: { status: "OK" } }
     end      
@@ -31,7 +31,11 @@ class GamesController < ApplicationController
     @path = params[:data][:path]
     @unit = @game.find_square(@path[0]).units.find(params[:data][:unit]).first
 
-    move_result = @unit.move(@path)
+    if @game.game_players.where(number: @unit.player_number).first.user_id == current_user.id.to_s
+      move_result = @unit.move(@path)
+    else 
+      move_result = { success: false }
+    end
 
     if move_result[:success]
       broadcast({

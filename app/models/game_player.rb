@@ -5,6 +5,7 @@ class GamePlayer < MongoidModel
   embeds_many :vision_squares, class_name: "Square::Vision"
 
   field :number, type: Integer
+  field :user_id, type: String
 
   # Searches through every square on the board and collects all units belonging
   # to the player

@@ -21,7 +21,7 @@ module BoardSetup
   # TEST MODE
   def generate_game_players
     players.each_with_index do |player, i|
-      GamePlayer.create game: self, number: i + 1
+      GamePlayer.create game: self, number: i + 1, user_id: player.user_id.to_s
     end
   end
 
