@@ -83,6 +83,8 @@ class User < MongoidModel
       new_game = Game.create(state: "lobby")
       Player.create(user: self, game: new_game, role: "player", host: true)
       return new_game
+    else
+      return false
     end
   end
 

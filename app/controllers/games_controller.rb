@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   def create
     new_game = current_user.create_game
-    redirect_to game_path(new_game)
+    redirect_to game_path(new_game) if new_game
   end
 
   def start
