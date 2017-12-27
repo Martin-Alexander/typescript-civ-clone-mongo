@@ -45,7 +45,7 @@ NetworkController.prototype.aStar = function(aStarData, callback) {
 }
 
 NetworkController.prototype.send = function(payload, callback) {
-  payload.game_id = gameId;
+  payload.game = gameId;
 
   const response = fetch("/game/input", {
     method: "POST",
