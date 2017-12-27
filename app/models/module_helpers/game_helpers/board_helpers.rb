@@ -14,4 +14,12 @@ module BoardHelpers
       squares[col.to_i]
     end
   end
+
+  def each_unit
+    squares.each do |square|
+      square.each do |unit|
+        yield(unit)
+      end
+    end
+  end
 end
