@@ -11,6 +11,7 @@ class MovePath
     end
   end
 
+  # Pass all missing methods to moves array
   def method_missing(method, *args, &block)
     if args.any?
       if block
