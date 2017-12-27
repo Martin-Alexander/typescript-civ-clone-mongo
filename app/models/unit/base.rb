@@ -10,12 +10,16 @@ module Unit
       self.delete
     end
 
+    def valid_move_path(move_path)
+      return are_adjacent(move_path) && are_free_of_units(move_path)
+    end
+
     def move(path)
       initial_moves_left = 0
       move_results = { success: false, path: path, new_squares: [] }
       move_path = MovePath.new(square.board, path)
 
-      if are_adjacent(move_path) && are_free_of_units(move_path)
+      if valid_move_path(move_path)
         execute_move(move_path.last.to)
         move_results[:success] = true
         move_results[:new_squares] = [move_path.first.from, move_path.last.to]
