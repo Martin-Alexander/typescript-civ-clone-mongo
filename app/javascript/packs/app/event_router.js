@@ -101,6 +101,13 @@ EventRouter.prototype.initializeEventListener = function() {
       UI.offset.y = (UI.offset.y / zoomSpeed) + (mouse.centerRelativePosition.y / 11);
     }
   });
+
+  window.addEventListener("keyup", function(event) {
+    switch (event.keyCode) {
+      case 13: // Enter
+        inputController.nextTurn();
+    }
+  });
 }
 
 EventRouter.prototype.setMousePosition = function(event) {

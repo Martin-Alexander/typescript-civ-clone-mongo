@@ -37,11 +37,9 @@ NetworkController.prototype.pieceMove = function(pieceMoveData) {
   this.send(payload);
 }
 
-NetworkController.prototype.aStar = function(aStarData, callback) {
-  const payload = { method: "a_star" };
-  payload.data = aStarData;
-
-  this.send(payload, callback);
+NetworkController.prototype.nextTurn = function() {
+  const payload = { method: "next_turn" };
+  this.send(payload);
 }
 
 NetworkController.prototype.send = function(payload, callback) {

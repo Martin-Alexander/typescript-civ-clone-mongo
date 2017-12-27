@@ -62,6 +62,11 @@ InputController.prototype.drawPathLine = function() {
   });
 }
 
+// Tell server to initiate next turn
+InputController.prototype.nextTurn = function() {
+  this.networkController.nextTurn();
+}
+
 // Querries gameData for the square corresponding to the tile that the mouse is over
 InputController.prototype.squareClickedOn = function() {
   return this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
