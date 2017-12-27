@@ -1,7 +1,7 @@
 module BoardSetup
   # Returns the dimension on the board such that each players "gets" 72 squares
   def board_size
-    Math::sqrt(number_of_players(role: "player") * 72).to_i
+    Math::sqrt(number_of_players(role: "player") * 500).to_i
   end
   
   private
