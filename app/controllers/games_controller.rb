@@ -17,6 +17,7 @@ class GamesController < ApplicationController
   end
 
   def input
+    # byebug
     @game = Game.find(params[:game])
     send(params[:method].to_sym)
   end
