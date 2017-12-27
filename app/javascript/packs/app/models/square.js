@@ -22,7 +22,8 @@ Square.prototype.color = function(selectionSquare) {
 const playerColorLookup = {
   1: "blue",
   2: "red",
-  3: "yellow"
+  3: "yellow",
+  4: "green"
 };
 
 export { Square };
