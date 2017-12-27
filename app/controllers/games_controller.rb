@@ -17,44 +17,29 @@ class GamesController < ApplicationController
   end
 
   def input
-    @game = Game.find(params[:game_id])
+    @game = Game.find(params[:game])
     send(params[:method].to_sym)
   end
 
   private
 
-  def piece_move
-    set_from_and_two_square
-    
-    broadcast({
-      type: "piece_move",
-      path: AStar.run(@game, start: @from_square, finish: @to_square),
-      new_squares: @game.move(@from_square, @to_square)
-    })
+  def piece_move   
+    @path = params[:data][:path]
+    @unit = @game.find_square(@path[0]).units.find(params[:data][:unit]).first
+
+    move_result = @unit.move(@path)
+
+    if move_result[:success]
+      broadcast({
+        type: "piece_move",
+        path: move_result[:path],
+        new_squares: move_result[:new_squares]
+      })
+    end
 
     respond_to do |format|      
       format.json { render json: { status: "OK" } }
     end    
-  end
-
-  def a_star
-    set_from_and_two_square
-    
-    respond_to do |format|      
-      format.json { 
-        render json: {
-          type: "a_star",
-          path: AStar.run(@game, start: @from_square, finish: @to_square)
-        }
-      }
-    end
-  end
-
-  def set_from_and_two_square
-    data = params.require(:data).permit(:to, :from).to_h
-
-    @from_square = @game.squares.find(data[:from])
-    @to_square = @game.squares.find(data[:to])
   end
 
   def broadcast(data)
