@@ -18,15 +18,19 @@ module Unit
 
     # Default move validations
     def valid_move_path(move_path)
-      return are_adjacent(move_path) && are_free_of_units(move_path) && has_enough_moves(move_path)
+      return(
+        are_adjacent(move_path) && 
+        are_free_of_units(move_path) && 
+        has_enough_moves(move_path)
+      )
     end
 
     # Should be only move function
-    def move(path)
+    def move(user, path)
       move_results = { success: false, path: path, new_squares: nil }
       move_path = MovePath.new(square.board, path)
 
-      if valid_move_path(move_path)
+      if valid_move_path(move_path) && is_unit_owner(user)
         update(moves: moves - move_path.total_move_cost)
         execute_move(move_path.last.to)
         move_results[:success] = true
@@ -53,6 +57,10 @@ module Unit
     # Unit has more are at least as many as the move path costs
     def has_enough_moves(move_path)
       moves >= move_path.total_move_cost
+    end
+
+    def is_unit_owner(user)
+      square.board.game_players.where(number: player_number).first.user_id == user.id.to_s
     end
   end
 end
