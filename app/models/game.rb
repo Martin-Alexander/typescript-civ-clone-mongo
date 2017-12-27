@@ -16,5 +16,3 @@ class Game < MongoidModel
 
   validates :state, inclusion: { in: ["lobby", "ongoing", "over", "paused"] }
 end
-
-# Hmmmm
