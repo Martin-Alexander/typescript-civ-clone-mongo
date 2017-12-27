@@ -11,6 +11,10 @@ class MovePath
     end
   end
 
+  def total_move_cost
+    @moves.sum { |move| move.move_cost }
+  end
+
   # Pass all missing methods to moves array
   def method_missing(method, *args, &block)
     if args.any?
@@ -40,7 +44,8 @@ class MovePath
       # @connection = connection_type
     end
 
-    def move_cost(unit)
+    def move_cost
+    # def move_cost(unit)
       # GameRule.terrain_move_cost(unit, @to, @connection)
       1
     end
