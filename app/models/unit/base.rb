@@ -5,6 +5,10 @@ module Unit
     field :player_number, default: 0
     field :moves, default: 2
     
+    def base_moves
+      2
+    end
+
     # Default move execution
     def execute_move(to_square)
       to_square.infantry << self.dup
