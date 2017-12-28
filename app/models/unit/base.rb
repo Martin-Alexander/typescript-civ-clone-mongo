@@ -8,7 +8,7 @@ module Unit
     field :state, default: "none"
     
     def update_state_from_orders
-      
+
     end
 
     # The base movement value of a unit

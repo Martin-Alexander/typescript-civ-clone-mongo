@@ -1,0 +1,85 @@
+orders:
+  none:
+    type: unit_state_transform
+    transform_to: none
+  go:
+    type: action
+  fortify:
+    type: unit_state_transform
+    transform_to: fortified
+  siege:
+    type: unit_state_transform
+    transform_to: siege_mode
+  build_road:
+    type: action
+  build_fortress:
+    type: action
+  build_city:
+    type: action
+  build_farm:
+    type: action    
+units:
+  infantry:
+    movement: 
+      base: 2
+    allowed_orders:
+      - none
+      - go
+      - fortify
+      - siege
+  worker:
+    movement: 
+      base: 2
+    allowed_orders:
+      - none
+      - go
+      - build_road
+      - build_fortress
+      - build_city
+  tank:
+    movement: 
+      base: 2
+      penalty_terrain: 
+        marsh: null
+        forest: 4
+    allowed_orders:
+      - none
+      - go
+      - fortify
+      - siege_mode
+  ship:
+    movement:
+      base: 6
+    allowed_orders:
+      - none
+      - go
+terrain:
+  grass:
+    type: land
+    move_cost: 1
+    fortification_bonus: 2
+  plains:
+    type: land
+    move_cost: 1
+    fortification_bonus: 2
+  desert:
+    type: land
+    move_cost: 1
+    fortification_bonus: 1.5
+  forest:
+    type: land
+    move_cost: 2
+    fortification_bonus: 3
+  marsh:
+    type: land
+    move_cost: 2
+    fortification_bonus: null
+  mountains:
+    type: land
+    move_cost: null
+    fortification_bonus: null
+  water:
+    type: water
+    move_cost: 1
+    fortification_bonus: null
+
