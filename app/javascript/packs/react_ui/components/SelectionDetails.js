@@ -1,5 +1,7 @@
 import React from "react";
 
+import Orders from "./Orders";
+
 export default class SelectionDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -40,6 +42,7 @@ export default class SelectionDetails extends React.Component {
         <div><strong>Selection square:</strong></div>
         <div>Coords: {selectionSquare.x}, {selectionSquare.y}</div>
         <div>No. Units: {selectionSquare.numberOfUnits}</div>
+        <Orders name="Fortify"/>
       </div>
     );
   }
