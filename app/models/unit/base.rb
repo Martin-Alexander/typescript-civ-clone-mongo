@@ -4,7 +4,13 @@ module Unit
 
     field :player_number, default: 0
     field :moves, default: 2
+    field :orders, default: "none"
+    field :state, default: "none"
     
+    def update_state_from_orders
+      
+    end
+
     # The base movement value of a unit
     def base_moves
       2
