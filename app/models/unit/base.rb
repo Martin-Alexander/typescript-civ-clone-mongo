@@ -7,8 +7,9 @@ module Unit
     field :orders, default: "none"
     field :state, default: "none"
     
-    def update_state_from_orders
-
+    # returns string representation of unit type
+    def type
+      _type.split("::").last.downcase
     end
 
     # The base movement value of a unit
