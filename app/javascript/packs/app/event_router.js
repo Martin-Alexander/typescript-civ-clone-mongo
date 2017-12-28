@@ -76,7 +76,7 @@ EventRouter.prototype.initializeEventListener = function() {
         x: (mouse.rawPosition.x - event.clientX),
         y: (mouse.rawPosition.y - event.clientY)
       };
-      if (mouse.preDragDistance > 10) {
+      if (mouse.preDragDistance > 5) {
         console.log("drag");
         UI.offset.x -= dragDistance.x;
         UI.offset.y -= dragDistance.y;
