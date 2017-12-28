@@ -25,11 +25,17 @@ EventRouter.prototype.initializeEventListener = function() {
     return false; 
   });
 
+  // Disabling all text selection
+  function disableselect(e) {return false};
+  document.onselectstart = disableselect;
+  document.onmousedown = disableselect;
+
   window.addEventListener("mousedown", function(event) {
     if (self.outOfBounds()) { return false; }
 
     switch (event.button) {
       case 0: // left
+        console.log("left down");
         mouse.left.down = true;
         mouse.positionOnLastDown = {
           x: mouse.rawPosition.x,
@@ -37,6 +43,7 @@ EventRouter.prototype.initializeEventListener = function() {
         };
         break;
       case 2: // right
+        console.log("right down");
         inputController.pathFindBegin();
         mouse.right.down = true;
         break;
@@ -48,6 +55,7 @@ EventRouter.prototype.initializeEventListener = function() {
 
     switch (event.button) {
       case 0: // left
+        console.log("left up")
         if (mouse.preDragDistance < 10) {
           inputController.selectSquare();
         }
@@ -55,6 +63,7 @@ EventRouter.prototype.initializeEventListener = function() {
         mouse.left.down = false; 
         break;
       case 2: // right
+        console.log("right up")
         inputController.moveUnit();
         mouse.right.down = false;
         break;
@@ -68,9 +77,11 @@ EventRouter.prototype.initializeEventListener = function() {
         y: (mouse.rawPosition.y - event.clientY)
       };
       if (mouse.preDragDistance > 10) {
+        console.log("drag");
         UI.offset.x -= dragDistance.x;
         UI.offset.y -= dragDistance.y;
       } else {
+        console.log("pre-drag");
         mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
       }
     }
