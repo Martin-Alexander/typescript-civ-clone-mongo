@@ -7,6 +7,13 @@ module Unit
     field :orders, default: "none"
     field :state, default: "none"
     
+    # Updates a unit's orders after rule checking
+    def give_order(order_name)
+      if Rules[type]["allowed_orders"].include?(order_name)
+        update(orders: order_name)
+      end
+    end
+
     # returns string representation of unit type
     def type
       _type.split("::").last.downcase
