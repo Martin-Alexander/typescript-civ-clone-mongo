@@ -14,6 +14,9 @@ function NetworkController(gameDataController, animationController) {
         case "next_turn":
           gameDataController.newGameData(data.new_game);
           break;
+        case "give_order":
+          gameDataController.replaceSquare(data.new_square);
+          break;
         default:
           break;
       }
@@ -31,6 +34,12 @@ NetworkController.prototype.pieceMove = function(pieceMoveData) {
 NetworkController.prototype.nextTurn = function() {
   const payload = { method: "next_turn" };
   this.send(payload);
+}
+
+NetworkController.prototype.giveOrder = function(orderData) {
+  const payload = { method: "give_order" };
+  payload.data = orderData;
+  this.send(payload)
 }
 
 NetworkController.prototype.send = function(payload, callback) {

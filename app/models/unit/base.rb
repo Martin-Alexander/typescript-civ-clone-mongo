@@ -9,8 +9,9 @@ module Unit
     
     # Updates a unit's orders after rule checking
     def give_order(order_name)
-      if Rules[type]["allowed_orders"].include?(order_name)
-        update(orders: order_name)
+      if Rules["units"][type]["allowed_orders"].include?(order_name)
+        new_order = orders == order_name ? "none" : order_name
+        update(orders: new_order)
         return true
       else
         return false
@@ -51,7 +52,7 @@ module Unit
         update(moves: moves - move_path.total_move_cost)
         execute_move(move_path.last.to)
         move_results[:success] = true
-        move_results[:new_squares] = [move_path.first.from, move_path.last.to]
+        move_results[:new_squares] = [move_path.first.from.to_hash, move_path.last.to.to_hash]
       end
 
       return move_results

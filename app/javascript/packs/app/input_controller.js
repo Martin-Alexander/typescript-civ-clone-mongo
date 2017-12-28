@@ -51,16 +51,7 @@ InputController.prototype.moveUnit = function() {
   this.reactController.updateSelectionDetails(this.UI);
 };
 
-// Ask server for AStar path and update UI
 InputController.prototype.drawPathLine = function() {
-  // this.networkController.aStar({
-  //   from: this.UI.selection.square.id,
-  //   to: this.squareClickedOn().id
-  // }, (data) => {
-  //   if (this.UI.selection.square) {
-  //     this.UI.currentPath = data.path;
-  //   }
-  // });
   this.UI.currentPath = AStar.run(this.gameData, { 
     start: this.UI.selection.square,
     finish: this.squareClickedOn()
@@ -72,6 +63,14 @@ InputController.prototype.drawPathLine = function() {
 // Tell server to initiate next turn
 InputController.prototype.nextTurn = function() {
   this.networkController.nextTurn();
+}
+
+InputController.prototype.fortify = function() {
+  this.networkController.giveOrder({
+    square_coords: this.UI.tileMousePosition,
+    unit: this.UI.selection.square.units[0].id,
+    order: "fortify"
+  });
 }
 
 // Querries gameData for the square corresponding to the tile that the mouse is over

@@ -47,7 +47,7 @@ class GamesController < ApplicationController
 
     broadcast({
       type: "next_turn",
-      new_game: @game.to_json
+      new_game: @game.to_hash
     })
   end
 
@@ -58,7 +58,7 @@ class GamesController < ApplicationController
     if @unit.give_order(params[:data][:order])
       broadcast({
         type: "give_order",
-        new_squares: @square
+        new_square: @square.to_hash
       })
     end
   end

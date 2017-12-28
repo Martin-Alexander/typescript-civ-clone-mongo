@@ -112,6 +112,10 @@ EventRouter.prototype.initializeEventListener = function() {
     switch (event.keyCode) {
       case 13: // Enter
         inputController.nextTurn();
+        break;
+      case 70: // f
+        inputController.fortify();
+        break;
     }
   });
 }

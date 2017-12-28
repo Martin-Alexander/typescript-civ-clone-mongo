@@ -31,9 +31,8 @@ GameData.prototype.replaceSquare = function(square) {
 };
 
 GameData.prototype.newGameData = function(rawGameData) {
-  const data = JSON.parse(rawGameData);
-  Object.keys(data).forEach((property) => {
-    this[property] = data[property];
+  Object.keys(rawGameData).forEach((property) => {
+    this[property] = rawGameData[property];
   });
 
   this.initialize();
