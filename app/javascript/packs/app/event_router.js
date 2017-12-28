@@ -144,10 +144,12 @@ EventRouter.prototype.setMousePosition = function(event) {
     y: (2 * offsetCoords.y - (offsetCoords.x - window.innerWidth / 2)) / 2 
   };
 
-  UI.tileMousePosition = {
-    x: Math.floor(mouse.rawIsoPosition.x / UI.tileHeight),
-    y: Math.floor(mouse.rawIsoPosition.y / UI.tileHeight)
-  };
+  if (!this.outOfBounds()) {
+    UI.tileMousePosition = {
+      x: Math.floor(mouse.rawIsoPosition.x / UI.tileHeight),
+      y: Math.floor(mouse.rawIsoPosition.y / UI.tileHeight)
+    };
+  }
 
   this.reactController.updateSelectionDetails(UI);
 }
