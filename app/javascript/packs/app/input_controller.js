@@ -1,9 +1,10 @@
 import { AStar } from "./a_star/a_star";
 
-function InputController(UI, gameData, networkController) {
+function InputController(UI, gameData, networkController, reactController) {
   this.UI = UI;
   this.gameData = gameData;
   this.networkController = networkController;
+  this.reactController = reactController;
 }
 
 // Selecting a square and cycling through units & structures
@@ -17,6 +18,8 @@ InputController.prototype.selectSquare = function() {
   } else if (selectedSquare.units.length > 0) {
     this.UI.selection.square = selectedSquare;
   }
+
+  this.reactController.updateSelectionDetails(this.UI);
 };
 
 // Pressing the right mouse button to begin unit movement path finding
@@ -44,6 +47,8 @@ InputController.prototype.moveUnit = function() {
     this.UI.selection.square = null;
     this.UI.currentPath = null;
   }
+
+  this.reactController.updateSelectionDetails(this.UI);
 };
 
 // Ask server for AStar path and update UI
@@ -60,6 +65,8 @@ InputController.prototype.drawPathLine = function() {
     start: this.UI.selection.square,
     finish: this.squareClickedOn()
   });
+
+  this.reactController.updateSelectionDetails(this.UI);
 }
 
 // Tell server to initiate next turn

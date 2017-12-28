@@ -6,6 +6,7 @@ import { GameData }            from "./game_data";
 import { NetworkController }   from "./network_controller";
 import { GameDataController }  from "./game_data_controller";
 import { AnimationController } from "./animation_controller";
+import { ReactController }     from "./react_controller";
 
 /* global rawGameData */
 
@@ -17,8 +18,9 @@ const renderer            = new Renderer(UI, gameData, parentElement);
 const gameDataController  = new GameDataController(gameData);
 const animationController = new AnimationController(renderer);
 const networkController   = new NetworkController(gameDataController, animationController);
-const inputController     = new InputController(UI, gameData, networkController);
-const eventRouter         = new EventRouter(UI, inputController);
+const reactController     = new ReactController(UI, gameData);
+const inputController     = new InputController(UI, gameData, networkController, reactController);
+const eventRouter         = new EventRouter(UI, inputController, reactController);
 
 gameData.initialize();
 renderer.run();

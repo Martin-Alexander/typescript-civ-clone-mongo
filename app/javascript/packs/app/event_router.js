@@ -1,6 +1,7 @@
-function EventRouter(UI, inputController) {
+function EventRouter(UI, inputController, reactController) {
   this.UI = UI;
   this.inputController = inputController;
+  this.reactController = reactController;
   this.mouse = {
     right: { down: false },
     left: { down: false },
@@ -143,6 +144,8 @@ EventRouter.prototype.setMousePosition = function(event) {
     x: Math.floor(mouse.rawIsoPosition.x / UI.tileHeight),
     y: Math.floor(mouse.rawIsoPosition.y / UI.tileHeight)
   };
+
+  this.reactController.updateSelectionDetails(UI);
 }
 
 EventRouter.prototype.outOfBounds = function() {
