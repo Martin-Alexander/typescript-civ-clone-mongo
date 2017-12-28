@@ -51,6 +51,18 @@ class GamesController < ApplicationController
     })
   end
 
+  def give_order
+    @square = @game.find_square(params[:data][:square_coords])
+    @unit = @square.units.find(params[:data][:unit]).first
+
+    if @unit.give_order(params[:data][:order])
+      broadcast({
+        type: "give_order",
+        new_squares: @square
+      })
+    end
+  end
+
   def broadcast(data)
     ActionCable.server.broadcast("game_channel_#{@game.id}", data)
   end

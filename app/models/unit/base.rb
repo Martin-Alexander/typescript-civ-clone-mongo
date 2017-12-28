@@ -11,6 +11,9 @@ module Unit
     def give_order(order_name)
       if Rules[type]["allowed_orders"].include?(order_name)
         update(orders: order_name)
+        return true
+      else
+        return false
       end
     end
 
