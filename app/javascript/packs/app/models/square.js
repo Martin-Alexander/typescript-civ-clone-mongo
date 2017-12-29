@@ -23,6 +23,10 @@ Square.prototype.equalTo = function(otherSquare) {
   return this.x === otherSquare.x && this.y === otherSquare.y;
 }
 
+Square.prototype.getCoordinates = function() {
+  return { x: this.x, y: this.y };
+}
+
 const playerColorLookup = {
   1: "blue",
   2: "red",
