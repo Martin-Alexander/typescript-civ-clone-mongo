@@ -13,7 +13,11 @@ GameDataController.prototype.replaceSquare = function(square) {
 }
 
 GameDataController.prototype.newGameData = function(rawGameData) {
+  const oldSelectionSquare = this.UI.selection.square;
   this.gameData.newGameData(rawGameData);
+  this.UI.selection.square = this.gameData.square(oldSelectionSquare.x, oldSelectionSquare.y);
+  this.UI.selection.unit = this.UI.selection.square.units[0];
+  this.reactController.updateSelectionDetails();
 }
 
 GameDataController.prototype.updateSelectedSquare = function(newSquare) {
