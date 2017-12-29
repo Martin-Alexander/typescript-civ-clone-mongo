@@ -70,7 +70,7 @@ InputController.prototype.nextTurn = function() {
 
 InputController.prototype.giveOrder = function(order) {
   this.networkController.giveOrder({
-    square_coords: this.UI.tileMousePosition,
+    square_coords: this.UI.selection.square.getCoordinates(),
     unit: this.UI.selection.square.units[0].id,
     order: order
   });
