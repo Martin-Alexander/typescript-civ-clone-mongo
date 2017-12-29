@@ -4,18 +4,48 @@ module Unit
 
     field :player_number, default: 0
     field :moves, default: 2
-    field :orders, default: "none"
+    field :order, default: "none"
     field :state, default: "none"
+
+    # ==== Next turn methods ====
+
+    # Executes all methods involved in turn roll over
+    def apply_turn_rollover_logic
+      update(moves: base_moves)
+      execute_order
+    end
+
+    # ==== Order methods ====
     
+    # Returns whether or not a unit has a non-none order
+    def has_order?
+      order != "none"
+    end
+
     # Updates a unit's orders after rule checking
     def give_order(order_name)
-      if Rules["units"][type]["allowed_orders"].include?(order_name)
-        new_order = orders == order_name ? "none" : order_name
-        update(orders: new_order)
+      if unit_rules["allowed_orders"].include?(order_name)
+        new_order = order == order_name ? "none" : order_name
+        update(order: new_order)
         return true
       else
         return false
       end
+    end
+
+    # Applies game logic turning an order into state
+    def execute_order
+      if Rules["orders"][order]["type"] == "unit_state_transform"
+        update(state: Rules["orders"][order]["transform_to"])
+        update(order: "none")
+      end
+    end
+
+    # ==== General untility methods ====
+
+    # The base movement value of a unit
+    def base_moves
+      Rules["units"][type]["movement"]["base"]
     end
 
     # returns string representation of unit type
@@ -23,10 +53,18 @@ module Unit
       _type.split("::").last.downcase
     end
 
-    # The base movement value of a unit
-    def base_moves
-      2
+    # Returns the rules for unit
+    def unit_rules
+      Rules["units"][type]
     end
+
+    # Returns whether or not the unit belongs to a given user
+    def is_unit_owner(user)
+      square.board.game_players.where(number: player_number).first.user_id == user.id.to_s
+    end
+
+
+    # ==== Movement methods ====
 
     # Default move execution
     def execute_move(to_square)
@@ -58,6 +96,8 @@ module Unit
       return move_results
     end
 
+    # ---- Move validation methods ----
+
     # All moves are to adjacent squares
     def are_adjacent(move_path)
       move_path.all? do |move|
@@ -75,10 +115,6 @@ module Unit
     # Unit has more are at least as many as the move path costs
     def has_enough_moves(move_path)
       moves >= move_path.total_move_cost
-    end
-
-    def is_unit_owner(user)
-      square.board.game_players.where(number: player_number).first.user_id == user.id.to_s
     end
   end
 end

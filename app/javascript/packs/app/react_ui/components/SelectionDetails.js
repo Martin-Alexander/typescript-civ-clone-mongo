@@ -35,7 +35,7 @@ export default class SelectionDetails extends React.Component {
             <div><strong>Selection square:</strong></div>
             <div>Type: {this.state.UI.selection.unit.type}</div>
             <div>Moves: {this.state.UI.selection.unit.moves}</div>
-            <div>Orders: {this.state.UI.selection.unit.orders}</div>
+            <div>Orders: {this.state.UI.selection.unit.order}</div>
             <div>State: {this.state.UI.selection.unit.state}</div>
           </div>
         );
@@ -43,8 +43,10 @@ export default class SelectionDetails extends React.Component {
     }
 
     const renderOrdersOfSelectedUnit = () => {
+      let orders = [];
+
       if (this.state.UI.selection.unit) {
-        var orders = this.rules.units[this.state.UI.selection.unit.type].allowed_orders.map((order) => {
+        orders = this.rules.units[this.state.UI.selection.unit.type].allowed_orders.map((order) => {
           return <Order key={order} inputController={this.props.inputController} name={order}/>;
         });
       }

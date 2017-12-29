@@ -2,7 +2,7 @@ module GameLogic
   # Handles all game logic related to turn roll-over
   def next_turn
     each_unit do |unit|
-      unit.update(moves: unit.base_moves)
+      unit.apply_turn_rollover_logic
     end
   end
 end
