@@ -31,7 +31,7 @@ module Lobby
   def generate_game_data
     generate_global_squares
     generate_game_players
-    generate_vision_squares
+    # generate_vision_squares
     generate_initial_unit_placement
   end
 end
