@@ -20,10 +20,10 @@ const parentElement = document.getElementById("canvas-container");
 const UI                     = new UserInterface();
 const gameData               = new GameData(UI, rawGameData);
 const renderer               = new Renderer(UI, gameData, parentElement);
-const gameDataController     = new GameDataController(gameData);
+const reactController        = new ReactController(UI, gameData);
+const gameDataController     = new GameDataController(gameData, UI, reactController);
 const animationController    = new AnimationController(renderer);
 const networkController      = new NetworkController(gameDataController, animationController);
-const reactController        = new ReactController(UI, gameData);
 const inputController        = new InputController(UI, gameData, networkController, reactController);
 const eventRouter            = new EventRouter(UI, inputController, reactController);
 
@@ -31,4 +31,4 @@ gameData.initialize();
 renderer.run();
 
 const canvasContainer = document.getElementById("canvas-container");
-ReactDOM.render(<ReactUserInterface inputController={inputController} />, canvasContainer);
+ReactDOM.render(<ReactUserInterface UI={UI} inputController={inputController} />, canvasContainer);

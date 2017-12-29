@@ -68,11 +68,11 @@ InputController.prototype.nextTurn = function() {
   this.networkController.nextTurn();
 }
 
-InputController.prototype.fortify = function() {
+InputController.prototype.giveOrder = function(order) {
   this.networkController.giveOrder({
     square_coords: this.UI.tileMousePosition,
     unit: this.UI.selection.square.units[0].id,
-    order: "fortify"
+    order: order
   });
 }
 

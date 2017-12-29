@@ -19,6 +19,10 @@ Square.prototype.color = function(selectionSquare) {
   return "black";
 };
 
+Square.prototype.equalTo = function(otherSquare) {
+  return this.x === otherSquare.x && this.y === otherSquare.y;
+}
+
 const playerColorLookup = {
   1: "blue",
   2: "red",

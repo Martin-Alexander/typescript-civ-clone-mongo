@@ -1,10 +1,10 @@
 function ReactController(UI, gameData) {
-  global.UI = UI;
-  global.gameData = gameData;
+  this.UI = UI;
+  this.gameData = gameData;
 }
 
-ReactController.prototype.updateSelectionDetails = function(UI) {
-  global.updateSelectionDetails(UI);
+ReactController.prototype.updateSelectionDetails = function() {
+  global.updateSelectionDetails(this.UI);
 }
 
 export { ReactController };

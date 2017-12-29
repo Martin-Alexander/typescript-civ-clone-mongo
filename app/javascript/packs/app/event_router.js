@@ -114,7 +114,7 @@ EventRouter.prototype.initializeEventListener = function() {
         inputController.nextTurn();
         break;
       case 70: // f
-        inputController.fortify();
+        inputController.giveOrder("fortify");
         break;
     }
   });

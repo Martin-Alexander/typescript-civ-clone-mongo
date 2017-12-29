@@ -5,15 +5,13 @@ import Order from "./Order";
 export default class SelectionDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      UI: global.UI
-    };
+    this.state = { UI: this.props.UI };
     this.rules = JSON.parse(rules);
   }
 
   componentWillMount() {
     global.updateSelectionDetails = (UI) => {
-      this.setState(UI);
+      this.setState({UI: UI});
     }
   }
 
@@ -47,7 +45,7 @@ export default class SelectionDetails extends React.Component {
     const renderOrdersOfSelectedUnit = () => {
       if (this.state.UI.selection.unit) {
         var orders = this.rules.units[this.state.UI.selection.unit.type].allowed_orders.map((order) => {
-          return <Order name={order}/>;
+          return <Order key={order} inputController={this.props.inputController} name={order}/>;
         });
       }
 
