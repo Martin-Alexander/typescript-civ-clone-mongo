@@ -1,14 +1,14 @@
 import React from "react";
 
-import Orders from "./Orders";
+import Order from "./Order";
 
 export default class SelectionDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      UI: global.UI,
-      rules: rules
+      UI: global.UI
     };
+    this.rules = JSON.parse(rules);
   }
 
   componentWillMount() {
@@ -44,6 +44,16 @@ export default class SelectionDetails extends React.Component {
       }
     }
 
+    const renderOrdersOfSelectedUnit = () => {
+      if (this.state.UI.selection.unit) {
+        var orders = this.rules.units[this.state.UI.selection.unit.type].allowed_orders.map((order) => {
+          return <Order name={order}/>;
+        });
+      }
+
+      return orders;
+    }
+
     const selectionDetailsStyle = {
       position: "absolute",
       bottom: "0",
@@ -58,6 +68,7 @@ export default class SelectionDetails extends React.Component {
         <div><strong>Tile over:</strong> {this.state.UI.tileMousePosition.x}, {this.state.UI.tileMousePosition.y}</div>
         {renderSelectedSquareDetails()}
         {renderSelectedUnitDetails()}
+        {renderOrdersOfSelectedUnit()}
       </div>
     );
   }

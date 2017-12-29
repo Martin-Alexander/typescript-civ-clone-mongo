@@ -4,7 +4,7 @@ import SelectionDetails from "./SelectionDetails";
 import TurnTimer from "./TurnTimer";
 import Minimap from "./Minimap";
 
-export default class UserInterface extends React.Component {
+export default class ReactUserInterface extends React.Component {
   render() {
     const userInterfaceStyle = {
       position: "absolute",
