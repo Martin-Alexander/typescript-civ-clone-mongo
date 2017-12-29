@@ -5,7 +5,10 @@ import Orders from "./Orders";
 export default class SelectionDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { UI: global.UI };
+    this.state = { 
+      UI: global.UI,
+      rules: rules
+    };
   }
 
   componentWillMount() {
@@ -15,16 +18,30 @@ export default class SelectionDetails extends React.Component {
   }
 
   render() {
-    const selectionSquare = {
-      x: null,
-      y: null,
-      numberOfUnits: null
+    const renderSelectedSquareDetails = () => {
+      if (this.state.UI.selection.square) {
+        return(
+          <div>
+            <div><strong>Selection square:</strong></div>
+            <div>Coords: {this.state.UI.selection.square.x}, {this.state.UI.selection.square.y}</div>
+            <div>No. Units: {this.state.UI.selection.square.units.length}</div>
+          </div>
+        );
+      }
     }
 
-    if (this.state.UI.selection.square) {
-      selectionSquare.x = this.state.UI.selection.square.x;
-      selectionSquare.y = this.state.UI.selection.square.y;
-      selectionSquare.numberOfUnits = this.state.UI.selection.square.units.length;
+    const renderSelectedUnitDetails = () => {
+      if (this.state.UI.selection.unit) {
+        return(
+          <div>
+            <div><strong>Selection square:</strong></div>
+            <div>Type: {this.state.UI.selection.unit.type}</div>
+            <div>Moves: {this.state.UI.selection.unit.moves}</div>
+            <div>Orders: {this.state.UI.selection.unit.orders}</div>
+            <div>State: {this.state.UI.selection.unit.state}</div>
+          </div>
+        );
+      }
     }
 
     const selectionDetailsStyle = {
@@ -39,10 +56,8 @@ export default class SelectionDetails extends React.Component {
     return(
       <div style={selectionDetailsStyle}>
         <div><strong>Tile over:</strong> {this.state.UI.tileMousePosition.x}, {this.state.UI.tileMousePosition.y}</div>
-        <div><strong>Selection square:</strong></div>
-        <div>Coords: {selectionSquare.x}, {selectionSquare.y}</div>
-        <div>No. Units: {selectionSquare.numberOfUnits}</div>
-        <Orders name="Fortify"/>
+        {renderSelectedSquareDetails()}
+        {renderSelectedUnitDetails()}
       </div>
     );
   }
