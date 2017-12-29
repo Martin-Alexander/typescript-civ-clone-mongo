@@ -15,8 +15,10 @@ InputController.prototype.selectSquare = function() {
 
   if (this.UI.selection.square == selectedSquare) {
     this.UI.selection.square = null;
+    this.UI.selection.unit = null;
   } else if (selectedSquare.units.length > 0) {
     this.UI.selection.square = selectedSquare;
+    this.UI.selection.unit = selectedSquare.units[0];
   }
 
   this.reactController.updateSelectionDetails(this.UI);
@@ -45,6 +47,7 @@ InputController.prototype.moveUnit = function() {
     });
 
     this.UI.selection.square = null;
+    this.UI.selection.unit = null;
     this.UI.currentPath = null;
   }
 
