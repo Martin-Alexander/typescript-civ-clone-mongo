@@ -62,6 +62,7 @@ Renderer.prototype.drawSquare = function(square) {
     ((square.y + square.x) * UI.tileHeight / 2) + UI.offset.y + ((canvas.height - 15 * UI.tileHeight) / 2)
   );
   square.render(context, UI);
+  if (square.structures[0]) { square.structures[0].render(context, UI); }
   if (square.units[0]) { square.units[0].render(context, UI); }
   context.restore();     
 }

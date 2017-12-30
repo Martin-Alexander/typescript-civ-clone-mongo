@@ -36,7 +36,7 @@ MoveAnimation.prototype.draw = function(canvas, context, UI) {
   context.translate(this.counter * this.xDirection, (this.counter * this.yDirection) / 2);
   this.unit.render(context, UI);
   context.restore();
-  this.counter += UI.tileHeight / 2;
+  this.counter += UI.tileHeight / 3;
   if (this.counter >= UI.tileHeight) { 
     this.animationController.loadNextPieceMoveAnimation(this.animationData, this.callback);
     this.done = true;

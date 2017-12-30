@@ -1,13 +1,19 @@
 import { Unit } from "./unit";
+import { Structure } from "./structure";
 
 function Square(rawSquareObject) {
   this.units = [];
+  this.structures = [];
   Object.keys(rawSquareObject).forEach((property) => {
     if (property === "units") {
       rawSquareObject.units.forEach((unit) => {
         this.units.push(new Unit(unit));
       });
-    } else if (property == "_id") {
+    } else if (property === "structures") {
+      rawSquareObject.structures.forEach((structure) => {
+        this.structures.push(new Structure(structure));
+      });      
+    } else if (property === "_id") {
       this.id = rawSquareObject[property]["$oid"];
     } else {
       this[property] = rawSquareObject[property];
