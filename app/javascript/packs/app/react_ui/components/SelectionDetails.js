@@ -5,7 +5,10 @@ import Order from "./Order";
 export default class SelectionDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { UI: this.props.UI };
+    this.state = { 
+      UI: this.props.UI,
+      currentPlayer: this.props.currentPlayer
+    };
     this.rules = JSON.parse(rules);
   }
 
@@ -52,9 +55,8 @@ export default class SelectionDetails extends React.Component {
           if (
             !(self.rules.orders[order].type == "construction" && 
             self.state.UI.selection.square.hasCompletedStructure(self.rules.orders[order].structure)) &&
-            // self.rules.orders[order].transform_to !== self.state.UI.selection.unit.state &&
             order !== self.state.UI.selection.unit.order &&
-            gameData.getCurrentPlayer().number === self.state.UI.selection.unit.player_number
+            this.state.currentPlayer.number === self.state.UI.selection.unit.player_number
           ) {
             return <Order key={order} inputController={self.props.inputController} name={order}/>;
           }

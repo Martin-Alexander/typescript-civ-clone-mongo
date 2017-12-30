@@ -16,7 +16,7 @@ export default class ReactUserInterface extends React.Component {
     return(
       <div style={userInterfaceStyle}>
         <MenuBar currentPlayer={this.props.currentPlayer}/>
-        <SelectionDetails UI={this.props.UI} inputController={this.props.inputController}/>
+        <SelectionDetails currentPlayer={this.props.currentPlayer} UI={this.props.UI} inputController={this.props.inputController}/>
         <TurnTimer />
         <Minimap />
       </div>
