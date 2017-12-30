@@ -8,7 +8,7 @@ export default class Minimap extends React.Component {
       right: "0",
       width: "300px",
       height: "200px",
-      backgroundColor: "red"
+      backgroundColor: "#e4e5d7"
     }
 
     return(

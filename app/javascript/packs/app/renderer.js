@@ -120,7 +120,7 @@ Renderer.prototype.pathLineCoordinates = function(a, b) {
 Renderer.prototype.clearCanvas = function() {
   this.context.save();
   this.context.setTransform(1, 0, 0, 1, 0, 0);
-  this.context.fillStyle = "rgba(255, 255, 255, 1)";
+  this.context.fillStyle = "rgba(0, 0, 0, 1)";
   this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   this.context.restore();  
 }

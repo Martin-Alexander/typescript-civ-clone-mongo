@@ -12,7 +12,7 @@ export default class MenuBar extends React.Component {
       left: "0",
       width: "100%",
       height: "30px",
-      backgroundColor: "yellow"
+      backgroundColor: "#e4e5d7"
     }
     return(
       <div style={menuBarStyle}>

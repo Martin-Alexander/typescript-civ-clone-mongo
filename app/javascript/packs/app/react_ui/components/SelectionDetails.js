@@ -60,7 +60,7 @@ export default class SelectionDetails extends React.Component {
       left: "0",
       width: "400px",
       height: "200px",
-      backgroundColor: "green"
+      backgroundColor: "#e4e5d7"
     }
     
     return(

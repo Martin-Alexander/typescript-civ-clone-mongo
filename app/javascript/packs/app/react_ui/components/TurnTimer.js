@@ -8,7 +8,7 @@ export default class TurnTimer extends React.Component {
       left: "calc(50% - 200px)",
       width: "400px",
       height: "50px",
-      backgroundColor: "blue"
+      backgroundColor: "#e4e5d7"
     }
     
     return(
