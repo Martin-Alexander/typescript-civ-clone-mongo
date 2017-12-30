@@ -94,7 +94,7 @@ EventRouter.prototype.initializeEventListener = function() {
   window.addEventListener("wheel", function(event) {
     if (self.outOfBounds()) { return false; }
 
-    const zoomSpeed = 1.1;
+    const zoomSpeed = 1.2;
     if (event.deltaY < 0) {
       UI.tileHeight *= zoomSpeed;
       UI.tileWidth *= zoomSpeed;
