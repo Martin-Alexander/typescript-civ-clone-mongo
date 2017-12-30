@@ -69,6 +69,15 @@ module Unit
 
     # ==== Movement methods ====
 
+    # Actually updates the database with new move
+    def execute_move(to_square)
+      new_unit = self.dup
+      to_square.send(type.pluralize.to_sym).send(:push, new_unit)
+      self.delete
+
+      return new_unit      
+    end
+
     # Default move validations
     def valid_move_path(move_path)
       return(

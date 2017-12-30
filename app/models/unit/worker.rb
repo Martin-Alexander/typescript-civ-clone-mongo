@@ -21,13 +21,5 @@ module Unit
         update(order: "none")
       end
     end
-
-    def execute_move(to_square)
-      new_unit = self.dup
-      to_square.workers << new_unit
-      self.delete
-
-      return new_unit
-    end    
   end
 end
