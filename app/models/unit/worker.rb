@@ -11,7 +11,8 @@ module Unit
     def execute_construction_order(structure_name)
       if square.has_complete_structure(structure_name)
         update(order: "none")
-      else
+        update(moves: base_moves)
+      elsif moves > 0
         if square.structure_status(structure_name) == "absent"
           create_structure(structure_name)
           square.get_structure(structure_name).build
@@ -24,7 +25,27 @@ module Unit
         end
 
         update(moves: 0)
+      else
+        update(moves: base_moves)
       end
+    end
+
+    # Applies game logic turning an order into state
+    def execute_order
+      if Rules["orders"][order]["type"] == "unit_state_transform"
+        update(state: Rules["orders"][order]["transform_to"])
+        update(moves: base_moves)
+      elsif Rules["orders"][order]["type"] == "construction"
+        structure_type = Rules["orders"][order]["structure"]
+        execute_construction_order(structure_type)
+      else
+        update(moves: base_moves)
+      end
+    end
+
+    # Executes all methods involved in turn roll over
+    def apply_turn_rollover_logic
+      execute_order
     end
   end
 end
