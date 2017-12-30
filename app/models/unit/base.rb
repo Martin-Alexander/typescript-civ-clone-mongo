@@ -2,10 +2,10 @@ module Unit
   class Base < MongoidModel
     embedded_in :square, class_name: "Square::Global"
 
-    field :player_number, default: 0
-    field :moves, default: 2
-    field :order, default: "none"
-    field :state, default: "none"
+    field :player_number, type: Integer, default: 0
+    field :moves, type: Integer, default: 2
+    field :order, type: String,  default: "none"
+    field :state, type: String, default: "none"
 
     # ==== Next turn methods ====
 
