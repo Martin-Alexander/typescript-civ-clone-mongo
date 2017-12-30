@@ -13,6 +13,10 @@ module Square
       structures.where(type: type).first
     end
 
+    def has_complete_structure(type)
+      structures.where(type: type, complete: true).any?
+    end
+
     def structure_status(type)
       if get_structure(type) && get_structure(type).complete
         "present"
