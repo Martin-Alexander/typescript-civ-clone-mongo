@@ -32,6 +32,16 @@ Square.prototype.color = function(selectionSquare) {
   return "#0e960c";
 };
 
+Square.prototype.hasCompletedStructure = function(type) {
+  for (let i = 0; i < this.structures.length; i++) {
+    if (this.structures[i].type === type && this.structures[i].complete) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 Square.prototype.equalTo = function(otherSquare) {
   return this.x === otherSquare.x && this.y === otherSquare.y;
 }

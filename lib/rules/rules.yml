@@ -51,7 +51,7 @@ units:
       - none
       - go
       - fortify
-      - siege_mode
+      - siege
   ship:
     movement:
       base: 6

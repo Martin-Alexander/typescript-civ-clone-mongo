@@ -43,15 +43,25 @@ export default class SelectionDetails extends React.Component {
     }
 
     const renderOrdersOfSelectedUnit = () => {
-      let orders = [];
+      let listOfOrders = [];
 
+      
       if (this.state.UI.selection.unit) {
-        orders = this.rules.units[this.state.UI.selection.unit.type].allowed_orders.map((order) => {
-          return <Order key={order} inputController={this.props.inputController} name={order}/>;
+        const self = this;
+        listOfOrders = this.rules.units[this.state.UI.selection.unit.type].allowed_orders.map((order) => {
+          if (
+            !(self.rules.orders[order].type == "construction" && 
+            self.state.UI.selection.square.hasCompletedStructure(self.rules.orders[order].structure)) &&
+            // self.rules.orders[order].transform_to !== self.state.UI.selection.unit.state &&
+            order !== self.state.UI.selection.unit.order &&
+            gameData.getCurrentPlayer().number === self.state.UI.selection.unit.player_number
+          ) {
+            return <Order key={order} inputController={self.props.inputController} name={order}/>;
+          }
         });
       }
 
-      return orders;
+      return listOfOrders;
     }
 
     const selectionDetailsStyle = {
@@ -68,7 +78,7 @@ export default class SelectionDetails extends React.Component {
         <div><strong>Tile over:</strong> {this.state.UI.tileMousePosition.x}, {this.state.UI.tileMousePosition.y}</div>
         {renderSelectedSquareDetails()}
         {renderSelectedUnitDetails()}
-        {renderOrdersOfSelectedUnit()}
+        {renderOrdersOfSelectedUnit.call(this)}
       </div>
     );
   }
