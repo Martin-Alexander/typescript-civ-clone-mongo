@@ -19,7 +19,7 @@ GameData.prototype.initialize = function() {
 GameData.prototype.square = function(col, row = false) {
   let square;
   if (row === false) {
-    if (col.x && col.y) {
+    if (col.x !== undefined && col.y !== undefined) {
       square = this.squares[col.y * (this.size + 1) + col.x];
     } else {
       square = this.squares[col];

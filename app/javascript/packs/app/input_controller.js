@@ -7,6 +7,12 @@ function InputController(UI, gameData, networkController, reactController) {
   this.reactController = reactController;
 }
 
+InputController.prototype.setTileMousePosition = function(squareCoordinates) {
+  this.UI.tileMousePosition = this.gameData.square(squareCoordinates);
+
+  this.reactController.updateSelectionDetails(this.UI);
+}
+
 // Selecting a square and cycling through units & structures
 InputController.prototype.selectSquare = function() {
   const selectedSquare = this.squareClickedOn();
