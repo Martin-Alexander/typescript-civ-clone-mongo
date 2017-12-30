@@ -18,11 +18,7 @@ class GamesController < ApplicationController
 
   def input
     @game = Game.find(params[:game])
-    send(params[:method].to_sym)
-
-    respond_to do |format|      
-      format.json { render json: { status: "OK" } }
-    end      
+    send(params[:method].to_sym)  
   end
 
   private
@@ -37,18 +33,22 @@ class GamesController < ApplicationController
       broadcast({
         type: "piece_move",
         path: move_result[:path],
+        moved_unit: move_result[:moved_unit],
         new_squares: move_result[:new_squares]
       })
-    end  
+    end
+
+    respond_with_success
   end
 
   def next_turn
     @game.next_turn
 
     broadcast({
-      type: "next_turn",
-      new_game: @game.to_hash
+      type: "next_turn"
     })
+
+    respond_with_success
   end
 
   def give_order
@@ -61,6 +61,23 @@ class GamesController < ApplicationController
         new_square: @square.to_hash
       })
     end
+
+    respond_with_success
+  end
+
+  def get_game_data
+    respond_to do |format|      
+      format.json { render json: { 
+        status: "OK",
+        new_game: @game.client_game_data(current_user)
+      } }
+    end   
+  end
+
+  def respond_with_success
+    respond_to do |format|      
+      format.json { render json: { status: "OK" } }
+    end    
   end
 
   def broadcast(data)

@@ -69,12 +69,6 @@ module Unit
 
     # ==== Movement methods ====
 
-    # Default move execution
-    def execute_move(to_square)
-      to_square.infantry << self.dup
-      self.delete
-    end
-
     # Default move validations
     def valid_move_path(move_path)
       return(
@@ -91,7 +85,8 @@ module Unit
 
       if valid_move_path(move_path) && is_unit_owner(user)
         update(moves: moves - move_path.total_move_cost)
-        execute_move(move_path.last.to)
+        moved_unit = execute_move(move_path.last.to)
+        move_results[:moved_unit] = moved_unit
         move_results[:success] = true
         move_results[:new_squares] = [move_path.first.from.to_hash, move_path.last.to.to_hash]
       end

@@ -19,7 +19,11 @@ GameData.prototype.initialize = function() {
 GameData.prototype.square = function(col, row = false) {
   let square;
   if (row === false) {
-    square = this.squares[col];
+    if (col.x && col.y) {
+      square = this.squares[col.y * (this.size + 1) + col.x];
+    } else {
+      square = this.squares[col];
+    }
   } else {
     square = this.squares[row * (this.size + 1) + col];
   }

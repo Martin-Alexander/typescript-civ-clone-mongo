@@ -2,21 +2,20 @@
 /*global gameId*/
 
 function NetworkController(gameDataController, animationController) {
+  this.gameDataController = gameDataController;
+  this.animationController = animationController;
+
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
     received: (data) => {
       switch (data.type) {
         case "piece_move":
-          gameDataController.replaceSquare(data.new_squares[0]);
-          animationController.pieceMove(data, () => {
-            gameDataController.replaceSquare(data.new_squares[1]);
-          });
+          gameDataController.pieceMove(data, animationController.pieceMove.bind(animationController));
           break;
         case "next_turn":
-          console.log("next turn");
-          gameDataController.newGameData(data.new_game);
+          this.getGameData();
           break;
         case "give_order":
-          gameDataController.replaceSquare(data.new_square);
+          gameDataController.giveOrder(data.new_square);
           break;
         default:
           break;
@@ -41,6 +40,14 @@ NetworkController.prototype.giveOrder = function(orderData) {
   const payload = { method: "give_order" };
   payload.data = orderData;
   this.send(payload)
+}
+
+NetworkController.prototype.getGameData = function() {
+  const payload = { method: "get_game_data" };
+  this.send(payload, (data) => {
+    console.log("next turn");
+    this.gameDataController.newGameData(data.new_game);
+  });  
 }
 
 NetworkController.prototype.send = function(payload, callback) {
