@@ -35,6 +35,7 @@ units:
       - go
       - build_road
       - build_fortress
+      - build_farm
       - build_city
   tank:
     movement: 
@@ -82,4 +83,12 @@ terrain:
     type: water
     move_cost: 1
     fortification_bonus: null
-
+structures:
+  road:
+    time_cost: 2
+  fortress:
+    time_cost: 8
+  farm:
+    time_cost: 3
+  city:
+    time_cost: 1

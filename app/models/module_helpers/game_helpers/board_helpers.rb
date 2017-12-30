@@ -23,4 +23,15 @@ module BoardHelpers
       end
     end
   end
+
+  # Returns an array of all units on the board
+  def units
+    all_units = []
+
+    each_unit do |unit|
+      all_units << unit
+    end
+
+    all_units
+  end
 end
