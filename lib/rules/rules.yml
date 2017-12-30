@@ -11,13 +11,17 @@ orders:
     type: unit_state_transform
     transform_to: siege_mode
   build_road:
-    type: action
+    type: construction
+    structure: road
   build_fortress:
-    type: action
+    type: construction
+    structure: fortress
   build_city:
-    type: action
+    type: construction
+    structure: city
   build_farm:
-    type: action    
+    type: construction
+    structure: farm
 units:
   infantry:
     movement: 

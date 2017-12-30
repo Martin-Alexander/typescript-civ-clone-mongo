@@ -38,6 +38,9 @@ module Unit
       if Rules["orders"][order]["type"] == "unit_state_transform"
         update(state: Rules["orders"][order]["transform_to"])
         update(order: "none")
+      elsif Rules["orders"][order]["type"] == "construction"
+        structure_type = Rules["orders"][order]["structure"]
+        execute_construction_order(structure_type)
       end
     end
 

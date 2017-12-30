@@ -7,5 +7,19 @@ module Unit
         raise ArgumentError, "#{structure_name} is not a valid structure"
       end
     end
+
+    def execute_construction_order(structure_name)
+      if square.structure_status(structure_name) == "absent"
+        create_structure(structure_name)
+        square.get_structure(structure_name).build
+      elsif square.structure_status(structure_name) == "under_contruction"
+        square.get_structure(structure_name).build
+      end
+
+      if square.get_structure(structure_name).complete
+        update(state: "none")
+        update(order: "none")
+      end
+    end
   end
 end

@@ -12,6 +12,7 @@ function NetworkController(gameDataController, animationController) {
           });
           break;
         case "next_turn":
+          console.log("next turn");
           gameDataController.newGameData(data.new_game);
           break;
         case "give_order":
