@@ -18,7 +18,7 @@ import ReactUserInterface      from "./react_ui/components/ReactUserInterface";
 const parentElement = document.getElementById("canvas-container");
 
 const UI                     = new UserInterface();
-const gameData               = new GameData(UI, rawGameData);
+global.gameData               = new GameData(UI, rawGameData);
 const renderer               = new Renderer(UI, gameData, parentElement);
 const reactController        = new ReactController(UI, gameData);
 const gameDataController     = new GameDataController(gameData, UI, reactController);
@@ -31,4 +31,4 @@ gameData.initialize();
 renderer.run();
 
 const canvasContainer = document.getElementById("canvas-container");
-ReactDOM.render(<ReactUserInterface UI={UI} inputController={inputController} />, canvasContainer);
+ReactDOM.render(<ReactUserInterface currentPlayer={gameData.getCurrentPlayer()} UI={UI} inputController={inputController} />, canvasContainer);

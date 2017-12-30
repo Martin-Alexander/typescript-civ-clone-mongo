@@ -38,4 +38,16 @@ GameData.prototype.newGameData = function(rawGameData) {
   this.initialize();
 }
 
+GameData.prototype.getCurrentPlayer = function() {
+  let currentPlayer;
+
+  this.game_players.forEach((player) => {
+    if (player.current_player) {
+      currentPlayer = player;
+    }
+  })
+
+  return currentPlayer;
+}
+
 export { GameData };
