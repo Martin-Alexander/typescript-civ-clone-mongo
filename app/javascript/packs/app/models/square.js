@@ -1,7 +1,12 @@
+import { Unit } from "./unit";
+
 function Square(rawSquareObject) {
+  this.units = [];
   Object.keys(rawSquareObject).forEach((property) => {
-    if (property == "infantry") {
-      this.units = rawSquareObject[property];
+    if (property === "units") {
+      rawSquareObject.units.forEach((unit) => {
+        this.units.push(new Unit(unit));
+      });
     } else if (property == "_id") {
       this.id = rawSquareObject[property]["$oid"];
     } else {
@@ -11,12 +16,14 @@ function Square(rawSquareObject) {
 }
 
 Square.prototype.color = function(selectionSquare) {
+  const terrainColorLookup = {};
+
   if (this == selectionSquare) {
     return "white";
-  } else if (this.units.length > 0) {
-    return playerColorLookup[this.units[this.units.length - 1].player_number];
+  } else if (this.terrain) {
+    return terrainColorLookup[this.terrain];
   }
-  return "black";
+  return "#0e960c";
 };
 
 Square.prototype.equalTo = function(otherSquare) {
@@ -27,11 +34,16 @@ Square.prototype.getCoordinates = function() {
   return { x: this.x, y: this.y };
 }
 
-const playerColorLookup = {
-  1: "blue",
-  2: "red",
-  3: "yellow",
-  4: "green"
-};
+Square.prototype.render = function(context, UI) {
+  context.beginPath();
+  context.moveTo(0, 0);
+  context.lineTo(UI.tileWidth / 2, UI.tileHeight / 2);
+  context.lineTo(0, UI.tileHeight);
+  context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
+  context.closePath();
+  context.fillStyle = this.color(UI.selection.square);
+  context.fill();
+}
+
 
 export { Square };

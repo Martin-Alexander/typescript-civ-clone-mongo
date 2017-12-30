@@ -61,14 +61,8 @@ Renderer.prototype.drawSquare = function(square) {
     (square.x - square.y) * (UI.tileWidth / 2) + (canvas.width / 2) + UI.offset.x, 
     ((square.y + square.x) * UI.tileHeight / 2) + UI.offset.y + ((canvas.height - 15 * UI.tileHeight) / 2)
   );
-  context.beginPath();
-  context.moveTo(0, 0);
-  context.lineTo(UI.tileWidth / 2, UI.tileHeight / 2);
-  context.lineTo(0, UI.tileHeight);
-  context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
-  context.closePath();
-  context.fillStyle = square.color(UI.selection.square);
-  context.fill();
+  square.render(context, UI);
+  if (square.units[0]) { square.units[0].render(context, UI); }
   context.restore();     
 }
 

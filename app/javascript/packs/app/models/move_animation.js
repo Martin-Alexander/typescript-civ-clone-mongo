@@ -1,10 +1,10 @@
 function MoveAnimation(animationData, callback) {
   this.animationData = animationData;
+  this.callback = callback;
   this.fromSquare = animationData.path[animationData.index];
   this.toSquare = animationData.path[animationData.index + 1];
   this.counter = 0;
-  this.color = animationData.color;
-  this.callback = callback;
+  this.unit = animationData.unit;
   this.animationController = animationData.animationController;
   this.done = false;
 
@@ -34,14 +34,7 @@ MoveAnimation.prototype.draw = function(canvas, context, UI) {
     ((this.fromSquare.y + this.fromSquare.x) * UI.tileHeight / 2) + UI.offset.y + ((canvas.height - 15 * UI.tileHeight) / 2)
   );
   context.translate(this.counter * this.xDirection, (this.counter * this.yDirection) / 2);
-  context.beginPath();
-  context.moveTo(0, 0);
-  context.lineTo(UI.tileWidth / 2, UI.tileHeight / 2);
-  context.lineTo(0, UI.tileHeight);
-  context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
-  context.closePath();
-  context.fillStyle = this.color;
-  context.fill();
+  this.unit.render(context, UI);
   context.restore();
   this.counter += UI.tileHeight / 2;
   if (this.counter >= UI.tileHeight) { 

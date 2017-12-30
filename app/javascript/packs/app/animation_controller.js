@@ -12,7 +12,7 @@ AnimationController.prototype.pieceMove = function(data, callback) {
   const toSquare = new Square(data.new_squares[1]);
 
   const animationData = {
-    color: toSquare.color(),
+    unit: toSquare.units[0],
     path: data.path,
     index: 0,
     animationController: this
