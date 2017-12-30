@@ -20,6 +20,8 @@ module Unit
         update(state: "none")
         update(order: "none")
       end
+      
+      update(moves: 0)
     end
   end
 end
