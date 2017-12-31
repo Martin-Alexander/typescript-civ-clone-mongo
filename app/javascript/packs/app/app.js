@@ -36,4 +36,5 @@ ReactDOM.render(
     currentPlayer={gameData.getCurrentPlayer()}
     UI={UI}
     inputController={inputController}
-  />, canvasContainer);
+  />, canvasContainer
+);
