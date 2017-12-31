@@ -46,9 +46,9 @@ export default class SelectionDetails extends React.Component {
       if (square.structures && square.structures.length > 0) {
         const allStructures = square.structures.map((structure) => {
           if (structure.complete) {
-            return(<span key={structure}><strong>{structure.type} </strong></span>);
+            return(<span key={structure.id}><strong>{structure.type} </strong></span>);
           } else {
-            return(<span key={structure}>{structure.type} </span>);
+            return(<span key={structure.id}>{structure.type} </span>);
           }
         });
 
