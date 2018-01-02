@@ -17,15 +17,17 @@ class GamesController < ApplicationController
   end
 
   def input
-    @game = Game.find(params[:game])
-    send(params[:method].to_sym)  
+    @permitted_params = params.permit(:method, :game, data: {}).to_h
+
+    @game = Game.find(@permitted_params[:game])
+    send(@permitted_params[:method].to_sym)  
   end
 
   private
 
-  def piece_move   
-    @path = params[:data][:path]
-    @unit = @game.find_square(@path[0]).units.find(params[:data][:unit]).first
+  def piece_move
+    @path = @permitted_params[:data][:path]
+    @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
 
     move_result = @unit.move(current_user, @path)
 
@@ -52,10 +54,10 @@ class GamesController < ApplicationController
   end
 
   def give_order
-    @square = @game.find_square(params[:data][:square_coords])
-    @unit = @square.units.find(params[:data][:unit]).first
+    @square = @game.find_square(@permitted_params[:data][:square_coords])
+    @unit = @square.units.find(@permitted_params[:data][:unit]).first
 
-    if @unit.give_order(params[:data][:order])
+    if @unit.give_order(@permitted_params[:data][:order])
       broadcast({
         type: "give_order",
         new_square: @square.to_hash
