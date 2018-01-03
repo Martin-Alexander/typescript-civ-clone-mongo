@@ -93,6 +93,7 @@ module Unit
       move_results = { success: false, path: path, new_squares: nil }
       move_path = MovePath.new(square.board, path)
 
+      start = DateTime.now
       if valid_move_path(move_path) && is_unit_owner(user)
         update(moves: moves - move_path.total_move_cost)
         moved_unit = execute_move(move_path.last.to)
@@ -100,6 +101,7 @@ module Unit
         move_results[:success] = true
         move_results[:new_squares] = [move_path.first.from.to_hash, move_path.last.to.to_hash]
       end
+      print "\n===========================SPECIAL PART OF METHOD==============================\n#{DateTime.now - start}\n"
 
       return move_results
     end
