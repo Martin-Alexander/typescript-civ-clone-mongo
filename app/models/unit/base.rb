@@ -3,10 +3,16 @@ module Unit
     embedded_in :square, class_name: "Square::Global"
 
     field :player_number, type: Integer, default: 0
-    field :moves,         type: Integer, default: 2
+    field :moves,         type: Integer, default: 0
     field :order,         type: String,  default: "none"
     field :state,         type: String,  default: "none"
     field :go_to_path,    type: Array,   default: []
+
+    after_create :set_base_moves
+
+    def set_base_moves
+      update(moves: base_moves)
+    end
 
     # ==== Next turn methods ====
 
