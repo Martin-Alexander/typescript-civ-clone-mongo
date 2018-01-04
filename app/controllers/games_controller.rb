@@ -26,10 +26,6 @@ class GamesController < ApplicationController
   private
 
   def piece_move
-    start = DateTime.now.to_time.to_i
-    @permitted_params = params.permit(:method, :game, data: {}).to_h
-    @game = Game.find(@permitted_params[:game])
-
     @path = @permitted_params[:data][:path]
     @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
 
@@ -43,7 +39,7 @@ class GamesController < ApplicationController
         new_squares: move_result[:new_squares]
       })
     end
-    print "\n======================TOTAL PIECE MOVE METHOD=======================\n#{DateTime.now.to_time.to_i - start}\n"
+
     respond_with_success
   end
 
