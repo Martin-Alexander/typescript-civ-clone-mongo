@@ -29,15 +29,17 @@ class GamesController < ApplicationController
     @path = @permitted_params[:data][:path]
     @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
 
-    move_result = @unit.move(current_user, @path)
+    if @unit.square.board.game_players.where(number: @unit.player_number).first.user_id == current_user.id.to_s
+      move_result = @unit.move(@path)
 
-    if move_result[:success]
-      broadcast({
-        type: "piece_move",
-        path: move_result[:path],
-        moved_unit: move_result[:moved_unit],
-        new_squares: move_result[:new_squares]
-      })
+      if move_result[:success]
+        broadcast({
+          type: "piece_move",
+          path: move_result[:path],
+          moved_unit: move_result[:moved_unit],
+          new_squares: move_result[:new_squares]
+        })
+      end
     end
 
     respond_with_success
