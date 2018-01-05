@@ -93,13 +93,16 @@ EventRouter.prototype.initializeEventListener = function() {
   window.addEventListener("wheel", function(event) {
     if (self.outOfBounds()) { return false; }
 
+    console.log(event.deltaY)
+    console.log(UI.tileHeight)
+
     const zoomSpeed = 1.2;
-    if (event.deltaY < 0) {
+    if (event.deltaY < 0 && UI.tileHeight < 100) {
       UI.tileHeight *= zoomSpeed;
       UI.tileWidth *= zoomSpeed;
       UI.offset.x = (UI.offset.x * zoomSpeed) - (mouse.centerRelativePosition.x / 10);
       UI.offset.y = (UI.offset.y * zoomSpeed) - (mouse.centerRelativePosition.y / 10);
-    } else {
+    } else if (event.deltaY > 0 && UI.tileHeight > 25) {
       UI.tileHeight /= zoomSpeed;
       UI.tileWidth /= zoomSpeed;
       UI.offset.x = (UI.offset.x / zoomSpeed) + (mouse.centerRelativePosition.x / 11);
