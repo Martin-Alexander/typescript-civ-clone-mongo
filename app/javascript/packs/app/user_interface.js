@@ -10,6 +10,15 @@ function UserInterface() {
   };
   this.currentPath = null;
   this.size = null;
+  this.ongoingTurnTransition = false;
+}
+
+UserInterface.prototype.clearAllSelection = function() {
+  this.selection = {
+    square: null,
+    unit: null,
+    structure: null
+  };
 }
 
 export { UserInterface };
