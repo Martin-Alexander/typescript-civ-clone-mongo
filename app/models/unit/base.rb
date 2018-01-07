@@ -17,7 +17,7 @@ module Unit
     # Executes all methods involved in turn roll over
     def apply_turn_rollover_logic
       update(moves: base_moves)
-      execute_order
+      return execute_order
     end
 
     # ==== Order methods ====
@@ -40,13 +40,22 @@ module Unit
 
     # Applies game logic turning an order into state
     def execute_order
-      if Rules["orders"][order]["type"] == "unit_state_transform"
+      result = nil
+      order_type = Rules["orders"][order]["type"]
+      case Rules["orders"][order]["type"]
+      when "unit_state_transform"
         update(state: Rules["orders"][order]["transform_to"])
-        # update(order: "none")
-      elsif Rules["orders"][order]["type"] == "construction"
+      when "construction"
         structure_type = Rules["orders"][order]["structure"]
         execute_construction_order(structure_type)
+      when "action"
+        case order
+        when "go"
+          result = move(go_to)
+        end
       end
+
+      return result
     end
 
     # ==== General untility methods ====
@@ -75,7 +84,7 @@ module Unit
       new_unit.update(new_unit_fields)
       self.delete
 
-      return new_unit      
+      return new_unit
     end
 
     # Default move validations
@@ -89,18 +98,19 @@ module Unit
     # Should be only move function
     # TODO: Refactor this abomination
     def move(path)
-      move_results = { success: false, path: [], new_squares: nil }
+      move_results = { success: false, path: [] }
       move_path = MovePath.new(square.board, path)
 
       if valid_move_path(move_path)
         moves_left = moves
         immediate_path = [move_path.path.first]
-        go_to_path = []
+        go_to_path = [move_path.path.first]
 
         move_path.moves.each_with_index do |move, i|
           if move.cost <= moves_left
             moves_left -= move.cost
             immediate_path << path[i + 1]
+            go_to_path = [path[i + 1]]
           else
             go_to_path << path[i + 1]
           end
@@ -108,29 +118,21 @@ module Unit
 
         immediate_move_path = MovePath.new(square.board, immediate_path)
 
-        new_unit_fields = { moves: moves_left}
-
-        if go_to_path.any?
-          new_unit_fields[:go_to] = go_to_path
-          new_unit_fields[:order] = "go"
-        elsif order == "go"
-          new_unit_fields[:go_to] = []
-          new_unit_fields[:order] = "none"
-        end
-
-        if immediate_move_path.moves.any?
+        if immediate_move_path.moves.any? && go_to_path.any?
           move_to_square = immediate_move_path.moves.last.to
-          move_results[:moved_unit] = execute_move(new_unit_fields, move_to_square).to_hash
-          move_results[:new_squares] = [square.to_hash, move_to_square.to_hash]
-        else
+          new_order = "go"
+        elsif immediate_move_path.moves.any? && go_to_path.empty?
+          move_to_square = immediate_move_path.moves.last.to
+          new_order = "none"
+        elsif immediate_move_path.moves.empty? && go_to_path.any?
           move_to_square = square
-          move_results[:moved_unit] = execute_move(new_unit_fields, move_to_square).to_hash
-          move_results[:new_squares] = [square.to_hash]
+          new_order = "go"
         end
-        
+
+        move_results[:moved_unit] = execute_move({ moves: moves_left, go_to: go_to_path, order: new_order }, move_to_square).to_hash
+        move_results[:new_squares] = [square.to_hash, move_to_square.to_hash]        
         move_results[:success] = true
         move_results[:path] = immediate_path
-        move_results[:go_to] = go_to_path
       end
 
       return move_results

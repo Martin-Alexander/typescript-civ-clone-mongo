@@ -29,7 +29,7 @@ class GamesController < ApplicationController
     @path = @permitted_params[:data][:path]
     @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
 
-    if @unit.square.board.game_players.where(number: @unit.player_number).first.user_id == current_user.id.to_s
+    if @game.game_players.where(number: @unit.player_number).first.user_id == current_user.id.to_s
       move_result = @unit.move(@path)
 
       if move_result[:success]
@@ -46,10 +46,11 @@ class GamesController < ApplicationController
   end
 
   def next_turn
-    @game.next_turn
+    move_animations = @game.next_turn
 
     broadcast({
-      type: "next_turn"
+      type: "next_turn",
+      move_animations: move_animations.reject(&:nil?)
     })
 
     respond_with_success

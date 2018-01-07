@@ -12,6 +12,9 @@ function NetworkController(gameDataController, animationController) {
           gameDataController.pieceMove(data, animationController.pieceMove.bind(animationController));
           break;
         case "next_turn":
+          data.move_animations.forEach((moveAnimation) => {
+            gameDataController.pieceMove(moveAnimation, animationController.pieceMove.bind(animationController));
+          });
           this.getGameData();
           break;
         case "give_order":

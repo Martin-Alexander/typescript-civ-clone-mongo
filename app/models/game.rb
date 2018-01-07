@@ -34,9 +34,12 @@ class Game < MongoidModel
 
   # Handles all game logic related to turn roll-over
   def next_turn
-    each_unit do |unit|
-      unit.apply_turn_rollover_logic
+    move_results = []
+    units.each do |unit|
+      move_results << unit.apply_turn_rollover_logic
     end
+
+    return move_results
   end
 
   # ==== Board helpers ====
