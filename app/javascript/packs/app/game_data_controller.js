@@ -8,12 +8,14 @@ function GameDataController(gameData, UI, reactController) {
 
 GameDataController.prototype.pieceMove = function(data, animationCallback) {
   this.replaceSquare(data.new_squares[0])
-  animationCallback(data, () => {
-    const newSquare = this.replaceSquare(data.new_squares[1])
-    if (newSquare.units[0].player_number == this.gameData.getCurrentPlayer().number) {
-      this.updateSelectedSquare(newSquare);
-    }
-  })
+  if (data.new_squares[1]) {
+    animationCallback(data, () => {
+      const newSquare = this.replaceSquare(data.new_squares[1])
+      if (newSquare.units[0].player_number == this.gameData.getCurrentPlayer().number) {
+        this.updateSelectedSquare(newSquare);
+      }
+    })
+  }
 }
 
 GameDataController.prototype.giveOrder = function(newSquare) {
