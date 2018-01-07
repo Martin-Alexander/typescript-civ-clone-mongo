@@ -6,9 +6,7 @@ module Unit
     field :moves,         type: Integer, default: 0
     field :order,         type: String,  default: "none"
     field :state,         type: String,  default: "none"
-    field :go_to_path,    type: Array,   default: []
-
-    after_create :set_base_moves
+    field :go_to,         type: Array,   default: []
 
     def set_base_moves
       update(moves: base_moves)
@@ -68,18 +66,13 @@ module Unit
       Rules["units"][type]
     end
 
-    # Returns whether or not the unit belongs to a given user
-    def is_unit_owner(user)
-      square.board.game_players.where(number: player_number).first.user_id == user.id.to_s
-    end
-
-
     # ==== Movement methods ====
 
     # Actually updates the database with new move
-    def execute_move(to_square)
+    def execute_move(new_unit_fields, to_square)
       new_unit = self.dup
       to_square.send(type.pluralize.to_sym).send(:push, new_unit)
+      new_unit.update(new_unit_fields)
       self.delete
 
       return new_unit      
@@ -89,22 +82,54 @@ module Unit
     def valid_move_path(move_path)
       return(
         are_adjacent(move_path) && 
-        are_free_of_units(move_path) && 
-        has_enough_moves(move_path)
+        are_free_of_units(move_path)
       )
     end
 
     # Should be only move function
-    def move(user, path)
-      move_results = { success: false, path: path, new_squares: nil }
+    def move(path)
+      move_results = { success: false, path: [], new_squares: nil }
       move_path = MovePath.new(square.board, path)
 
-      if valid_move_path(move_path) && is_unit_owner(user)
-        update(moves: moves - move_path.total_move_cost)
-        moved_unit = execute_move(move_path.last.to)
-        move_results[:moved_unit] = moved_unit
+      if valid_move_path(move_path)
+        moves_left = moves
+        immediate_path = [move_path.path.first]
+        go_to_path = []
+
+        move_path.moves.each_with_index do |move, i|
+          if move.cost <= moves_left
+            moves_left -= move.cost
+            immediate_path << path[i + 1]
+          else
+            go_to_path << path[i + 1]
+          end
+        end
+
+        immediate_move_path = MovePath.new(square.board, immediate_path)
+
+        new_unit_fields = { moves: moves_left}
+        
+        if go_to_path.any?
+          new_unit_fields[:go_to] = go_to_path
+          new_unit_fields[:order] = "go"
+        elsif order == "go"
+          new_unit_fields[:go_to] = []
+          new_unit_fields[:order] = "none"
+        end
+
+        if immediate_move_path.moves.any?
+          move_to_square = immediate_move_path.moves.last.to
+          move_results[:moved_unit] = execute_move(new_unit_fields, move_to_square).to_hash
+          move_results[:new_squares] = [square.to_hash, move_to_square.to_hash]
+        else
+          move_to_square = square
+          move_results[:moved_unit] = execute_move(new_unit_fields, move_to_square).to_hash
+          move_results[:new_squares] = [square.to_hash]
+        end
+        
         move_results[:success] = true
-        move_results[:new_squares] = [move_path.first.from.to_hash, move_path.last.to.to_hash]
+        move_results[:path] = immediate_path
+        move_results[:go_to] = go_to_path
       end
 
       return move_results
@@ -114,21 +139,16 @@ module Unit
 
     # All moves are to adjacent squares
     def are_adjacent(move_path)
-      move_path.all? do |move|
+      move_path.moves.all? do |move|
         move.from.neighbours.include?(move.to)
       end
     end
 
     # All moves are to squares with no units
     def are_free_of_units(move_path)
-      move_path.all? do |move|
+      move_path.moves.all? do |move|
         move.to.units.empty?
       end
-    end
-
-    # Unit has more are at least as many as the move path costs
-    def has_enough_moves(move_path)
-      moves >= move_path.total_move_cost
     end
   end
 end
