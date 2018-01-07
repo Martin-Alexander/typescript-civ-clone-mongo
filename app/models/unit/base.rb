@@ -87,6 +87,7 @@ module Unit
     end
 
     # Should be only move function
+    # TODO: Refactor this abomination
     def move(path)
       move_results = { success: false, path: [], new_squares: nil }
       move_path = MovePath.new(square.board, path)
@@ -108,7 +109,7 @@ module Unit
         immediate_move_path = MovePath.new(square.board, immediate_path)
 
         new_unit_fields = { moves: moves_left}
-        
+
         if go_to_path.any?
           new_unit_fields[:go_to] = go_to_path
           new_unit_fields[:order] = "go"
