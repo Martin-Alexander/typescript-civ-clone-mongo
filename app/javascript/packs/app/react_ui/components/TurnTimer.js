@@ -10,9 +10,17 @@ export default class TurnTimer extends React.Component {
       height: "50px",
       backgroundColor: "#e4e5d7"
     }
+
+    const text = () => {
+      if (this.props.ongoingTurnTransition) {
+        return "Next Turn. Please Wait..."
+      } else {
+        return "Ready"
+      }
+    }
     
     return(
-      <div style={turnTimerStyle}></div>
+      <div style={turnTimerStyle}>{text()}</div>
     );
   }
 }

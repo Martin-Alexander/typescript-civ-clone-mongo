@@ -3,8 +3,8 @@ function ReactController(UI, gameData) {
   this.gameData = gameData;
 }
 
-ReactController.prototype.updateSelectionDetails = function() {
-  global.updateSelectionDetails(this.UI);
+ReactController.prototype.updateUI = function() {
+  global.updateUI(this.UI);
 }
 
 export { ReactController };

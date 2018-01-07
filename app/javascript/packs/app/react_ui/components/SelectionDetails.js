@@ -12,12 +12,6 @@ export default class SelectionDetails extends React.Component {
     this.rules = JSON.parse(rules);
   }
 
-  componentWillMount() {
-    global.updateSelectionDetails = (UI) => {
-      this.setState({UI: UI});
-    }
-  }
-
   render() {
 
     const renderSelectionDetails = () => {

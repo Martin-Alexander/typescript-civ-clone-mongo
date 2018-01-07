@@ -5,6 +5,20 @@ import TurnTimer from "./TurnTimer";
 import Minimap from "./Minimap";
 
 export default class ReactUserInterface extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      UI: this.props.UI,
+      currentPlayer: this.props.currentPlayer
+    };
+  }
+
+  componentWillMount() {
+    global.updateUI = (UI) => {
+      this.setState({UI: UI});
+    }
+  }  
+
   render() {
     const userInterfaceStyle = {
       position: "absolute",
@@ -17,7 +31,7 @@ export default class ReactUserInterface extends React.Component {
       <div style={userInterfaceStyle}>
         <MenuBar currentPlayer={this.props.currentPlayer}/>
         <SelectionDetails currentPlayer={this.props.currentPlayer} UI={this.props.UI} inputController={this.props.inputController}/>
-        <TurnTimer />
+        <TurnTimer ongoingTurnTransition={this.state.UI.ongoingTurnTransition}/>
         <Minimap />
       </div>
     );

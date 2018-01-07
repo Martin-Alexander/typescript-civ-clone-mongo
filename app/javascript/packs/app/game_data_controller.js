@@ -33,6 +33,7 @@ GameDataController.prototype.replaceSquare = function(square) {
 GameDataController.prototype.newGameData = function(rawGameData) {
   this.gameData.newGameData(rawGameData);
   this.updateSelectedSquare();
+  this.UI.ongoingTurnTransition = false;
 }
 
 GameDataController.prototype.updateSelectedSquare = function(newSelectionSquare = false) {
@@ -45,7 +46,7 @@ GameDataController.prototype.updateSelectedSquare = function(newSelectionSquare 
     }
 
     this.UI.selection.unit = this.UI.selection.square.units[0];
-    this.reactController.updateSelectionDetails();
+    this.reactController.updateUI();
   }
 }
 
