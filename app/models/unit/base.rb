@@ -116,6 +116,8 @@ module Unit
           end
         end
 
+        go_to_path = [] if go_to_path.length == 1
+
         immediate_move_path = MovePath.new(square.board, immediate_path)
 
         if immediate_move_path.moves.any? && go_to_path.any?
