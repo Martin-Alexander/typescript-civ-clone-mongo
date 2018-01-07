@@ -1,7 +1,8 @@
 /*global App*/
 /*global gameId*/
 
-function NetworkController(gameDataController, animationController) {
+function NetworkController(turnTransitioner, gameDataController, animationController) {
+  this.turnTransitioner = turnTransitioner;
   this.gameDataController = gameDataController;
   this.animationController = animationController;
 
@@ -9,16 +10,17 @@ function NetworkController(gameDataController, animationController) {
     received: (data) => {
       switch (data.type) {
         case "piece_move":
-          gameDataController.pieceMove(data, animationController.pieceMove.bind(animationController));
+          this.gameDataController.pieceMove(data, this.animationController.pieceMove.bind(this.animationController));
           break;
         case "next_turn":
+          this.turnTransitioner.begin();
           data.move_animations.forEach((moveAnimation) => {
-            gameDataController.pieceMove(moveAnimation, animationController.pieceMove.bind(animationController));
+            this.gameDataController.pieceMove(moveAnimation, this.animationController.pieceMove.bind(this.animationController));
           });
           this.getGameData();
           break;
         case "give_order":
-          gameDataController.giveOrder(data.new_square);
+          this.gameDataController.giveOrder(data.new_square);
           break;
         default:
           break;
@@ -50,6 +52,7 @@ NetworkController.prototype.getGameData = function() {
   this.send(payload, (data) => {
     console.log("next turn");
     this.gameDataController.newGameData(data.new_game);
+    this.turnTransitioner.end();
   });  
 }
 
