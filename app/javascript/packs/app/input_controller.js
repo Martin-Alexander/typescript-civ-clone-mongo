@@ -23,12 +23,12 @@ InputController.prototype.selectSquare = function() {
 
   console.log(selectedSquare);
 
-  if (this.UI.selection.square == selectedSquare) {
-    this.UI.selection.square = null;
-    this.UI.selection.unit = null;
-  } else if (selectedSquare.units.length > 0) {
+  if (selectedSquare.units.length > 0 && selectedSquare != this.UI.selection.square) {
     this.UI.selection.square = selectedSquare;
     this.UI.selection.unit = selectedSquare.units[0];
+  } else {
+    this.UI.selection.square = null;
+    this.UI.selection.unit = null;
   }
 
   this.reactController.updateUI(this.UI);
@@ -37,8 +37,9 @@ InputController.prototype.selectSquare = function() {
 // Pressing the right mouse button to begin unit movement path finding
 InputController.prototype.pathFindBegin = function() {
   if (!this._authorized("pathFindBegin")) { return false; }
+  if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
-  if (this.UI.selection.square) { 
+  if (this.UI.selection.square && this.UI.selection.square.units[0]) { 
     this.drawPathLine();
   }
 };
@@ -46,6 +47,7 @@ InputController.prototype.pathFindBegin = function() {
 // Moving the mouse while holding down the right mouse button
 InputController.prototype.pathUpdate = function() {
   if (!this._authorized("pathUpdate")) { return false; }
+  if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
   if (this.UI.selection.square && this.UI.currentPath) {
     this.drawPathLine();
@@ -55,6 +57,7 @@ InputController.prototype.pathUpdate = function() {
 // Releasing the right mouse button and issuing a unit move or canceling
 InputController.prototype.moveUnit = function() {
   if (!this._authorized("moveUnit")) { return false; }
+  if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
   if (this.UI.selection.square && this.UI.currentPath.length > 1) { 
     this.networkController.pieceMove({
@@ -72,6 +75,7 @@ InputController.prototype.moveUnit = function() {
 
 InputController.prototype.drawPathLine = function() {
   if (!this._authorized("drawPathLine")) { return false; }
+  if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
   this.UI.currentPath = AStar.run(this.gameData, { 
     start: this.UI.selection.square,
