@@ -14,6 +14,12 @@ GameData.prototype.initialize = function() {
   for (let i = 0; i < this.squares.length; i++) {
     this.squares[i] = new Square(this.squares[i]);
   }
+
+  if (this.getCurrentPlayer().turn_over) {
+    this.UI.ready = true;
+  } else {
+    this.UI.ready = false;
+  }
 };
 
 GameData.prototype.square = function(col, row = false) {

@@ -42,6 +42,7 @@ NetworkController.prototype.pieceMove = function(pieceMoveData) {
 NetworkController.prototype.nextTurn = function() {
   const payload = { method: "next_turn" };
   this.send(payload);
+  this.turnTransitioner.ready();
 }
 
 NetworkController.prototype.giveOrder = function(orderData) {

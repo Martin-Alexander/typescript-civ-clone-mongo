@@ -58,12 +58,12 @@ class GamesController < ApplicationController
           result.nil? || result[:success] == false
         end
       })
-    else
-      broadcast({
-        type: "player_ready",
-        players_ready: @game.who_is_ready_for_next_turn
-      })
     end
+    
+    broadcast({
+      type: "player_ready",
+      players_ready: @game.who_is_ready_for_next_turn
+    })
 
     respond_with_success
   end

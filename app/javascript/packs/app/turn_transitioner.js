@@ -13,9 +13,20 @@ TurnTransitioner.prototype.begin = function() {
 
 TurnTransitioner.prototype.end = function() {
   this.UI.ongoingTurnTransition = false;
+  this.UI.ready = false;
   this.UI.clearAllSelection();
 
   this.reactController.updateUI(this.UI);
+}
+
+TurnTransitioner.prototype.ready = function() {
+  if (this.UI.ready) {
+    this.UI.ready = false;
+  } else {
+    this.UI.clearAllSelection();
+    this.UI.currentPath = null;    
+    this.UI.ready = true;
+  }
 }
 
 export { TurnTransitioner };

@@ -11,6 +11,7 @@ function UserInterface() {
   this.currentPath = null;
   this.size = null;
   this.ongoingTurnTransition = false;
+  this.ready = false;
 }
 
 UserInterface.prototype.clearAllSelection = function() {

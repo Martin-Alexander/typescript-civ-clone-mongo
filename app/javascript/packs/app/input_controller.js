@@ -105,8 +105,6 @@ InputController.prototype.giveOrder = function(order) {
 
 // Querries gameData for the square corresponding to the tile that the mouse is over
 InputController.prototype.squareClickedOn = function() {
-  if (!this._authorized("squareClickedOn")) { return false; }
-
   return this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
 }
 
@@ -126,6 +124,11 @@ InputController.prototype._authorized = function(functionName) {
       type: "inclusion",
       functionNames: ["setTileMousePosition"]
     }
+  } else if (this.UI.ready) {
+    allowedFunctionRules = {
+      type: "inclusion",
+      functionNames: ["setTileMousePosition", "nextTurn", "selectSquare"]
+    }    
   } else {
     allowedFunctionRules = {
       type: "exclusion",
