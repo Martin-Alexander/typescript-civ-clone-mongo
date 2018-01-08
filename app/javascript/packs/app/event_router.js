@@ -1,6 +1,7 @@
-function EventRouter(UI, inputController) {
+function EventRouter(UI, inputController, canvas) {
   this.UI = UI;
   this.inputController = inputController;
+  this.canvas = canvas;
   this.mouse = {
     right: { down: false },
     left: { down: false },
@@ -31,7 +32,7 @@ EventRouter.prototype.initializeEventListener = function() {
   document.onmousedown = disableselect;
 
   window.addEventListener("mousedown", function(event) {
-    if (self.outOfBounds()) { return false; }
+    if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
 
     switch (event.button) {
       case 0: // left
@@ -83,7 +84,7 @@ EventRouter.prototype.initializeEventListener = function() {
     const oldtileMousePosition = UI.tileMousePosition;
     self.setMousePosition(event);
         
-    if (self.outOfBounds()) { return false; }
+    if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
 
     if (mouse.right.down && !haveSameCoords(oldtileMousePosition, UI.tileMousePosition)) {
       inputController.pathUpdate();
@@ -91,7 +92,7 @@ EventRouter.prototype.initializeEventListener = function() {
   });
 
   window.addEventListener("wheel", function(event) {
-    if (self.outOfBounds()) { return false; }
+    if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
 
     const zoomSpeed = 1.1;
     if (event.deltaY < 0 && UI.tileHeight < 100) {
@@ -156,6 +157,10 @@ EventRouter.prototype.outOfBounds = function() {
   this.mouse.rawIsoPosition.y / this.UI.tileHeight < 0 ||
   this.mouse.rawIsoPosition.x / this.UI.tileHeight > this.UI.size + 1||
   this.mouse.rawIsoPosition.y / this.UI.tileHeight > this.UI.size + 1;
+}
+
+EventRouter.prototype.directMapClick = function(event) {
+  return event.path[0].id === "react-user-interface";
 }
 
 function haveSameCoords(a, b) {
