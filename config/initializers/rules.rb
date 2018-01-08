@@ -1,0 +1,1 @@
+Rules = YAML.load(File.open(File.join(Rails.root, "config/rules.yml")))
