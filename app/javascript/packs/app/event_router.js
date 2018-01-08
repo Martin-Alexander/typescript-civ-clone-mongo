@@ -54,7 +54,7 @@ EventRouter.prototype.initializeEventListener = function() {
 
     switch (event.button) {
       case 0: // left
-        if (mouse.preDragDistance < 10) {
+        if (mouse.preDragDistance < 10 && self.directMapClick(event)) {
           inputController.selectSquare();
         }
         mouse.preDragDistance = 0;
