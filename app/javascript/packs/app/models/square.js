@@ -21,6 +21,10 @@ function Square(rawSquareObject) {
   });
 }
 
+Square.prototype.isOwnedBy = function(player) {
+  return this.units[0] && this.units[0].player_number == player.number;
+}
+
 Square.prototype.color = function(selectionSquare) {
   const terrainColorLookup = {};
 
