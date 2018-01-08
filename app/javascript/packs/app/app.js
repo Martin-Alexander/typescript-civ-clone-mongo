@@ -36,6 +36,7 @@ const canvasContainer = document.getElementById("canvas-container");
 ReactDOM.render(
   <ReactUserInterface 
     currentPlayer={gameData.getCurrentPlayer()}
+    gameData={gameData}
     UI={UI}
     inputController={inputController}
   />, canvasContainer

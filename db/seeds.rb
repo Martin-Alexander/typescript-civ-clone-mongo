@@ -27,7 +27,6 @@ print " - Creating users..."
 martin = User.create! username: "martin", password: "123456"
 sophie = User.create! username: "sophie", password: "123456"
 chloe = User.create! username: "chloe", password: "123456"
-frankie = User.create! username: "frankie", password: "123456"
 
 done
 
@@ -42,7 +41,6 @@ print " - Creating games..."
 
 Player.create! user: martin, game: new_game, host: true
 Player.create! user: sophie, game: new_game
-Player.create! user: frankie, game: new_game
 Player.create! user: chloe, game: chloe_game, host: true
 
 done

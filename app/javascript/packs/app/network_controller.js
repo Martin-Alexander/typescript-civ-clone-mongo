@@ -22,6 +22,9 @@ function NetworkController(turnTransitioner, gameDataController, animationContro
         case "give_order":
           this.gameDataController.giveOrder(data.new_square);
           break;
+        case "player_ready":
+          this.gameDataController.updatePlayersReady(data.players_ready);
+          break;
         default:
           break;
       }
@@ -50,7 +53,6 @@ NetworkController.prototype.giveOrder = function(orderData) {
 NetworkController.prototype.getGameData = function() {
   const payload = { method: "get_game_data" };
   this.send(payload, (data) => {
-    console.log("next turn");
     this.gameDataController.newGameData(data.new_game);
     this.turnTransitioner.end();
   });  

@@ -30,6 +30,16 @@ GameData.prototype.square = function(col, row = false) {
   return square;
 };
 
+GameData.prototype.updatePlayersReady = function(playersReady) {
+  this.game_players.forEach((gameDataGamePlayers) => {
+    playersReady.forEach((gamePlayers) => {
+      if (gameDataGamePlayers.number === gamePlayers.number) {
+        gameDataGamePlayers.turn_over = gamePlayers.turn_over;
+      }
+    });
+  });
+}
+
 GameData.prototype.replaceSquare = function(square) {
   this.squares[square.y * (this.size + 1) + square.x] = square;
 };

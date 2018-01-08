@@ -12,10 +12,15 @@ GameDataController.prototype.pieceMove = function(data, animationCallback) {
     animationCallback(data, () => {
       const newSquare = this.replaceSquare(data.new_squares[1])
       if (!this.UI.ongoingTurnTransition && newSquare.units[0].player_number == this.gameData.getCurrentPlayer().number) {
-        this.updateSelectedSquare(newSquare);
+        // this.updateSelectedSquare(newSquare);
       }
     })
   }
+}
+
+GameDataController.prototype.updatePlayersReady = function(playersReady) {
+  this.gameData.updatePlayersReady(playersReady);
+  this.reactController.updateGameData(gameData);
 }
 
 GameDataController.prototype.giveOrder = function(newSquare) {

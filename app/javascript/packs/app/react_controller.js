@@ -7,4 +7,8 @@ ReactController.prototype.updateUI = function() {
   global.updateUI(this.UI);
 }
 
+ReactController.prototype.updateGameData = function() {
+  global.updateGameData(this.gameData);
+}
+
 export { ReactController };

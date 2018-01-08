@@ -19,8 +19,21 @@ export default class TurnTimer extends React.Component {
       }
     }
     
+    const playersReady = () => {
+      return this.props.gamePlayers.map((gamePlayer) => {
+        if (gamePlayer.turn_over) {
+          return(<span key={gamePlayer.number}>Player {gamePlayer.number} is <strong>ready</strong></span>)
+        } else {
+          return(<span key={gamePlayer.number}>Player {gamePlayer.number} is <strong>not ready</strong></span>)
+        }
+      });
+    }
+
     return(
-      <div style={turnTimerStyle}>{text()}</div>
+      <div style={turnTimerStyle}>
+        <div>{text()}</div>
+        <div>{playersReady()}</div>
+      </div>
     );
   }
 }

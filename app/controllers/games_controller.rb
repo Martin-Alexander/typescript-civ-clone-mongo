@@ -46,15 +46,24 @@ class GamesController < ApplicationController
   end
 
   def next_turn
-    move_animations = @game.next_turn
+    game_player = @game.game_players.where(user_id: current_user.id.to_s).first
+    game_player.toggle_turn_over
 
-    broadcast({
-      type: "next_turn",
-      move_animations: move_animations.reject do |result|
-        result.nil? || result[:success] == false
-      end
-    })
+    if @game.all_players_ready_for_next_turn
+      move_animations = @game.next_turn
 
+      broadcast({
+        type: "next_turn",
+        move_animations: move_animations.reject do |result|
+          result.nil? || result[:success] == false
+        end
+      })
+    else
+      broadcast({
+        type: "player_ready",
+        players_ready: @game.who_is_ready_for_next_turn
+      })
+    end
 
     respond_with_success
   end

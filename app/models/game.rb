@@ -22,6 +22,7 @@ class Game < MongoidModel
         { 
           user_id: game_player[:user_id], 
           number: game_player[:number],
+          turn_over: game_player[:turn_over],
           current_player: false
         }
       end
@@ -39,7 +40,19 @@ class Game < MongoidModel
       move_results << unit.apply_turn_rollover_logic
     end
 
+    game_players.each { |game_player| game_player.apply_turn_rollover_logic }
+
     return move_results
+  end
+
+  def all_players_ready_for_next_turn
+    game_players.all? { |player| player.turn_over }
+  end
+
+  def who_is_ready_for_next_turn
+    game_players.each_with_object([]) do |game_player, output|
+      output << { number: game_player.number, turn_over: game_player.turn_over }
+    end
   end
 
   # ==== Board helpers ====
@@ -175,9 +188,4 @@ class Game < MongoidModel
       end 
     end
   end  
-
-  public
-
-
-
 end
