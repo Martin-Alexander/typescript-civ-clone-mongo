@@ -84,7 +84,8 @@ InputController.prototype.drawPathLine = function() {
 // Tell server to initiate next turn
 InputController.prototype.nextTurn = function() {
   if (!this._authorized("nextTurn")) { return false; }
-  this.UI.ongoingTurnTransition = true;
+  
+  // this.UI.ongoingTurnTransition = true;
   this.networkController.nextTurn();
 }
 
