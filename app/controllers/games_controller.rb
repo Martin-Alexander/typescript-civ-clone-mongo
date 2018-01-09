@@ -13,7 +13,8 @@ class GamesController < ApplicationController
 
   def leave
     game = Game.find(params[:id])
-    game.player(current_user).role == "player" ? current_user.resign(game) : redirect_to(home_path)
+    current_user.resign(game) if game.player(current_user).role == "player"
+    redirect_to(home_path)
   end
 
   def input
@@ -27,6 +28,7 @@ class GamesController < ApplicationController
 
   def piece_move
     @path = @permitted_params[:data][:path]
+    byebug
     @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
 
     if @game.game_players.where(number: @unit.player_number).first.user_id == current_user.id.to_s

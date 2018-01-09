@@ -39,5 +39,6 @@ ReactDOM.render(
     gameData={gameData}
     UI={UI}
     inputController={inputController}
+    networkController={networkController}
   />, canvasContainer
 );

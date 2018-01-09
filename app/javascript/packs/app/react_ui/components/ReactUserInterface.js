@@ -1,8 +1,9 @@
-import React from "react";
-import MenuBar from "./MenuBar";
+import React            from "react";
+import MenuBar          from "./MenuBar";
 import SelectionDetails from "./SelectionDetails";
-import TurnTimer from "./TurnTimer";
-import Minimap from "./Minimap";
+import TurnTimer        from "./TurnTimer";
+import Minimap          from "./Minimap";
+import MainMenu         from "./MainMenu";
 
 export default class ReactUserInterface extends React.Component {
   constructor(props) {
@@ -10,19 +11,24 @@ export default class ReactUserInterface extends React.Component {
     this.state = { 
       UI: this.props.UI,
       gameData: this.props.gameData,
-      currentPlayer: this.props.currentPlayer
+      currentPlayer: this.props.currentPlayer,
+      menuOpen: false
     };
   }
 
   componentWillMount() {
     global.updateUI = (UI) => {
-      this.setState({ UI: UI, gameData: this.state.gameData });
+      this.setState({ UI: UI });
     }
 
     global.updateGameData = (gameData) => {
-      this.setState({ gameData: gameData, UI: this.state.UI });
+      this.setState({ gameData: gameData });
     }
   }  
+
+  toggleMenu() {
+    this.setState({ menuOpen: !this.state.menuOpen });
+  }
 
   render() {
     const userInterfaceStyle = {
@@ -34,10 +40,11 @@ export default class ReactUserInterface extends React.Component {
 
     return(
       <div id="react-user-interface" style={userInterfaceStyle}>
-        <MenuBar currentPlayer={this.props.currentPlayer}/>
+        <MenuBar toggleMenu={this.toggleMenu.bind(this)} currentPlayer={this.props.currentPlayer}/>
         <SelectionDetails currentPlayer={this.props.currentPlayer} UI={this.props.UI} inputController={this.props.inputController}/>
         <TurnTimer gamePlayers={this.state.gameData.game_players} ongoingTurnTransition={this.state.UI.ongoingTurnTransition}/>
         <Minimap />
+        <MainMenu networkController={this.props.networkController} menuOpen={this.state.menuOpen}/>
       </div>
     );
   }

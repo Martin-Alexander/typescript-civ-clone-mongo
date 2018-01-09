@@ -59,6 +59,17 @@ NetworkController.prototype.getGameData = function() {
   });  
 }
 
+NetworkController.prototype.leaveGame = function() {
+  fetch(`/game/${gameId}/leave`, {
+    method: "POST",
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    },
+    credentials: "same-origin"
+  }); 
+}
+
 NetworkController.prototype.send = function(payload, callback) {
   payload.game = gameId;
 

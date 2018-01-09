@@ -22,7 +22,7 @@ export default class MenuBar extends React.Component {
           supply={this.props.currentPlayer.supply}
           growth={this.props.currentPlayer.growth}
         />
-        <Options />
+        <Options toggleMenu={this.props.toggleMenu}/>
       </div>
     );
   }
