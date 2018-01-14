@@ -16,7 +16,7 @@ Renderer.prototype.run = function() {
     self.drawAllSquares();
     self.drawAllAnimations();
     self.drawPathLine();
-  }, 30);
+  }, 35);
 };
 
 Renderer.prototype.addAnimation = function(animation) {

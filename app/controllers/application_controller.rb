@@ -19,15 +19,17 @@ class ApplicationController < ActionController::Base
   end
 
   def respond_with_success
-    respond_to do |format|
-      format.json { render json: { status: "OK" } }
-    end
+    json_response(status: "OK")
   end
 
   def respond_with_failure
+    json_response(status: "FAILURE")
+  end
+
+  def json_response(hash)
     respond_to do |format|
-      format.json { render json: { status: "OK" } }
-    end    
+      format.json { render json: hash }
+    end        
   end
 
   def broadcast(data)

@@ -67,7 +67,10 @@ NetworkController.prototype.leaveGame = function() {
       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     },
     credentials: "same-origin"
-  }); 
+  }).then(response => response.json())
+  .then((data) => {
+    console.log(data);
+  });
 }
 
 NetworkController.prototype.send = function(payload, callback) {
