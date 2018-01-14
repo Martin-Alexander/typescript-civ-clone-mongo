@@ -57,6 +57,11 @@ class User < MongoidModel
 
   # ==== Validation methods ====
 
+  # Is the user a living play in the game
+  def alive_in_game?(game)
+    game.players.where(role: "player").pluck(:user_id).include?(id)
+  end
+
   # Is the user in a specific game (filter)
   def in_game?(game)
     games.include?(game)
