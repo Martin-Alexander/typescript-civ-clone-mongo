@@ -21,14 +21,14 @@ class GamesController < ApplicationController
     @permitted_params = params.permit(:method, :game, data: {}).to_h
 
     @game = Game.find(@permitted_params[:game])
-    send(@permitted_params[:method].to_sym)  
+
+    current_user.alive_in_game?(@game) ? send(@permitted_params[:method].to_sym) : respond_with_failure
   end
 
   private
 
   def piece_move
     @path = @permitted_params[:data][:path]
-    byebug
     @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
 
     if @game.game_players.where(number: @unit.player_number).first.user_id == current_user.id.to_s
@@ -94,7 +94,13 @@ class GamesController < ApplicationController
   end
 
   def respond_with_success
-    respond_to do |format|      
+    respond_to do |format|
+      format.json { render json: { status: "OK" } }
+    end
+  end
+
+  def respond_with_failure
+    respond_to do |format|
       format.json { render json: { status: "OK" } }
     end    
   end
