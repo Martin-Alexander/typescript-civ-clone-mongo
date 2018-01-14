@@ -3,16 +3,21 @@ module Unit
     embedded_in :square, class_name: "Square::Global"
 
     field :player_number, type: Integer, default: 0
-    field :moves, type: Integer, default: 2
-    field :order, type: String,  default: "none"
-    field :state, type: String, default: "none"
+    field :moves,         type: Integer, default: 0
+    field :order,         type: String,  default: "none"
+    field :state,         type: String,  default: "none"
+    field :go_to,         type: Array,   default: []
+
+    def set_base_moves
+      update(moves: base_moves)
+    end
 
     # ==== Next turn methods ====
 
     # Executes all methods involved in turn roll over
     def apply_turn_rollover_logic
       update(moves: base_moves)
-      execute_order
+      return execute_order
     end
 
     # ==== Order methods ====
@@ -35,12 +40,22 @@ module Unit
 
     # Applies game logic turning an order into state
     def execute_order
-      if Rules["orders"][order]["type"] == "unit_state_transform"
+      result = nil
+      order_type = Rules["orders"][order]["type"]
+      case Rules["orders"][order]["type"]
+      when "unit_state_transform"
         update(state: Rules["orders"][order]["transform_to"])
-      elsif Rules["orders"][order]["type"] == "construction"
+      when "construction"
         structure_type = Rules["orders"][order]["structure"]
         execute_construction_order(structure_type)
+      when "action"
+        case order
+        when "go"
+          result = move(go_to)
+        end
       end
+
+      return result
     end
 
     # ==== General untility methods ====
@@ -60,43 +75,66 @@ module Unit
       Rules["units"][type]
     end
 
-    # Returns whether or not the unit belongs to a given user
-    def is_unit_owner(user)
-      square.board.game_players.where(number: player_number).first.user_id == user.id.to_s
-    end
-
-
     # ==== Movement methods ====
 
     # Actually updates the database with new move
-    def execute_move(to_square)
+    def execute_move(new_unit_fields, to_square)
       new_unit = self.dup
       to_square.send(type.pluralize.to_sym).send(:push, new_unit)
+      new_unit.update(new_unit_fields)
       self.delete
 
-      return new_unit      
+      return new_unit
     end
 
     # Default move validations
     def valid_move_path(move_path)
       return(
         are_adjacent(move_path) && 
-        are_free_of_units(move_path) && 
-        has_enough_moves(move_path)
+        are_free_of_units(move_path)
       )
     end
 
     # Should be only move function
-    def move(user, path)
-      move_results = { success: false, path: path, new_squares: nil }
+    # TODO: Refactor this abomination
+    def move(path)
+      move_results = { success: false, path: [] }
       move_path = MovePath.new(square.board, path)
 
-      if valid_move_path(move_path) && is_unit_owner(user)
-        update(moves: moves - move_path.total_move_cost)
-        moved_unit = execute_move(move_path.last.to)
-        move_results[:moved_unit] = moved_unit
+      if valid_move_path(move_path)
+        moves_left = moves
+        immediate_path = [move_path.path.first]
+        go_to_path = [move_path.path.first]
+
+        move_path.moves.each_with_index do |move, i|
+          if move.cost <= moves_left
+            moves_left -= move.cost
+            immediate_path << path[i + 1]
+            go_to_path = [path[i + 1]]
+          else
+            go_to_path << path[i + 1]
+          end
+        end
+
+        go_to_path = [] if go_to_path.length == 1
+
+        immediate_move_path = MovePath.new(square.board, immediate_path)
+
+        if immediate_move_path.moves.any? && go_to_path.any?
+          move_to_square = immediate_move_path.moves.last.to
+          new_order = "go"
+        elsif immediate_move_path.moves.any? && go_to_path.empty?
+          move_to_square = immediate_move_path.moves.last.to
+          new_order = "none"
+        elsif immediate_move_path.moves.empty? && go_to_path.any?
+          move_to_square = square
+          new_order = "go"
+        end
+
+        move_results[:moved_unit] = execute_move({ moves: moves_left, go_to: go_to_path, order: new_order }, move_to_square).to_hash
+        move_results[:new_squares] = [square.to_hash, move_to_square.to_hash]        
         move_results[:success] = true
-        move_results[:new_squares] = [move_path.first.from.to_hash, move_path.last.to.to_hash]
+        move_results[:path] = immediate_path
       end
 
       return move_results
@@ -106,21 +144,16 @@ module Unit
 
     # All moves are to adjacent squares
     def are_adjacent(move_path)
-      move_path.all? do |move|
+      move_path.moves.all? do |move|
         move.from.neighbours.include?(move.to)
       end
     end
 
     # All moves are to squares with no units
     def are_free_of_units(move_path)
-      move_path.all? do |move|
+      move_path.moves.all? do |move|
         move.to.units.empty?
       end
-    end
-
-    # Unit has more are at least as many as the move path costs
-    def has_enough_moves(move_path)
-      moves >= move_path.total_move_cost
     end
   end
 end

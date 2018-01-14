@@ -33,7 +33,7 @@ units:
       - siege
   worker:
     movement: 
-      base: 20
+      base: 4
     allowed_orders:
       - none
       - go
@@ -79,6 +79,10 @@ terrain:
     type: land
     move_cost: 2
     fortification_bonus: null
+  hill:
+    type: land
+    move_cost: 2
+    fortification_bonus: 2
   mountains:
     type: land
     move_cost: null

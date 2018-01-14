@@ -1,7 +1,8 @@
 /*global App*/
 /*global gameId*/
 
-function NetworkController(gameDataController, animationController) {
+function NetworkController(turnTransitioner, gameDataController, animationController) {
+  this.turnTransitioner = turnTransitioner;
   this.gameDataController = gameDataController;
   this.animationController = animationController;
 
@@ -9,13 +10,20 @@ function NetworkController(gameDataController, animationController) {
     received: (data) => {
       switch (data.type) {
         case "piece_move":
-          gameDataController.pieceMove(data, animationController.pieceMove.bind(animationController));
+          this.gameDataController.pieceMove(data, this.animationController.pieceMove.bind(this.animationController));
           break;
         case "next_turn":
+          this.turnTransitioner.begin();
+          data.move_animations.forEach((moveAnimation) => {
+            this.gameDataController.pieceMove(moveAnimation, this.animationController.pieceMove.bind(this.animationController));
+          });
           this.getGameData();
           break;
         case "give_order":
-          gameDataController.giveOrder(data.new_square);
+          this.gameDataController.giveOrder(data.new_square);
+          break;
+        case "player_ready":
+          this.gameDataController.updatePlayersReady(data.players_ready);
           break;
         default:
           break;
@@ -34,6 +42,7 @@ NetworkController.prototype.pieceMove = function(pieceMoveData) {
 NetworkController.prototype.nextTurn = function() {
   const payload = { method: "next_turn" };
   this.send(payload);
+  this.turnTransitioner.ready();
 }
 
 NetworkController.prototype.giveOrder = function(orderData) {
@@ -45,9 +54,20 @@ NetworkController.prototype.giveOrder = function(orderData) {
 NetworkController.prototype.getGameData = function() {
   const payload = { method: "get_game_data" };
   this.send(payload, (data) => {
-    console.log("next turn");
     this.gameDataController.newGameData(data.new_game);
+    this.turnTransitioner.end();
   });  
+}
+
+NetworkController.prototype.leaveGame = function() {
+  fetch(`/game/${gameId}/leave`, {
+    method: "POST",
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    },
+    credentials: "same-origin"
+  }); 
 }
 
 NetworkController.prototype.send = function(payload, callback) {

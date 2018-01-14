@@ -4,11 +4,11 @@ class GamePlayer < MongoidModel
   embedded_in :game
   embeds_many :vision_squares, class_name: "Square::Vision"
 
-  field :number, type: Integer
-  field :user_id, type: String
-
-  field :growth, type: Integer, default: 1
-  field :supply, type: Integer, default: 0
+  field :number,         type: Integer
+  field :user_id,        type: String
+  field :turn_over,      type: Boolean, default: false
+  field :growth,         type: Integer, default: 1
+  field :supply,         type: Integer, default: 0
   field :military_count, type: Integer, default: 0
   field :civilian_count, type: Integer, default: 0
 
@@ -20,5 +20,13 @@ class GamePlayer < MongoidModel
         collection << unit if unit.player_number == number
       end
     end
+  end
+
+  def toggle_turn_over
+    update(turn_over: !turn_over)
+  end
+
+  def apply_turn_rollover_logic
+    update(turn_over: false)
   end
 end
