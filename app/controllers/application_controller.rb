@@ -17,4 +17,20 @@ class ApplicationController < ActionController::Base
       "#{params[:controller]}##{params[:action]}"
     end
   end
+
+  def respond_with_success
+    respond_to do |format|
+      format.json { render json: { status: "OK" } }
+    end
+  end
+
+  def respond_with_failure
+    respond_to do |format|
+      format.json { render json: { status: "OK" } }
+    end    
+  end
+
+  def broadcast(data)
+    ActionCable.server.broadcast("game_channel_#{@game.id}", data)
+  end  
 end
