@@ -31,21 +31,21 @@ module Unit
     end
 
     # Applies game logic turning an order into state
-    def execute_order
-      if Rules["orders"][order]["type"] == "unit_state_transform"
-        update(state: Rules["orders"][order]["transform_to"])
-        update(moves: base_moves)
-      elsif Rules["orders"][order]["type"] == "construction"
-        structure_type = Rules["orders"][order]["structure"]
-        execute_construction_order(structure_type)
-      else
-        update(moves: base_moves)
-      end
-    end
+    # def execute_order
+    #   if Rules["orders"][order]["type"] == "unit_state_transform"
+    #     update(state: Rules["orders"][order]["transform_to"])
+    #     update(moves: base_moves)
+    #   elsif Rules["orders"][order]["type"] == "construction"
+    #     structure_type = Rules["orders"][order]["structure"]
+    #     execute_construction_order(structure_type)
+    #   else
+    #     update(moves: base_moves)
+    #   end
+    # end
 
     # Executes all methods involved in turn roll over
-    def apply_turn_rollover_logic
-      execute_order
-    end
+    # def apply_turn_rollover_logic
+    #   execute_order
+    # end
   end
 end
