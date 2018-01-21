@@ -37,10 +37,10 @@ GameData.prototype.square = function(col, row = false) {
 };
 
 GameData.prototype.updatePlayersReady = function(playersReady) {
-  this.game_players.forEach((gameDataGamePlayers) => {
-    playersReady.forEach((gamePlayers) => {
-      if (gameDataGamePlayers.number === gamePlayers.number) {
-        gameDataGamePlayers.turn_over = gamePlayers.turn_over;
+  this.players.forEach((gameDataPlayers) => {
+    playersReady.forEach((players) => {
+      if (gameDataPlayers.number === players.number) {
+        gameDataPlayers.turn_over = players.turn_over;
       }
     });
   });
@@ -61,7 +61,7 @@ GameData.prototype.newGameData = function(rawGameData) {
 GameData.prototype.getCurrentPlayer = function() {
   let currentPlayer;
 
-  this.game_players.forEach((player) => {
+  this.players.forEach((player) => {
     if (player.current_player) {
       currentPlayer = player;
     }

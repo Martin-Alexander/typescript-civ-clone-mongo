@@ -42,7 +42,7 @@ export default class ReactUserInterface extends React.Component {
       <div id="react-user-interface" style={userInterfaceStyle}>
         <MenuBar toggleMenu={this.toggleMenu.bind(this)} currentPlayer={this.props.currentPlayer}/>
         <SelectionDetails currentPlayer={this.props.currentPlayer} UI={this.props.UI} inputController={this.props.inputController}/>
-        <TurnTimer gamePlayers={this.state.gameData.game_players} ongoingTurnTransition={this.state.UI.ongoingTurnTransition}/>
+        <TurnTimer players={this.state.gameData.players} ongoingTurnTransition={this.state.UI.ongoingTurnTransition}/>
         <Minimap />
         <MainMenu networkController={this.props.networkController} menuOpen={this.state.menuOpen}/>
       </div>

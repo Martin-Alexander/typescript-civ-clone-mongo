@@ -1,8 +1,7 @@
 class Game < MongoidModel
-  direct_children :game_players, :squares
+  direct_children :players, :squares
 
   has_many :players
-  embeds_many :game_players
   embeds_many :squares, class_name: "Square::Global"
 
   field :state, type: String
@@ -14,15 +13,20 @@ class Game < MongoidModel
   def client_game_data(current_user)
     game_data = to_hash
 
-    game_data[:game_players].map! do |game_player|
-      if game_player[:user_id] == current_user.id.to_s
-        game_player[:current_player] = true
-        game_player
+    game_data[:players].map! do |player|
+      if player[:user_id] == current_user.id
+        player[:current_player] = true
+        player[:user_id] = player[:user_id].to_s
+        player[:game_id] = player[:game_id].to_s
+        player
       else
         { 
-          user_id: game_player[:user_id], 
-          number: game_player[:number],
-          turn_over: game_player[:turn_over],
+          user_id: player[:user_id].to_s, 
+          game_id: player[:game_id].to_s, 
+          number: player[:number],
+          host: player[:host],
+          role: player[:role],
+          turn_over: player[:turn_over],
           current_player: false
         }
       end
@@ -40,18 +44,18 @@ class Game < MongoidModel
       move_results << unit.apply_turn_rollover_logic
     end
 
-    game_players.each { |game_player| game_player.apply_turn_rollover_logic }
+    players.each { |player| player.apply_turn_rollover_logic }
 
     return move_results
   end
 
   def all_players_ready_for_next_turn
-    game_players.all? { |player| player.turn_over }
+    players.all? { |player| player.turn_over }
   end
 
   def who_is_ready_for_next_turn
-    game_players.each_with_object([]) do |game_player, output|
-      output << { number: game_player.number, turn_over: game_player.turn_over }
+    players.each_with_object([]) do |player, output|
+      output << { number: player.number, turn_over: player.turn_over }
     end
   end
 
@@ -136,7 +140,7 @@ class Game < MongoidModel
   # TEST MODE
   def generate_game_data
     generate_global_squares
-    generate_game_players
+    initialize_players
     # generate_vision_squares
     generate_initial_unit_placement
   end  
@@ -160,29 +164,32 @@ class Game < MongoidModel
     end
   end
 
-  # Generates game players
-  def generate_game_players
+  # Initializes game players
+  def initialize_players
+    # players.each_with_index do |player, i|
+    #   GamePlayer.create game: self, number: i + 1, user_id: player.user_id.to_s
+    # end
     players.each_with_index do |player, i|
-      GamePlayer.create game: self, number: i + 1, user_id: player.user_id.to_s
+      player.update(number: i + 1)
     end
   end
 
   # Generates vision squares for each game player
   def generate_vision_squares
-    game_players.each do |game_player|
-      squares.each do |square|
-        Square::Vision.create! x: square.x, y: square.x, board: game_player
-      end
-    end
+    # players.each do |player|
+    #   squares.each do |square|
+    #     Square::Vision.create! x: square.x, y: square.x, board: player
+    #   end
+    # end
   end
 
   # Generates initlia player placement
   def generate_initial_unit_placement
-    game_players.each do |game_player|
+    players.each do |player|
       loop do 
         selected_square = squares.sample
         if selected_square.units.empty?
-          selected_square.create_worker player_number: game_player.number
+          selected_square.create_worker player_number: player.number
           break
         end
       end 
