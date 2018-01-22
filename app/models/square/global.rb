@@ -8,6 +8,8 @@ module Square
     embed_units :infantry, :tanks, :ships, :workers
     embeds_many :structures
 
+    field :terrain, type: String, default: "grass"
+
     def get_structure(type)
       structures.where(type: type).first
     end

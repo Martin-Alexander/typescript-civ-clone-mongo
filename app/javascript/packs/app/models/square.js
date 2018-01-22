@@ -26,7 +26,16 @@ Square.prototype.isOwnedBy = function(player) {
 }
 
 Square.prototype.color = function(selectionSquare) {
-  const terrainColorLookup = {};
+  const terrainColorLookup = {
+    grass: "#0e960c",
+    plains: "#dbab0d",
+    desert: "#f9f459",
+    forest: "#086001",
+    marsh: "#70876d",
+    hill: "#a08a73",
+    mountains: "#c4bfba",
+    water: "#2651d3"
+  };
 
   if (this == selectionSquare) {
     return "white";

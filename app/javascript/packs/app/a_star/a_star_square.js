@@ -17,7 +17,7 @@ AStarSquare.prototype.equalTo = function(otherSquare) {
 }
 
 AStarSquare.prototype.calculateMoveCost = function(square) {
-  if (square.units.length > 0) {
+  if (square.units.length > 0 || square.terrain == "mountains" || square.terrain == "water") {
     return infinity();
   } else {
     return 1;

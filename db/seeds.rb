@@ -27,13 +27,13 @@ print " - Creating users..."
 martin = User.create! username: "martin", password: "123456"
 sophie = User.create! username: "sophie", password: "123456"
 chloe = User.create! username: "chloe", password: "123456"
+brittany = User.create! username: "brittany", password: "123456"
 
 done
 
 print " - Creating players..."
 
 new_game = Game.create! state: "lobby"
-chloe_game = Game.create! state: "lobby"
 
 done
 
@@ -41,7 +41,8 @@ print " - Creating games..."
 
 Player.create! user: martin, game: new_game, host: true
 Player.create! user: sophie, game: new_game
-Player.create! user: chloe, game: chloe_game, host: true
+# Player.create! user: chloe, game: new_game
+# Player.create! user: brittany, game: new_game
 
 done
 

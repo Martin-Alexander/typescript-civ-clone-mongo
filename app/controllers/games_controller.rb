@@ -31,7 +31,7 @@ class GamesController < ApplicationController
     @path = @permitted_params[:data][:path]
     @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
 
-    if @game.game_players.where(number: @unit.player_number).first.user_id == current_user.id.to_s
+    if @game.players.where(number: @unit.player_number).first.user == current_user
       move_result = @unit.move(@path)
 
       if move_result[:success]
@@ -48,8 +48,8 @@ class GamesController < ApplicationController
   end
 
   def next_turn
-    game_player = @game.game_players.where(user_id: current_user.id.to_s).first
-    game_player.toggle_turn_over
+    player = @game.players.where(user: current_user).first
+    player.toggle_turn_over
 
     if @game.all_players_ready_for_next_turn
       move_animations = @game.next_turn
