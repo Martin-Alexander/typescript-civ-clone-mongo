@@ -100,7 +100,7 @@ EventRouter.prototype.initializeEventListener = function() {
       UI.tileWidth *= zoomSpeed;
       UI.offset.x = (UI.offset.x * zoomSpeed) - (mouse.centerRelativePosition.x / 10);
       UI.offset.y = (UI.offset.y * zoomSpeed) - (mouse.centerRelativePosition.y / 10);
-    } else if (event.deltaY > 0 && UI.tileHeight > 25) {
+    } else if (event.deltaY > 0 && UI.tileHeight > 15) {
       UI.tileHeight /= zoomSpeed;
       UI.tileWidth /= zoomSpeed;
       UI.offset.x = (UI.offset.x / zoomSpeed) + (mouse.centerRelativePosition.x / 11);
