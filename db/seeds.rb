@@ -41,8 +41,8 @@ print " - Creating games..."
 
 Player.create! user: martin, game: new_game, host: true
 Player.create! user: sophie, game: new_game
-# Player.create! user: chloe, game: new_game
-# Player.create! user: brittany, game: new_game
+Player.create! user: chloe, game: new_game
+Player.create! user: brittany, game: new_game
 
 done
 
