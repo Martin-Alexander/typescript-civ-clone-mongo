@@ -134,7 +134,45 @@ class Board
           end
         end          
       end
-    end      
+    end
+  end
+
+  def player_starting_locations(number_of_players)
+    squares.map { |square| [square, square.desirability(size / 10)] }.sort { |a, b| b[1] <=> a[1] }
+    
+    sorted_squares = {}
+    squares.each do |square|
+      if !["water", "mountains"].include?(square.terrain) && 
+      square.neighbouring_terrain("mountains", 2).zero?
+        if sorted_squares[square.desirability(size / 10)]
+          sorted_squares[square.desirability(size / 10)] << square
+        else 
+          sorted_squares[square.desirability(size / 10)] = [square]
+        end
+      end
+    end
+
+    enough_squares = {}
+    sorted_squares.each do |desirability_of_squares, all_squares|
+      if all_squares.length >= number_of_players
+        enough_squares[desirability_of_squares] = all_squares[0...number_of_players]
+      end
+    end
+
+    starting_locations = []
+    enough_squares.each do |desirability_of_squares, all_squares|
+      minimum_distance = all_squares.combination(2).map { |pair| distance(pair[0], pair[1]) }.min
+      starting_locations << {
+        squares: all_squares,
+        minimum_distance: minimum_distance
+      }
+    end
+
+    starting_locations.sort { |a, b| b[:minimum_distance] <=> a[:minimum_distance] }.first[:squares]
+  end
+
+  def distance(a, b)
+    (a.x - b.x).abs + (a.y - b.y).abs
   end
 
   def find_square(col, row = false)
@@ -191,6 +229,25 @@ class Board
 
     def neighbouring_terrain(terrain, radius = 1)
       neighbours(radius).select { |square| square.terrain == terrain }.length
+    end
+
+    def desirability(radius)
+      running_total = 0
+      neighbours(radius).each do |neighbour|
+        running_total += desirability_lookup(neighbour.terrain)
+      end
+
+      (running_total * 100) / 100
+    end
+
+    def desirability_lookup(terrain)
+      {
+        grass: 200,
+        plains: 180,
+        desert: 100,
+        water: 0,
+        mountains: 0
+      }[terrain.to_sym]
     end
     
     def to_s
