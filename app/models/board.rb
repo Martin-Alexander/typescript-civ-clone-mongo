@@ -138,12 +138,14 @@ class Board
   end
 
   def player_starting_locations(number_of_players)
-    squares.map { |square| [square, square.desirability(size / 10)] }.sort { |a, b| b[1] <=> a[1] }
+    squares.map { |square| [square, square.desirability(size / 5)] }.sort { |a, b| b[1] <=> a[1] }
     
     sorted_squares = {}
     squares.each do |square|
-      if !["water", "mountains"].include?(square.terrain) && 
-      square.neighbouring_terrain("mountains", 2).zero?
+      if !["water", "desert", "mountains"].include?(square.terrain) && 
+      square.neighbouring_terrain("mountains", 1).zero? &&
+      square.neighbouring_terrain("desert", 2).zero? &&
+      square.neighbours(3).length > 40
         if sorted_squares[square.desirability(size / 10)]
           sorted_squares[square.desirability(size / 10)] << square
         else 
@@ -237,16 +239,16 @@ class Board
         running_total += desirability_lookup(neighbour.terrain)
       end
 
-      (running_total * 100) / 100
+      (running_total * 10000) / 10000
     end
 
     def desirability_lookup(terrain)
       {
-        grass: 200,
-        plains: 180,
-        desert: 100,
-        water: 0,
-        mountains: 0
+        grass: 175,
+        plains: 150,
+        desert: 10,
+        water: 50,
+        mountains: 10
       }[terrain.to_sym]
     end
     
