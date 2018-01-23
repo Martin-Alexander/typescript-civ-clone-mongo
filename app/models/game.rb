@@ -137,11 +137,9 @@ class Game < MongoidModel
   end
 
   # Generates a blank board based on setting
-  # TEST MODE
   def generate_game_data
     generate_global_squares
     initialize_players
-    # generate_vision_squares
     generate_initial_unit_placement
   end  
 
@@ -152,6 +150,7 @@ class Game < MongoidModel
     Math::sqrt((number_of_players(role: "player") + number_of_players(role: "dead_player")) * 750).to_i
   end
   
+  # Currently only for testing purposes
   def generate_terrain
     board = Board.new(board_size)
 
@@ -162,7 +161,7 @@ class Game < MongoidModel
   
   private
 
-  # Generates global squares
+  # Generates global squares based on terrain generation of the Board class
   def generate_global_squares
     update!(size: board_size)
     board = Board.new(board_size)
@@ -174,15 +173,13 @@ class Game < MongoidModel
 
   # Initializes game players
   def initialize_players
-    # players.each_with_index do |player, i|
-    #   GamePlayer.create game: self, number: i + 1, user_id: player.user_id.to_s
-    # end
     players.each_with_index do |player, i|
       player.update(number: i + 1)
     end
   end
 
   # Generates vision squares for each game player
+  # This app probably won't even have fog of war
   def generate_vision_squares
     # players.each do |player|
     #   squares.each do |square|

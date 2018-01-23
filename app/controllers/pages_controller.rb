@@ -14,7 +14,10 @@ class PagesController < ApplicationController
 
   def game
     @game = Game.find(params[:id])
-    # @game.generate_terrain
+
+    # Generating new terrain on each page load for testing purpose
+    @game.generate_terrain
+    
     redirect_to home_path unless current_user.in_game?(@game)
     @players = @game.players
     @current_player = current_user.player_of_game(@game)
