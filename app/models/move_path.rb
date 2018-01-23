@@ -50,7 +50,7 @@ class MovePath
     def cost
     # def cost(unit)
       # GameRule.terrain_move_cost(unit, @to, @connection)
-      1
+      Rules["terrain"][@to.terrain]["move_cost"]
     end
 
     # private

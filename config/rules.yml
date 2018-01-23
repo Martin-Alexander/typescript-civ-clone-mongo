@@ -69,7 +69,7 @@ terrain:
     fortification_bonus: 2
   desert:
     type: land
-    move_cost: 1
+    move_cost: 2
     fortification_bonus: 1.5
   forest:
     type: land

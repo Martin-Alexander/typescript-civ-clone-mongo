@@ -9,7 +9,7 @@ export default class SelectionDetails extends React.Component {
       UI: this.props.UI,
       currentPlayer: this.props.currentPlayer
     };
-    this.rules = JSON.parse(rules);
+    this.rules = rules;
   }
 
   render() {
