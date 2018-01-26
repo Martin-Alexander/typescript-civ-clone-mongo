@@ -49,10 +49,12 @@ class Game < MongoidModel
     return move_results
   end
 
+  # Returns whether or not all players are ready'd up
   def all_players_ready_for_next_turn
     players.all? { |player| player.turn_over }
   end
 
+  # Returns a list of players who are ready'd up
   def who_is_ready_for_next_turn
     players.each_with_object([]) do |player, output|
       output << { number: player.number, turn_over: player.turn_over }
@@ -70,11 +72,7 @@ class Game < MongoidModel
     if row && (row > board_size || col > board_size)
       raise ArgumentError, "Invalid row #{row} or col #{col} for board size of #{board_size}"
     end
-    if row
-      squares[row * (board_size + 1) + col]
-    else
-      squares[col.to_i]
-    end
+    row ? squares[row * (board_size + 1) + col] : squares[col.to_i]
   end
 
   # Iterated through each unit and passes to a block
@@ -136,11 +134,14 @@ class Game < MongoidModel
     update!(state: "ongoing")
   end
 
-  # Generates a blank board based on setting
+  # Generates game and initialize players
   def generate_game_data
-    generate_global_squares
-    initialize_players
-    generate_initial_unit_placement
+    update!(size: board_size)
+    board = Board.new(board_size)
+
+    set_player_numbers
+    generate_global_squares(board)
+    set_starting_player_locations(board)
   end  
 
   # ==== Board setup ===
@@ -150,58 +151,26 @@ class Game < MongoidModel
     Math::sqrt((number_of_players(role: "player") + number_of_players(role: "dead_player")) * 750).to_i
   end
   
-  # Currently only for testing purposes
-  def generate_terrain
-    board = Board.new(board_size)
-
-    squares.each do |square|
-      square.update!(terrain: board.find_square(square.x, square.y).terrain, workers: [])
-    end
-
-    board.player_starting_locations(number_of_players(role: "player")).each_with_index do |square, i|
-      find_square(square.x, square.y).create_worker player_number: i + 1
-    end
-  end
-  
   private
 
   # Generates global squares based on terrain generation of the Board class
-  def generate_global_squares
-    update!(size: board_size)
-    board = Board.new(board_size)
-
+  def generate_global_squares(board)
     board.squares.each do |square|
       Square::Global.create x: square.x, y: square.y, board: self, terrain: square.terrain
     end
   end
-
-  # Initializes game players
-  def initialize_players
-    players.each_with_index do |player, i|
-      player.update(number: i + 1)
+  
+  # Attempts to set starting player locations as fairly as possible
+  def set_starting_player_locations(board)
+    board.player_starting_locations(number_of_players(role: "player")).each_with_index do |square, i|
+      find_square(square.x, square.y).create_worker player_number: i + 1
     end
   end
 
-  # Generates vision squares for each game player
-  # This app probably won't even have fog of war
-  def generate_vision_squares
-    # players.each do |player|
-    #   squares.each do |square|
-    #     Square::Vision.create! x: square.x, y: square.x, board: player
-    #   end
-    # end
-  end
-
-  # Generates initlia player placement
-  def generate_initial_unit_placement
-    players.each do |player|
-      loop do 
-        selected_square = squares.sample
-        if selected_square.units.empty?
-          selected_square.create_worker player_number: player.number
-          break
-        end
-      end 
+  # Initializes game players
+  def set_player_numbers
+    players.each_with_index do |player, i|
+      player.update(number: i + 1)
     end
   end
 end
