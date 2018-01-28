@@ -106,8 +106,12 @@ module Unit
         immediate_path = [move_path.path.first]
         go_to_path = [move_path.path.first]
 
+        out_of_moves = false
+
         move_path.moves.each_with_index do |move, i|
-          if move.cost <= moves_left
+          out_of_moves = move.cost > moves_left || out_of_moves
+
+          if !out_of_moves
             moves_left -= move.cost
             immediate_path << path[i + 1]
             go_to_path = [path[i + 1]]
@@ -118,26 +122,32 @@ module Unit
 
         go_to_path = [] if go_to_path.length == 1
 
-        immediate_move_path = MovePath.new(square.board, immediate_path)
-
-        if immediate_move_path.moves.any? && go_to_path.any?
-          move_to_square = immediate_move_path.moves.last.to
-          new_order = "go"
-        elsif immediate_move_path.moves.any? && go_to_path.empty?
-          move_to_square = immediate_move_path.moves.last.to
-          new_order = "none"
-        elsif immediate_move_path.moves.empty? && go_to_path.any?
-          move_to_square = square
-          new_order = "go"
-        end
+        move_to_square, new_order = calculate_move_to_square_and_new_order(immediate_path, go_to_path)
 
         move_results[:moved_unit] = execute_move({ moves: moves_left, go_to: go_to_path, order: new_order }, move_to_square).to_hash
-        move_results[:new_squares] = [square.to_hash, move_to_square.to_hash]        
+        move_results[:new_squares] = [square.to_hash, move_to_square.to_hash]
         move_results[:success] = true
         move_results[:path] = immediate_path
       end
 
       return move_results
+    end
+
+    def calculate_move_to_square_and_new_order(immediate_path, go_to_path)
+      immediate_path = MovePath.new(square.board, immediate_path)
+
+      if immediate_path.moves.any? && go_to_path.any?
+        move_to_square = immediate_path.moves.last.to
+        new_order = "go"
+      elsif immediate_path.moves.any? && go_to_path.empty?
+        move_to_square = immediate_path.moves.last.to
+        new_order = "none"
+      elsif immediate_path.moves.empty? && go_to_path.any?
+        move_to_square = square
+        new_order = "go"
+      end
+
+      [move_to_square, new_order]
     end
 
     # ---- Move validation methods ----
