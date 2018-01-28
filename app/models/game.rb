@@ -51,7 +51,8 @@ class Game < MongoidModel
 
   # Returns whether or not all players are ready'd up
   def all_players_ready_for_next_turn
-    players.all? { |player| player.turn_over }
+    true
+    # players.all? { |player| player.turn_over }
   end
 
   # Returns a list of players who are ready'd up
