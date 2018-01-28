@@ -98,7 +98,6 @@ module Unit
     # Should be only move function
     # TODO: Refactor this abomination
     def move(path)
-      move_results = { success: false, path: [] }
       move_path = MovePath.new(square.board, path)
 
       if valid_move_path(move_path)
@@ -124,13 +123,15 @@ module Unit
 
         move_to_square, new_order = calculate_move_to_square_and_new_order(immediate_path, go_to_path)
 
-        move_results[:moved_unit] = execute_move({ moves: moves_left, go_to: go_to_path, order: new_order }, move_to_square).to_hash
-        move_results[:new_squares] = [square.to_hash, move_to_square.to_hash]
-        move_results[:success] = true
-        move_results[:path] = immediate_path
+        return {
+          move_unit: execute_move({ moves: moves_left, go_to: go_to_path, order: new_order }, move_to_square).to_hash,
+          new_squares: [square.to_hash, move_to_square.to_hash],
+          success: true,
+          path: immediate_path
+        }
       end
 
-      return move_results
+      return { success: false, path: [] }
     end
 
     def calculate_move_to_square_and_new_order(immediate_path, go_to_path)
