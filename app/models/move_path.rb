@@ -1,8 +1,9 @@
-class MovePath
-  attr_reader :moves, :game, :path
-
+class MoveOrder
   def initialize(game, path)
     @game = game
+
+    @game.find_square(path[0])
+
     @moves = []
     @path = []
 
@@ -18,25 +19,6 @@ class MovePath
     @moves.sum { |move| move.cost }
   end
 
-  # Pass all missing methods to moves array
-  # def method_missing(method, *args, &block)
-  #   if args.any?
-  #     if block
-  #       @moves.send(method, args, &block)
-  #     else
-  #       @moves.send(method, args)
-  #     end
-  #   else
-  #     if block
-  #       @moves.send(method, &block)
-  #     else
-  #       @moves.send(method)
-  #     end
-  #   end
-  # rescue
-  #   super(method, args, block)
-  # end
-
   class Move
     attr_reader :game, :from, :to
 
@@ -48,14 +30,7 @@ class MovePath
     end
 
     def cost
-    # def cost(unit)
-      # GameRule.terrain_move_cost(unit, @to, @connection)
       Rules["terrain"][@to.terrain]["move_cost"]
     end
-
-    # private
-
-    # def connection_type
-    # end
   end
 end
