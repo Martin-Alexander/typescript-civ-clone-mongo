@@ -1,62 +1,59 @@
-def generateUnits(game, quantity)
-  print " - Generating units..."
-  quantity.times do
-    game.squares.sample.create_unit Square::Global.unit_types.sample, player_number: game.game_players.sample.number
-  end
-  done
+class SeedError < StandardError
+  class InvalidOptionError < StandardError; end
 end
 
-def done
+def generate_units(game, quantity)
+  quantity.times do
+    game.squares.sample.create_unit Square::Global.unit_types.sample, player_number: game.players.sample.number
+  end
+end
+
+def seed_task(message)
+  print "- #{message}..."
+  yield
   puts " done"
 end
 
-require 'highline/import'
-
-puts "Seeding..."
-
-print " - Destroying all users, players, and games..."
-
-User.destroy_all
-Player.destroy_all
-Game.destroy_all
-
-done
-
-print " - Creating users..."
-
-martin = User.create! username: "martin", password: "123456"
-sophie = User.create! username: "sophie", password: "123456"
-chloe = User.create! username: "chloe", password: "123456"
-brittany = User.create! username: "brittany", password: "123456"
-
-done
-
-print " - Creating players..."
-
-new_game = Game.create! state: "lobby"
-
-done
-
-print " - Creating games..."
-
-Player.create! user: martin, game: new_game, host: true
-Player.create! user: sophie, game: new_game
-Player.create! user: chloe, game: new_game
-Player.create! user: brittany, game: new_game
-
-done
-
-if ENV["args"].chars.include?("g")
-  print " - Starting game..."
-  new_game.start
-  done
-
-  print " - Generating board..."
-  new_game.generate_game_data
-  done
-
-  generateUnits(new_game, 50) if ENV["args"].chars.include?("u")
+allowed_options = ["clean", "spam", "default"]
+$__civ_clone_mongo_seed__option = ENV["options"] || "default"
+if !(allowed_options.include?($__civ_clone_mongo_seed__option) || $__civ_clone_mongo_seed__option.nil?)
+  raise SeedError::InvalidOptionError, "Invalid option: #{$__civ_clone_mongo_seed__option}"
 end
 
-puts "Done"
+puts "Seeding with `#{$__civ_clone_mongo_seed__option}` option..."
 
+seed_task "Clearing database" do
+  User.destroy_all
+  Player.destroy_all
+  Game.destroy_all
+end
+
+seed_task "Creating users" do
+  $__civ_clone_mongo_seed__martin = User.create! username: "martin", password: "123456"
+  $__civ_clone_mongo_seed__sophie = User.create! username: "sophie", password: "123456"
+  $__civ_clone_mongo_seed__chloe = User.create! username: "chloe", password: "123456"
+  $__civ_clone_mongo_seed__brittany = User.create! username: "brittany", password: "123456"
+end
+
+seed_task "Creating players" do
+  $__civ_clone_mongo_seed__new_game = Game.create! state: "lobby"
+end
+
+seed_task "Creating games" do
+  Player.create! user: $__civ_clone_mongo_seed__martin, game: $__civ_clone_mongo_seed__new_game, host: true
+  Player.create! user: $__civ_clone_mongo_seed__sophie, game: $__civ_clone_mongo_seed__new_game
+  Player.create! user: $__civ_clone_mongo_seed__chloe, game: $__civ_clone_mongo_seed__new_game
+  Player.create! user: $__civ_clone_mongo_seed__brittany, game: $__civ_clone_mongo_seed__new_game
+end
+
+if $__civ_clone_mongo_seed__option == "clean"
+  "Clean seed"
+else
+  seed_task("Starting game") { $__civ_clone_mongo_seed__new_game.start }
+  seed_task("Generating board") { $__civ_clone_mongo_seed__new_game.generate_game_data }
+  if $__civ_clone_mongo_seed__option == "spam"
+    seed_task("Spamming board with units") { generate_units($__civ_clone_mongo_seed__new_game, 50) }
+  end
+end
+
+puts "done"
