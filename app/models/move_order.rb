@@ -1,3 +1,7 @@
+# Goal of the MoveOder class is to take in a unit and a move order
+# and, based on game logic, return all the necessary information for 
+# move execution and for front end rendering of the move
+
 class MoveOrder
   def initialize(game, path)
     @game = game
