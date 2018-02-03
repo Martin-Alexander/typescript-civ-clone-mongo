@@ -10,7 +10,7 @@ class Game < MongoidModel
   direct_children :players, :squares
 
   has_many :players
-  embeds_many :squares, class_name: 'Square::Global'
+  embeds_many :squares, class_name: "Square::Global"
 
   field :state, type: String
   field :size, type: Integer, default: 0

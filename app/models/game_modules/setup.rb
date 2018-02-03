@@ -13,8 +13,8 @@ module GameModules
 
     # Returns the dimension on the board
     def board_size
-      c = player_count(role: 'player') + player_count(role: 'dead_player')
-      sqrt(c * 750).to_i
+      number_of_players = player_count(role: "player") + player_count(role: "dead_player")
+      sqrt(number_of_players * 750).to_i
     end
 
     private
@@ -33,7 +33,7 @@ module GameModules
 
     # Attempts to set starting player locations as fairly as possible
     def create_starting_player_locations(board)
-      locations = board.player_starting_locations(player_count(role: 'player'))
+      locations = board.player_starting_locations(player_count(role: "player"))
 
       locations.each_with_index do |square, i|
         find_square(square.x, square.y).create_worker player_number: i + 1

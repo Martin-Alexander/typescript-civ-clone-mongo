@@ -26,12 +26,11 @@ module GameModules
       end
     end
 
-    # Takes either a square number or a column row number pair and returns the
-    # corresponding square
+    # Takes either a square number or a column row number pair and returns the corresponding square
     def find_square(col, row = false)
       if col.respond_to?(:keys)
-        row = col[:y] || col['y']
-        col = col[:x] || col['x']
+        row = col[:y] || col["y"]
+        col = col[:x] || col["x"]
       end
       row ? squares[row * (board_size + 1) + col] : squares[col.to_i]
     end

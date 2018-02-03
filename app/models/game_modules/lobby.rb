@@ -15,7 +15,7 @@ module GameModules
 
       # Returns all games that're in the 'lobby state'
       def all_lobbies
-        Game.where(state: 'lobby')
+        Game.where(state: "lobby")
       end
     end
 
@@ -41,12 +41,12 @@ module GameModules
       # Returns whether or not the game has the right number/type of players for
       # game to start
       def ready_to_start?
-        player_count(role: 'player') > 1
+        player_count(role: "player") > 1
       end
 
       # Updates game state to 'ongoing'
       def start
-        update!(state: 'ongoing')
+        update!(state: "ongoing")
       end
     end
   end
