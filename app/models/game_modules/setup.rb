@@ -1,4 +1,4 @@
-module Game
+module GameModules
   # Game setup methods
   module Setup
     # Generates game and initialize players

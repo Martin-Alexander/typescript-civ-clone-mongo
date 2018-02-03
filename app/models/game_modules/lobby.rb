@@ -1,4 +1,4 @@
-module Game
+module GameModules
   # Game lobby methods
   module Lobby
     def self.included(base)

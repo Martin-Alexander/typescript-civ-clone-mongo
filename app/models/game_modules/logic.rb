@@ -1,4 +1,4 @@
-module Game
+module GameModules
   # Game logic methods
   module Logic
     # Handles all game logic related to turn roll-over
