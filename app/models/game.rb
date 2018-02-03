@@ -1,13 +1,17 @@
+# Mongo active record model for game
+
 class Game < MongoidModel
+  include Math
+
   direct_children :players, :squares
 
   has_many :players
-  embeds_many :squares, class_name: "Square::Global"
+  embeds_many :squares, class_name: 'Square::Global'
 
   field :state, type: String
   field :size, type: Integer, default: 0
 
-  validates :state, inclusion: { in: ["lobby", "ongoing", "over", "paused"] }
+  validates :state, inclusion: { in: %w([lobby ongoing over paused]) }
 
   # Returns a hash of game data that is prepared for the client
   def client_game_data(current_user)
@@ -20,9 +24,9 @@ class Game < MongoidModel
         player[:game_id] = player[:game_id].to_s
         player
       else
-        { 
-          user_id: player[:user_id].to_s, 
-          game_id: player[:game_id].to_s, 
+        {
+          user_id: player[:user_id].to_s,
+          game_id: player[:game_id].to_s,
           number: player[:number],
           host: player[:host],
           role: player[:role],
@@ -44,9 +48,9 @@ class Game < MongoidModel
       move_results << unit.apply_turn_rollover_logic
     end
 
-    players.each { |player| player.apply_turn_rollover_logic }
+    players.each(&:apply_turn_rollover_logic)
 
-    return move_results
+    move_results
   end
 
   # Returns whether or not all players are ready'd up
@@ -64,14 +68,12 @@ class Game < MongoidModel
 
   # ==== Board helpers ====
 
-  # Takes either a square number or a column row number pair and returns the corresponding square
+  # Takes either a square number or a column row number pair and returns the
+  # corresponding square
   def find_square(col, row = false)
-    if col.respond_to?(:keys) 
-      row = col[:y] || col["y"]
-      col = col[:x] || col["x"]
-    end
-    if row && (row > board_size || col > board_size)
-      raise ArgumentError, "Invalid row #{row} or col #{col} for board size of #{board_size}"
+    if col.respond_to?(:keys)
+      row = col[:y] || col['y']
+      col = col[:x] || col['x']
     end
     row ? squares[row * (board_size + 1) + col] : squares[col.to_i]
   end
@@ -105,7 +107,7 @@ class Game < MongoidModel
 
   # Returns all games that're in the 'lobby state'
   def self.all_lobbies
-    Game.where(state: "lobby")
+    Game.where(state: 'lobby')
   end
 
   # Returns the number of players (filter by role)
@@ -125,14 +127,15 @@ class Game < MongoidModel
     players.each { |player| return player.user if player.host }
   end
 
-  # Returns whether or not the game has the right number/type of players for game to start
+  # Returns whether or not the game has the right number/type of players for
+  # game to start
   def ready_to_start?
-    number_of_players(role: "player") > 1
+    number_of_players(role: 'player') > 1
   end
 
   # Updates game state to 'ongoing'
   def start
-    update!(state: "ongoing")
+    update!(state: 'ongoing')
   end
 
   # Generates game and initialize players
@@ -142,28 +145,37 @@ class Game < MongoidModel
 
     set_player_numbers
     generate_global_squares(board)
-    set_starting_player_locations(board)
-  end  
+    create_starting_player_locations(board)
+  end
 
   # ==== Board setup ===
 
   # Returns the dimension on the board such that each players "gets" 72 squares
   def board_size
-    Math::sqrt((number_of_players(role: "player") + number_of_players(role: "dead_player")) * 750).to_i
+    number_of_non_observer_players = number_of_players(role: 'player')
+    + number_of_players(role: 'dead_player')
+    sqrt(number_of_non_observer_players * 750).to_i
   end
-  
+
   private
 
   # Generates global squares based on terrain generation of the Board class
   def generate_global_squares(board)
     board.squares.each do |square|
-      Square::Global.create x: square.x, y: square.y, board: self, terrain: square.terrain
+      Square::Global.create(
+        x: square.x,
+        y: square.y,
+        board: self,
+        terrain: square.terrain
+      )
     end
   end
-  
+
   # Attempts to set starting player locations as fairly as possible
-  def set_starting_player_locations(board)
-    board.player_starting_locations(number_of_players(role: "player")).each_with_index do |square, i|
+  def create_starting_player_locations(board)
+    player_starting_locations = board.player_starting_locations(number_of_players(role: 'player'))
+
+    player_starting_locations.each_with_index do |square, i|
       find_square(square.x, square.y).create_worker player_number: i + 1
     end
   end
