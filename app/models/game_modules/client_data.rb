@@ -1,5 +1,4 @@
 module GameModules
-  # Methods for returning the appropriate game data to client
   module ClientData
     # Returns a hash of game data that is prepared for the client
     def client_game_data(current_user)

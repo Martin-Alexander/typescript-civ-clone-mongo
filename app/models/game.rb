@@ -1,4 +1,3 @@
-# Mongo active record model for game
 class Game < MongoidModel
   include Math
 

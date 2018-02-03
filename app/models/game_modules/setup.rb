@@ -1,5 +1,4 @@
 module GameModules
-  # Game setup methods
   module Setup
     # Generates game and initialize players
     def generate_game_data
