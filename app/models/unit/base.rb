@@ -1,11 +1,11 @@
 module Unit
   class Base < MongoidModel
-    embedded_in :square, class_name: "Square::Global"
+    embedded_in :square, class_name: 'Square::Global'
 
     field :player_number, type: Integer, default: 0
     field :moves,         type: Integer, default: 0
-    field :order,         type: String,  default: "none"
-    field :state,         type: String,  default: "none"
+    field :order,         type: String,  default: 'none'
+    field :state,         type: String,  default: 'none'
     field :go_to,         type: Array,   default: []
 
     def set_base_moves
@@ -17,82 +17,72 @@ module Unit
     # Executes all methods involved in turn roll over
     def apply_turn_rollover_logic
       update(moves: base_moves)
-      return execute_order
+      execute_order
     end
 
     # ==== Order methods ====
-    
+
     # Returns whether or not a unit has a non-none order
-    def has_order?
-      order != "none"
+    def order?
+      order != 'none'
     end
 
     # Updates a unit's orders after rule checking
     def give_order(order_name)
-      if unit_rules["allowed_orders"].include?(order_name)
-        new_order = order == order_name ? "none" : order_name
+      if unit_rules['allowed_orders'].include?(order_name)
+        new_order = order == order_name ? 'none' : order_name
         update(order: new_order)
-        return true
+        true
       else
-        return false
+        false
       end
     end
 
     # Applies game logic turning an order into state
     def execute_order
-      result = nil
-      order_type = Rules["orders"][order]["type"]
-      case Rules["orders"][order]["type"]
-      when "unit_state_transform"
-        update(state: Rules["orders"][order]["transform_to"])
-      when "construction"
-        structure_type = Rules["orders"][order]["structure"]
+      case Rules['orders'][order]['type']
+      when 'unit_state_transform'
+        update(state: Rules['orders'][order]['transform_to'])
+      when 'construction'
+        structure_type = Rules['orders'][order]['structure']
         execute_construction_order(structure_type)
-      when "action"
-        case order
-        when "go"
-          result = move(go_to)
-        end
+      when 'action'
+        move(go_to)
       end
-
-      return result
     end
 
     # ==== General untility methods ====
 
     # The base movement value of a unit
     def base_moves
-      Rules["units"][type]["movement"]["base"]
+      Rules['units'][type]['movement']['base']
     end
 
     # returns string representation of unit type
     def type
-      _type.split("::").last.downcase
+      _type.split('::').last.downcase
     end
 
     # Returns the rules for unit
     def unit_rules
-      Rules["units"][type]
+      Rules['units'][type]
     end
 
     # ==== Movement methods ====
 
     # Actually updates the database with new move
     def execute_move(new_unit_fields, to_square)
-      new_unit = self.dup
+      new_unit = dup
       to_square.send(type.pluralize.to_sym).send(:push, new_unit)
       new_unit.update(new_unit_fields)
-      self.delete
+      delete
 
-      return new_unit
+      new_unit
     end
 
     # Default move validations
     def valid_move_path(move_path)
-      return(
-        are_adjacent(move_path) && 
-        are_free_of_units(move_path)
-      )
+      are_adjacent(move_path) && are_free_of_units(move_path)
     end
 
     # Should be only move function
@@ -131,7 +121,7 @@ module Unit
         }
       end
 
-      return { success: false, path: [] }
+      { success: false, path: [] }
     end
 
     def calculate_move_to_square_and_new_order(immediate_path, go_to_path)
@@ -139,13 +129,13 @@ module Unit
 
       if immediate_path.moves.any? && go_to_path.any?
         move_to_square = immediate_path.moves.last.to
-        new_order = "go"
+        new_order = 'go'
       elsif immediate_path.moves.any? && go_to_path.empty?
         move_to_square = immediate_path.moves.last.to
-        new_order = "none"
+        new_order = 'none'
       elsif immediate_path.moves.empty? && go_to_path.any?
         move_to_square = square
-        new_order = "go"
+        new_order = 'go'
       end
 
       [move_to_square, new_order]
