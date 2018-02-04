@@ -15,8 +15,8 @@ module Square
           next if (x_diff.zero? && y_diff.zero?) ||
                   x_diff + x < 0 ||
                   y_diff + y < 0 ||
-                  x_diff + x > game.board_size ||
-                  y_diff + y > game.board_size
+                  x_diff + x > game.size ||
+                  y_diff + y > game.size
           array << game.find_square(x_diff + x, y_diff + y)
         end
       end

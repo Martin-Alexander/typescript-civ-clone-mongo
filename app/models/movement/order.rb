@@ -8,18 +8,11 @@ module Movement
     def initialize(attributes = {})
       @validations = attributes[:validations]
 
-      # Path will be an array of square coordinations the includes the square
-      # that the unit starts on
       @unit = attributes[:unit]
-      @starting_square = @unit.square
       @game = @unit.square.board
 
       # Contains all move objects of the move order
       @moves = []
-
-      # Path that the unit moves along
-      # Needed to tell front-end how to animate unit move
-      @immediate_move_path = []
 
       # All squares that have been updated in the process of executing the move
       # Needed to tell front-end which squares in memeory to replace
@@ -30,26 +23,25 @@ module Movement
 
     # Applies validations, updates database accordingly, and returns move results hash
     def execute
-      if valid_move
-        puts "yay"
-        puts "yay"
-      end
+      move_result = Result.new(unit: @unit)
+      move_result.execute(@moves) if valid_move
+      move_result
     end
 
     private
 
     def valid_move
       @validations.all? do |validation|
-        @unit.send(validation, move_path)
+        @unit.send(validation, @moves)
       end
     end
 
     def fill_moves(path)
       path.each_with_index do |coords, i|
-        break if i == path.length - 2
+        break if i == path.length - 1
         from_square = @game.find_square(coords)
         to_square = @game.find_square(path[i + 1])
-        Move.new(@unit, from_square, to_square)
+        @moves << Move.new(@unit, from_square, to_square)
       end
     end
 

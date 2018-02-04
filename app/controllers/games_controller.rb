@@ -33,7 +33,7 @@ class GamesController < ApplicationController
 
     if @game.players.where(number: @unit.player_number).first.user == current_user
       move_result = @unit.move(@path)
-
+      
       if move_result[:success]
         broadcast({
           type: "piece_move",
@@ -53,7 +53,6 @@ class GamesController < ApplicationController
 
     if @game.all_players_ready_for_next_turn
       move_animations = @game.next_turn
-
       broadcast({
         type: "next_turn",
         move_animations: move_animations.reject do |result|
@@ -61,7 +60,7 @@ class GamesController < ApplicationController
         end
       })
     end
-    
+
     broadcast({
       type: "player_ready",
       players_ready: @game.who_is_ready_for_next_turn

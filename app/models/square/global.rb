@@ -39,5 +39,9 @@ module Square
     def create_unit(unit, *args)
       send(unit.to_s.pluralize.to_sym).create! args
     end
+
+    def coordinates
+      { x: x, y: x }
+    end
   end
 end

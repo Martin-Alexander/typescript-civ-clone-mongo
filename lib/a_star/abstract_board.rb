@@ -18,8 +18,8 @@ class AbstractBoard
       (-radius..radius).each do |y_diff|
         unless (x_diff.zero? && y_diff.zero?) ||
         x_diff + square.x < 0 || y_diff + square.y < 0 || 
-        x_diff + square.x > @game.board_size ||
-        y_diff + square.y > @game.board_size
+        x_diff + square.x > @game.size ||
+        y_diff + square.y > @game.size
           array << find_square(x_diff + square.x, y_diff + square.y)
         end
       end
@@ -29,10 +29,10 @@ class AbstractBoard
   private
 
   def find_square(x, y)
-    if (x > @game.board_size || y > @game.board_size)
-      raise ArgumentError, "Invalid row #{y} or col #{x} for board size of #{@game.board_size}"
+    if (x > @game.size || y > @game.size)
+      raise ArgumentError, "Invalid row #{y} or col #{x} for board size of #{@game.size}"
     else
-      @squares[y * (@game.board_size + 1) + x]
+      @squares[y * (@game.size + 1) + x]
     end
   end
 end

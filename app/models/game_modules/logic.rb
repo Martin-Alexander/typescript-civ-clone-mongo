@@ -6,9 +6,7 @@ module GameModules
       units.each do |unit|
         move_results << unit.apply_turn_rollover_logic
       end
-
-      players.each(&:apply_turn_rollover_logic)
-
+      players.update_all(turn_over: false)
       move_results
     end
 
@@ -31,7 +29,7 @@ module GameModules
         row = col[:y] || col["y"]
         col = col[:x] || col["x"]
       end
-      row ? squares[row * (board_size + 1) + col] : squares[col.to_i]
+      row ? squares[row * (size + 1) + col] : squares[col.to_i]
     end
 
     # Returns an array of all units on the board

@@ -1,6 +1,6 @@
 module Unit
   class Base < MongoidModel
-    include UnitModules::Movement
+    include UnitModules::Moving
     include UnitModules::MoveValidations
     include UnitModules::Orders
 

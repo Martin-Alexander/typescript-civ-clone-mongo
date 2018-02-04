@@ -11,6 +11,8 @@ module GameModules
           client_player_data(player)
         end
       end
+
+      game_data
     end
 
     private

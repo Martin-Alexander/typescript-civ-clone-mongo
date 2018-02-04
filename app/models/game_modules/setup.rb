@@ -2,8 +2,8 @@ module GameModules
   module Setup
     # Generates game and initialize players
     def generate_game_data
-      update!(size: board_size)
-      board = Board.new(board_size)
+      update!(size: caluculate_board_size)
+      board = Board.new(size)
 
       set_player_numbers
       generate_global_squares(board)
@@ -11,7 +11,7 @@ module GameModules
     end
 
     # Returns the dimension on the board
-    def board_size
+    def caluculate_board_size
       number_of_players = player_count(role: "player") + player_count(role: "dead_player")
       sqrt(number_of_players * 750).to_i
     end

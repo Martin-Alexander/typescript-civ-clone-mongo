@@ -18,6 +18,7 @@ module UnitModules
 
     # Applies game logic turning an order into state
     def execute_order
+      result = nil
       case Rules["orders"][order]["type"]
       when "unit_state_transform"
         update(state: Rules["orders"][order]["transform_to"])
@@ -25,8 +26,10 @@ module UnitModules
         structure_type = Rules["orders"][order]["structure"]
         execute_construction_order(structure_type)
       when "action"
-        move(go_to)
+        result = move(go_to)
       end
+
+      result
     end
   end
 end
