@@ -21,7 +21,7 @@ module Movement
         move_unit: @unit,
         new_squares: @new_squares.map(&:to_hash),
         success: @success,
-        path: @immediate_path.map(&:to_hash)
+        path: @immediate_path.map(&:coordinates)
       }
     end
 
@@ -72,6 +72,7 @@ module Movement
     def prepend_with_starting_square
       if @immediate_path.any?
         @immediate_path.prepend(@unit.square)
+        @go_to_path.prepend(@immediate_path.last) if @go_to_path.any?
       elsif @go_to_path.any?
         @go_to_path.prepend(@unit.square)
       end

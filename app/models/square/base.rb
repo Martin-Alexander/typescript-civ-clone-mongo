@@ -22,8 +22,4 @@ module Square
       end
     end
   end
-
-  def coordinates
-    { x: x, y: x }
-  end
 end

@@ -41,7 +41,7 @@ module Square
     end
 
     def coordinates
-      { x: x, y: x }
+      { x: x, y: y }
     end
   end
 end
