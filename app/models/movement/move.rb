@@ -12,7 +12,12 @@ module Movement
     # TODO: consider whether or not the from and to squares are connected by
     #       a road
     def cost
-      Rules["terrain"][@to.terrain]["move_cost"]
+      if @from.structures.any? { |s| s.type == "road" && s.complete } &&
+         @to.structures.any? { |s| s.type == "road" && s.complete }
+        0
+      else
+        Rules["terrain"][@to.terrain]["move_cost"]
+      end
     end
   end
 end
