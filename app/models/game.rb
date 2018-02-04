@@ -14,5 +14,5 @@ class Game < MongoidModel
   field :state, type: String
   field :size, type: Integer, default: 0
 
-  validates :state, inclusion: { in: %w([lobby ongoing over paused]) }
+  validates :state, inclusion: { in: %w(lobby ongoing over paused) }
 end
