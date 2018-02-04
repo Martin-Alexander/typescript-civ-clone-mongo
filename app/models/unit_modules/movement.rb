@@ -23,7 +23,7 @@ module UnitModules
     # Should be only move function
     # TODO: Refactor this abomination
     def move(path)
-      move_path = MovePath.new(square.board, path)
+      move_path = Movement::Order.new(square.board, path)
 
       if valid_move_path(move_path)
         moves_left = moves

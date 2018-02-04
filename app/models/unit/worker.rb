@@ -2,14 +2,13 @@ module Unit
   class Worker < Base
     def create_structure(structure_name)
       if Rules["structures"].keys.include?(structure_name)
-        square.structures.create(type: structure_name, player_number: player_number)
-      else
         raise ArgumentError, "#{structure_name} is not a valid structure"
       end
+      square.structures.create(type: structure_name, player_number: player_number)
     end
 
     def execute_construction_order(structure_name)
-      if square.has_complete_structure(structure_name)
+      if square.complete_structure?(structure_name)
         update(order: "none")
         update(moves: base_moves)
       elsif moves > 0
@@ -19,11 +18,7 @@ module Unit
         elsif square.structure_status(structure_name) == "under_contruction"
           square.get_structure(structure_name).build
         end
-
-        if square.get_structure(structure_name).complete
-          update(order: "none")
-        end
-
+        update(order: "none") if square.get_structure(structure_name).complete
         update(moves: 0)
       else
         update(moves: base_moves)

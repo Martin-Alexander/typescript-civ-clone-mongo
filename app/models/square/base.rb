@@ -12,14 +12,18 @@ module Square
     def neighbours(radius = 1)
       (-radius..radius).each_with_object([]) do |x_diff, array|
         (-radius..radius).each do |y_diff|
-          unless (x_diff.zero? && y_diff.zero?) ||
-          x_diff + x < 0 || y_diff + y < 0 || 
-          x_diff + x > game.board_size ||
-          y_diff + y > game.board_size
-            array << game.find_square(x_diff + x, y_diff + y)
-          end
+          next if (x_diff.zero? && y_diff.zero?) ||
+                  x_diff + x < 0 ||
+                  y_diff + y < 0 ||
+                  x_diff + x > game.board_size ||
+                  y_diff + y > game.board_size
+          array << game.find_square(x_diff + x, y_diff + y)
         end
       end
     end
+  end
+
+  def coordinates
+    { x: x, y: x }
   end
 end
