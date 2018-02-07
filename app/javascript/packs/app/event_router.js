@@ -160,7 +160,7 @@ EventRouter.prototype.outOfBounds = function() {
 }
 
 EventRouter.prototype.directMapClick = function(event) {
-  return event.path[0].id === "react-user-interface";
+  return event.target.id === "react-user-interface";
 }
 
 function haveSameCoords(a, b) {
