@@ -52,6 +52,7 @@ Renderer.prototype.drawAllSquares = function() {
 }
 
 Renderer.prototype.drawSquare = function(square) {
+  if (!this.isSquareInBounds(square)) { return false; }
   const canvas = this.canvas;
   const context = this.context;
   const UI = this.UI;
@@ -123,6 +124,20 @@ Renderer.prototype.clearCanvas = function() {
   this.context.fillStyle = "rgba(0, 0, 0, 1)";
   this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   this.context.restore();  
+}
+
+Renderer.prototype.isSquareInBounds = function(square) {
+  const x = (square.x - square.y) 
+            * (this.UI.tileWidth / 2)
+            + (this.canvas.width / 2)
+            + this.UI.offset.x
+  const y = ((square.y + square.x) * this.UI.tileHeight / 2)
+            + this.UI.offset.y 
+            + ((this.canvas.height - 15 * this.UI.tileHeight) / 2)
+  return x + this.UI.tileWidth / 2 > 0 
+         && x - this.UI.tileWidth / 2 < this.canvas.width 
+         && y + this.UI.tileHeight > 0
+         && y < this.canvas.height
 }
 
 export { Renderer };
