@@ -23,9 +23,12 @@ InputController.prototype.selectSquare = function() {
 
   console.log(selectedSquare);
 
-  if (selectedSquare.units.length > 0 && selectedSquare != this.UI.selection.square) {
+  // Selecting the same square twice will no longer deselected it
+  // if (selectedSquare.units.length > 0 && selectedSquare != this.UI.selection.square) {
+  if (selectedSquare.units.length > 0) {
     this.UI.selection.square = selectedSquare;
-    this.UI.selection.unit = selectedSquare.units[0];
+    // this.UI.selection.unit = selectedSquare.units[0];
+    this._selectUnit(selectedSquare);
   } else {
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
@@ -61,7 +64,7 @@ InputController.prototype.moveUnit = function() {
 
   if (this.UI.selection.square && this.UI.currentPath.length > 1) { 
     this.networkController.pieceMove({
-      unit: this.UI.selection.square.units[0].id,
+      unit: this.UI.selection.unit.id,
       path: this.UI.currentPath
     });
 
@@ -137,6 +140,25 @@ InputController.prototype._authorized = function(functionName) {
   }
 
   return this._functionIsAllowed(functionName, allowedFunctionRules);
+}
+
+// Allows for the cycling selection of units
+InputController.prototype._selectUnit = function(selectedSquare) {
+  // Don't select unit if there aren't any units 
+  if (this.UI.selection.square.units.length == 0) { return false; }
+
+  // If there's already a unit from this square selected or there's no unit selected
+  if (this.UI.selection.unit && selectedSquare == this.UI.selection.square) {
+    const indexOfAlreadySelectedUnit = this.UI.selection.square.units.indexOf(this.UI.selection.unit);
+    if (indexOfAlreadySelectedUnit == this.UI.selection.square.units.length - 1) {
+      this.UI.selection.unit = null;
+      this.UI.selection.square = null;
+    } else {
+      this.UI.selection.unit = this.UI.selection.square.units[indexOfAlreadySelectedUnit + 1];
+    }
+  } else {
+    this.UI.selection.unit = this.UI.selection.square.units[0];
+  }
 }
 
 export { InputController };

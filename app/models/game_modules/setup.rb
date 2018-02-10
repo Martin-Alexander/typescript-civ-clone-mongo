@@ -38,6 +38,7 @@ module GameModules
 
       locations.each_with_index do |square, i|
         find_square(square.x, square.y).create_worker player_number: i + 1
+        find_square(square.x, square.y).create_infantry player_number: i + 1
       end
     end
 
