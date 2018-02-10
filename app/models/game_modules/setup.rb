@@ -24,7 +24,6 @@ module GameModules
         squares << Square::Global.new(
           x: square.x,
           y: square.y,
-          board: self,
           terrain: square.terrain
         )
       end
