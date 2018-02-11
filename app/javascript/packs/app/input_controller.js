@@ -24,16 +24,16 @@ InputController.prototype.selectSquare = function() {
   console.log(selectedSquare);
 
   // Selecting the same square twice will no longer deselected it
-  // if (selectedSquare.units.length > 0 && selectedSquare != this.UI.selection.square) {
   if (selectedSquare.units.length > 0) {
     this.UI.selection.square = selectedSquare;
-    // this.UI.selection.unit = selectedSquare.units[0];
     this._selectUnit(selectedSquare);
+    this._selectStructure(selectedSquare);
   } else {
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
   }
 
+  console.log(this.UI.selection);
   this.reactController.updateUI(this.UI);
 };
 
@@ -158,6 +158,18 @@ InputController.prototype._selectUnit = function(selectedSquare) {
     }
   } else {
     this.UI.selection.unit = this.UI.selection.square.units[0];
+  }
+}
+
+InputController.prototype._selectStructure = function(selectedSquare) {
+  if (
+    selectedSquare.hasStructure("city") && 
+    selectedSquare.getStructure("city").player_number == this.gameData.getCurrentPlayer().number &&
+    selectedSquare.getStructure("city") != this.UI.selection.structure
+  ) {
+    this.UI.selection.structure = selectedSquare.getStructure("city");
+  } else {
+    this.UI.selection.structure = null;
   }
 }
 
