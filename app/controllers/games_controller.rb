@@ -73,7 +73,9 @@ class GamesController < ApplicationController
 
   def give_order
     @square = @game.find_square(@permitted_params[:data][:square_coords])
-    @unit = @square.units.find(@permitted_params[:data][:unit]).first
+    @unit = @square.units.to_a.find do |unit|
+      unit.id.to_s == @permitted_params[:data][:unit]
+    end
 
     if @unit.give_order(@permitted_params[:data][:order])
       broadcast({
