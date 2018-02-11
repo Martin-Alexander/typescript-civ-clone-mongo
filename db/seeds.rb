@@ -36,6 +36,7 @@ else
     $__civ_clone_mongo_seed__sophie = User.create! username: "sophie", password: "123456"
     $__civ_clone_mongo_seed__chloe = User.create! username: "chloe", password: "123456"
     $__civ_clone_mongo_seed__brittany = User.create! username: "brittany", password: "123456"
+    $__civ_clone_mongo_seed__roxanne = User.create! username: "roxanne", password: "123456"
   end
 
   seed_task "Creating players" do
@@ -47,6 +48,7 @@ else
     Player.create! user: $__civ_clone_mongo_seed__sophie, game: $__civ_clone_mongo_seed__new_game
     Player.create! user: $__civ_clone_mongo_seed__chloe, game: $__civ_clone_mongo_seed__new_game
     Player.create! user: $__civ_clone_mongo_seed__brittany, game: $__civ_clone_mongo_seed__new_game
+    Player.create! user: $__civ_clone_mongo_seed__roxanne, game: $__civ_clone_mongo_seed__new_game
   end
   seed_task("Starting game") { $__civ_clone_mongo_seed__new_game.start }
   seed_task("Generating board") { $__civ_clone_mongo_seed__new_game.generate_game_data }
