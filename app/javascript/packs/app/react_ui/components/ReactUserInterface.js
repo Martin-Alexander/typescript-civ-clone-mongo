@@ -1,5 +1,6 @@
 import React            from "react";
 import MenuBar          from "./MenuBar";
+import CityOptions      from "./CityOptions";
 import SelectionDetails from "./SelectionDetails";
 import TurnTimer        from "./TurnTimer";
 import Minimap          from "./Minimap";
@@ -41,6 +42,7 @@ export default class ReactUserInterface extends React.Component {
     return(
       <div id="react-user-interface" style={userInterfaceStyle}>
         <MenuBar toggleMenu={this.toggleMenu.bind(this)} currentPlayer={this.props.currentPlayer}/>
+        <CityOptions />
         <SelectionDetails currentPlayer={this.props.currentPlayer} UI={this.props.UI} inputController={this.props.inputController}/>
         <TurnTimer players={this.state.gameData.players} ongoingTurnTransition={this.state.UI.ongoingTurnTransition}/>
         <Minimap />

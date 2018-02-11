@@ -5,7 +5,7 @@ export default class TurnTimer extends React.Component {
     const turnTimerStyle = {
       position: "absolute",
       bottom: "50px",
-      left: "calc(50% - 200px)",
+      left: "calc(50% - 150px)",
       width: "400px",
       height: "100px",
       backgroundColor: "#e4e5d7"
