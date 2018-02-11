@@ -33,6 +33,12 @@ module Movement
       update_database
     end
 
+    # This is called when a move is not valid
+    def clear_orders_and_path
+      @new_order = "none"
+      update_database
+    end
+
     private
 
     # Actually updates the database with new move

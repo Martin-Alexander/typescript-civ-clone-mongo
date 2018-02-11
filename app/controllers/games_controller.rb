@@ -58,7 +58,7 @@ class GamesController < ApplicationController
       broadcast({
         type: "next_turn",
         move_animations: move_animations.reject do |result|
-          result.nil? || result[:success] == false
+          result.nil? || result[:success] == false || result[:path].empty?
         end
       })
     end
