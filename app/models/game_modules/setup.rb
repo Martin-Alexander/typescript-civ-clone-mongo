@@ -36,8 +36,11 @@ module GameModules
       locations = board.player_starting_locations(player_count(role: "player"))
 
       locations.each_with_index do |square, i|
-        find_square(square.x, square.y).create_worker player_number: i + 1
-        find_square(square.x, square.y).create_infantry player_number: i + 1
+        starting_square = find_square(square.x, square.y)
+        starting_square.create_worker player_number: i + 1
+        10.times do
+          starting_square.create_infantry player_number: i + 1
+        end
       end
     end
 
