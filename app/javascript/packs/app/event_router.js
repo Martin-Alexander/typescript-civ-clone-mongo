@@ -28,8 +28,8 @@ EventRouter.prototype.initializeEventListener = function() {
 
   // Disabling all text selection
   function disableselect(e) {return false};
-  document.onselectstart = disableselect;
-  document.onmousedown = disableselect;
+  // document.onselectstart = disableselect;
+  // document.onmousedown = disableselect;
 
   window.addEventListener("mousedown", function(event) {
     if (self.outOfBounds() || !self.directMapClick(event)) { return false; }

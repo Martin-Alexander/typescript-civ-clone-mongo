@@ -51,6 +51,17 @@ NetworkController.prototype.giveOrder = function(orderData) {
   this.send(payload)
 }
 
+NetworkController.prototype.setProduction = function(structure, square) {
+  const payload = { 
+    method: "set_production",
+    square_id: square.id,
+    structure_id: structure.id,
+    production: structure.production
+  };
+
+  this.send(payload)
+}
+
 NetworkController.prototype.getGameData = function() {
   const payload = { method: "get_game_data" };
   this.send(payload, (data) => {

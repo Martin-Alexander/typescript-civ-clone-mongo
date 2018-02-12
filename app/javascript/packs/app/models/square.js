@@ -75,4 +75,27 @@ Square.prototype.render = function(context, UI) {
 }
 
 
+Square.prototype.hasStructure = function(structureName) {
+  for (let i = 0; i < this.structures.length; i++) {
+    const structure = this.structures[i];
+    if (structure.type == structureName) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// Assumes that only one structure of each type exists in a given square
+Square.prototype.getStructure = function(structureName) {
+  for (let i = 0; i < this.structures.length; i++) {
+    const structure = this.structures[i];
+    if (structure.type == structureName) {
+      return structure;
+    }
+  }
+
+  return false;
+}
+
 export { Square };

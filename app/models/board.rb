@@ -239,7 +239,7 @@ class Board
         running_total += desirability_lookup(neighbour.terrain)
       end
 
-      (running_total * 10000) / 10000
+      (running_total * 1000) / 1000
     end
 
     def desirability_lookup(terrain)

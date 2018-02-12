@@ -65,7 +65,11 @@ Renderer.prototype.drawSquare = function(square) {
   );
   square.render(context, UI);
   if (square.structures[0]) { square.structures[0].render(context, UI); }
-  if (square.units[0]) { square.units[0].render(context, UI); }
+  if (UI.selection.square == square && UI.selection.unit)
+    UI.selection.unit.render(context, UI);
+  else if (square.units[0]) {
+    square.units[0].render(context, UI);
+  }
   context.restore();     
 }
 

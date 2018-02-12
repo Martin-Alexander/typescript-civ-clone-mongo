@@ -65,14 +65,23 @@ export default class SelectionDetails extends React.Component {
     }
 
     const renderUnitDetails = (square) => {
-      if (square.units && square.units[0]) {
+      if (!square.units) { return false; }
+
+      let unit;
+
+      if (this.state.UI.selection.unit) {
+        unit = this.state.UI.selection.unit;
+      } else {
+        unit = square.units[0]
+      }
+      if (unit) {
         return(
           <div>
             <div><strong>Unit:</strong></div>
-            <div>Type: {square.units[0].type}</div>
-            <div>Moves: {square.units[0].moves}</div>
-            <div>Orders: {square.units[0].order}</div>
-            <div>State: {square.units[0].state}</div>
+            <div>Type: {unit.type}</div>
+            <div>Moves: {unit.moves}</div>
+            <div>Orders: {unit.order}</div>
+            <div>State: {unit.state}</div>
           </div>
         );
       }

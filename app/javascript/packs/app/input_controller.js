@@ -23,14 +23,18 @@ InputController.prototype.selectSquare = function() {
 
   console.log(selectedSquare);
 
-  if (selectedSquare.units.length > 0 && selectedSquare != this.UI.selection.square) {
+  // Selecting the same square twice will no longer deselected it
+  if (selectedSquare.units.length > 0 || selectedSquare.hasStructure("city")) {
     this.UI.selection.square = selectedSquare;
-    this.UI.selection.unit = selectedSquare.units[0];
+    this._selectUnit(selectedSquare);
+    this._selectStructure(selectedSquare);
   } else {
+    this.UI.selection.structure = null;
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
   }
 
+  this.reactController.updateUI(this.UI);
   this.reactController.updateUI(this.UI);
 };
 
@@ -61,10 +65,11 @@ InputController.prototype.moveUnit = function() {
 
   if (this.UI.selection.square && this.UI.currentPath.length > 1) { 
     this.networkController.pieceMove({
-      unit: this.UI.selection.square.units[0].id,
+      unit: this.UI.selection.unit.id,
       path: this.UI.currentPath
     });
 
+    this.UI.selection.structure = null;
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
     this.UI.currentPath = null;
@@ -98,7 +103,7 @@ InputController.prototype.giveOrder = function(order) {
 
   this.networkController.giveOrder({
     square_coords: this.UI.selection.square.getCoordinates(),
-    unit: this.UI.selection.square.units[0].id,
+    unit: this.UI.selection.unit.id,
     order: order
   });
 }
@@ -106,6 +111,10 @@ InputController.prototype.giveOrder = function(order) {
 // Querries gameData for the square corresponding to the tile that the mouse is over
 InputController.prototype.squareClickedOn = function() {
   return this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
+}
+
+InputController.prototype.setProduction = function() {
+  this.networkController.setProduction(this.UI.selection.structure, this.UI.selection.square);
 }
 
 InputController.prototype._functionIsAllowed = function(functionName, allowedFunctionRules) {
@@ -137,6 +146,41 @@ InputController.prototype._authorized = function(functionName) {
   }
 
   return this._functionIsAllowed(functionName, allowedFunctionRules);
+}
+
+// Allows for the cycling selection of units
+InputController.prototype._selectUnit = function(selectedSquare) {
+  // Don't select unit if there aren't any units 
+  if (this.UI.selection.square.units.length == 0) { 
+    this.UI.selection.unit = null;
+    return false; 
+  }
+
+  // If there's already a unit from this square selected or there's no unit selected
+  if (this.UI.selection.unit && selectedSquare == this.UI.selection.square) {
+    const indexOfAlreadySelectedUnit = this.UI.selection.square.units.indexOf(this.UI.selection.unit);
+    if (indexOfAlreadySelectedUnit == this.UI.selection.square.units.length - 1) {
+      this.UI.selection.unit = null;
+      this.UI.selection.square = null;
+    } else {
+      this.UI.selection.unit = this.UI.selection.square.units[indexOfAlreadySelectedUnit + 1];
+    }
+  } else {
+    this.UI.selection.unit = this.UI.selection.square.units[0];
+  }
+}
+
+InputController.prototype._selectStructure = function(selectedSquare) {
+  if (
+    selectedSquare.hasStructure("city") && 
+    selectedSquare.getStructure("city").player_number == this.gameData.getCurrentPlayer().number &&
+    selectedSquare.getStructure("city") != this.UI.selection.structure
+  ) {
+    this.UI.selection.structure = selectedSquare.getStructure("city");
+  } else {
+    this.UI.selection.structure = null;
+    if (!this.UI.selection.unit) { this.UI.selection.square = null; }
+  }
 }
 
 export { InputController };

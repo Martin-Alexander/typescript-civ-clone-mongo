@@ -24,7 +24,11 @@ module Movement
     # Applies validations, updates database accordingly, and returns move results hash
     def execute
       move_result = Result.new(unit: @unit)
-      move_result.execute(@moves) if valid_move
+      if valid_move
+        move_result.execute(@moves)
+      else
+        move_result.clear_orders_and_path
+      end
       move_result
     end
 

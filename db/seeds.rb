@@ -28,27 +28,28 @@ seed_task "Clearing database" do
   Game.destroy_all
 end
 
-seed_task "Creating users" do
-  $__civ_clone_mongo_seed__martin = User.create! username: "martin", password: "123456"
-  $__civ_clone_mongo_seed__sophie = User.create! username: "sophie", password: "123456"
-  $__civ_clone_mongo_seed__chloe = User.create! username: "chloe", password: "123456"
-  $__civ_clone_mongo_seed__brittany = User.create! username: "brittany", password: "123456"
-end
-
-seed_task "Creating players" do
-  $__civ_clone_mongo_seed__new_game = Game.create! state: "lobby"
-end
-
-seed_task "Creating games" do
-  Player.create! user: $__civ_clone_mongo_seed__martin, game: $__civ_clone_mongo_seed__new_game, host: true
-  Player.create! user: $__civ_clone_mongo_seed__sophie, game: $__civ_clone_mongo_seed__new_game
-  Player.create! user: $__civ_clone_mongo_seed__chloe, game: $__civ_clone_mongo_seed__new_game
-  Player.create! user: $__civ_clone_mongo_seed__brittany, game: $__civ_clone_mongo_seed__new_game
-end
-
 if $__civ_clone_mongo_seed__option == "clean"
   "Clean seed"
 else
+  seed_task "Creating users" do
+    $__civ_clone_mongo_seed__martin = User.create! username: "martin", password: "123456"
+    $__civ_clone_mongo_seed__sophie = User.create! username: "sophie", password: "123456"
+    $__civ_clone_mongo_seed__chloe = User.create! username: "chloe", password: "123456"
+    $__civ_clone_mongo_seed__brittany = User.create! username: "brittany", password: "123456"
+    $__civ_clone_mongo_seed__roxanne = User.create! username: "roxanne", password: "123456"
+  end
+
+  seed_task "Creating players" do
+    $__civ_clone_mongo_seed__new_game = Game.create! state: "lobby"
+  end
+
+  seed_task "Creating games" do
+    Player.create! user: $__civ_clone_mongo_seed__martin, game: $__civ_clone_mongo_seed__new_game, host: true
+    Player.create! user: $__civ_clone_mongo_seed__sophie, game: $__civ_clone_mongo_seed__new_game
+    Player.create! user: $__civ_clone_mongo_seed__chloe, game: $__civ_clone_mongo_seed__new_game
+    Player.create! user: $__civ_clone_mongo_seed__brittany, game: $__civ_clone_mongo_seed__new_game
+    Player.create! user: $__civ_clone_mongo_seed__roxanne, game: $__civ_clone_mongo_seed__new_game
+  end
   seed_task("Starting game") { $__civ_clone_mongo_seed__new_game.start }
   seed_task("Generating board") { $__civ_clone_mongo_seed__new_game.generate_game_data }
   if $__civ_clone_mongo_seed__option == "spam"

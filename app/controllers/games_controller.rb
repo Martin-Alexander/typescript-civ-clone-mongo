@@ -29,7 +29,9 @@ class GamesController < ApplicationController
 
   def piece_move
     @path = @permitted_params[:data][:path]
-    @unit = @game.find_square(@path[0]).units.find(@permitted_params[:data][:unit]).first
+    @unit = @game.find_square(@path[0]).units.to_a.find do |unit|
+      unit.id.to_s == @permitted_params[:data][:unit]
+    end
 
     if @game.players.where(number: @unit.player_number).first.user == current_user
       move_result = @unit.move(@path)
@@ -56,7 +58,7 @@ class GamesController < ApplicationController
       broadcast({
         type: "next_turn",
         move_animations: move_animations.reject do |result|
-          result.nil? || result[:success] == false
+          result.nil? || result[:success] == false || result[:path].empty?
         end
       })
     end
@@ -71,7 +73,9 @@ class GamesController < ApplicationController
 
   def give_order
     @square = @game.find_square(@permitted_params[:data][:square_coords])
-    @unit = @square.units.find(@permitted_params[:data][:unit]).first
+    @unit = @square.units.to_a.find do |unit|
+      unit.id.to_s == @permitted_params[:data][:unit]
+    end
 
     if @unit.give_order(@permitted_params[:data][:order])
       broadcast({
@@ -79,6 +83,15 @@ class GamesController < ApplicationController
         new_square: @square.to_hash
       })
     end
+
+    respond_with_success
+  end
+
+  def set_production
+    square_id = BSON::ObjectId.from_string(params[:square_id])
+    structure_id = BSON::ObjectId.from_string(params[:structure_id])
+
+    @game.squares.find(square_id).cities.find(structure_id).update(production: params[:production])
 
     respond_with_success
   end

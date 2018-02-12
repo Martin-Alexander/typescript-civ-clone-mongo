@@ -1,6 +1,6 @@
 <div>
   <div><%= game.id %></div>
   <div>Host: <strong><%= game.host.username %></strong></div>
-  <div>Number of players: <%= game.number_of_players %></div>
+  <div>Number of players: <%= game.player_count %></div>
   <div><%= link_to "Join Game", join_lobby_path(game), method: :post %></div>
 </div>

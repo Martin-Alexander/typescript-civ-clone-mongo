@@ -70,7 +70,7 @@ class User < MongoidModel
   # Can the user join a given game
   def can_join_game?(game)
     game.state == "lobby" &&
-    game.number_of_players(role: "player") < Game.max_players &&
+    game.player_count(role: "player") < Game.max_players &&
     games(game_state: "ongoing", role: "player").empty? &&
     games(game_state: "lobby").empty?
   end
@@ -107,7 +107,7 @@ class User < MongoidModel
   def leave_lobby
     if lobby
       game = lobby
-      if game.number_of_players == 1
+      if game.player_count == 1
         game.destroy!
       elsif game.host == self
         game.player(self).destroy

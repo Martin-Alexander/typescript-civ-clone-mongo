@@ -13,7 +13,8 @@ Unit.prototype.playerColor = function() {
     1: "red",
     2: "blue",
     3: "pink",
-    4: "purple"
+    4: "purple",
+    5: "orange"
   };
 
   return unitPlayerColorLookup[this.player_number];
