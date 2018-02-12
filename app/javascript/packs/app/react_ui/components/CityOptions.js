@@ -3,13 +3,29 @@ import React from "react";
 export default class CityOptions extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: "nothing"};
+    this.state = {structure: this.props.structure};
 
     this.handleChange = this.handleChange.bind(this);
+    this.rules = rules;
   }
 
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.state.structure.production = event.target.value;
+    this.setState({structure: this.state.structure});
+    this.props.inputController.setProduction();
+  }
+
+  productionOptions() {
+    // This is eventually be changed to list all units from the rules
+    const productionOptions = ["nothing", "infantry", "worker"].map((option, index) => {
+      if (option === this.state.structure.production) {
+        return(<option key={index} value={option}>{option}</option>);
+      } else {
+        return(<option key={index} value={option}>{option}</option>);
+      }
+    });
+
+    return productionOptions;
   }
 
   render() {
@@ -25,10 +41,9 @@ export default class CityOptions extends React.Component {
     return(
       <div style={userInterfaceStyle}>
         <form>
-          <select value={this.state.value} onChange={this.handleChange}>
-            <option value="nothing">Nothing</option>
-            <option value="infantry">Infantry</option>
-            <option value="worker">Worker</option>
+          <span><strong>Production: </strong></span>
+          <select value={this.state.structure.production} onChange={this.handleChange}>
+            {this.productionOptions()}
           </select>
         </form>
       </div>

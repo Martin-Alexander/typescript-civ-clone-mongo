@@ -24,11 +24,12 @@ InputController.prototype.selectSquare = function() {
   console.log(selectedSquare);
 
   // Selecting the same square twice will no longer deselected it
-  if (selectedSquare.units.length > 0) {
+  if (selectedSquare.units.length > 0 || selectedSquare.hasStructure("city")) {
     this.UI.selection.square = selectedSquare;
     this._selectUnit(selectedSquare);
     this._selectStructure(selectedSquare);
   } else {
+    this.UI.selection.structure = null;
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
   }
@@ -68,6 +69,7 @@ InputController.prototype.moveUnit = function() {
       path: this.UI.currentPath
     });
 
+    this.UI.selection.structure = null;
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
     this.UI.currentPath = null;
@@ -111,6 +113,10 @@ InputController.prototype.squareClickedOn = function() {
   return this.gameData.square(this.UI.tileMousePosition.x, this.UI.tileMousePosition.y);
 }
 
+InputController.prototype.setProduction = function() {
+  this.networkController.setProduction(this.UI.selection.structure, this.UI.selection.square);
+}
+
 InputController.prototype._functionIsAllowed = function(functionName, allowedFunctionRules) {
   if (allowedFunctionRules.type === "inclusion") {
     return allowedFunctionRules.functionNames.includes(functionName);
@@ -145,7 +151,10 @@ InputController.prototype._authorized = function(functionName) {
 // Allows for the cycling selection of units
 InputController.prototype._selectUnit = function(selectedSquare) {
   // Don't select unit if there aren't any units 
-  if (this.UI.selection.square.units.length == 0) { return false; }
+  if (this.UI.selection.square.units.length == 0) { 
+    this.UI.selection.unit = null;
+    return false; 
+  }
 
   // If there's already a unit from this square selected or there's no unit selected
   if (this.UI.selection.unit && selectedSquare == this.UI.selection.square) {
@@ -170,6 +179,7 @@ InputController.prototype._selectStructure = function(selectedSquare) {
     this.UI.selection.structure = selectedSquare.getStructure("city");
   } else {
     this.UI.selection.structure = null;
+    if (!this.UI.selection.unit) { this.UI.selection.square = null; }
   }
 }
 

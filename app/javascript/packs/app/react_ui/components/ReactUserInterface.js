@@ -31,6 +31,20 @@ export default class ReactUserInterface extends React.Component {
     this.setState({ menuOpen: !this.state.menuOpen });
   }
 
+  renderCityUI() {
+    if (
+      this.state.UI.selection.structure 
+      && this.state.gameData.getCurrentPlayer().number === this.state.UI.selection.structure.player_number
+    ) {
+      return(
+        <CityOptions
+          inputController={this.props.inputController}
+          structure={this.state.UI.selection.structure}
+        />
+      )
+    }
+  }
+
   render() {
     const userInterfaceStyle = {
       position: "absolute",
@@ -42,7 +56,7 @@ export default class ReactUserInterface extends React.Component {
     return(
       <div id="react-user-interface" style={userInterfaceStyle}>
         <MenuBar toggleMenu={this.toggleMenu.bind(this)} currentPlayer={this.props.currentPlayer}/>
-        <CityOptions />
+        {this.renderCityUI()}
         <SelectionDetails currentPlayer={this.props.currentPlayer} UI={this.props.UI} inputController={this.props.inputController}/>
         <TurnTimer players={this.state.gameData.players} ongoingTurnTransition={this.state.UI.ongoingTurnTransition}/>
         <Minimap />

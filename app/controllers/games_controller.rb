@@ -87,6 +87,15 @@ class GamesController < ApplicationController
     respond_with_success
   end
 
+  def set_production
+    square_id = BSON::ObjectId.from_string(params[:square_id])
+    structure_id = BSON::ObjectId.from_string(params[:structure_id])
+
+    @game.squares.find(square_id).cities.find(structure_id).update(production: params[:production])
+
+    respond_with_success
+  end
+
   def get_game_data
     respond_to do |format|      
       format.json { render json: { 
