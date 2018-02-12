@@ -53,6 +53,7 @@ Renderer.prototype.drawAllSquares = function() {
 
 Renderer.prototype.drawSquare = function(square) {
   if (!this.isSquareInBounds(square)) { return false; }
+  
   const canvas = this.canvas;
   const context = this.context;
   const UI = this.UI;
