@@ -34,7 +34,7 @@ InputController.prototype.selectSquare = function() {
     this.UI.selection.unit = null;
   }
 
-  console.log(this.UI.selection);
+  this.reactController.updateUI(this.UI);
   this.reactController.updateUI(this.UI);
 };
 

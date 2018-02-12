@@ -27,5 +27,7 @@ module Structure
         end
       end
     end
+
+    def apply_turn_rollover_logic; end
   end
 end

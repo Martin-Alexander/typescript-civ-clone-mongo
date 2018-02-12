@@ -33,7 +33,7 @@ export default class ReactUserInterface extends React.Component {
 
   renderCityUI() {
     if (
-      this.state.UI.selection.structure 
+      this.state.UI.selection.structure
       && this.state.gameData.getCurrentPlayer().number === this.state.UI.selection.structure.player_number
     ) {
       return(

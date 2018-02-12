@@ -9,6 +9,10 @@ export default class CityOptions extends React.Component {
     this.rules = rules;
   }
 
+  componentWillReceiveProps() {
+    this.setState({structure: this.props.structure});
+  }
+
   handleChange(event) {
     this.state.structure.production = event.target.value;
     this.setState({structure: this.state.structure});
