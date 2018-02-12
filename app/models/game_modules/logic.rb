@@ -2,18 +2,18 @@ module GameModules
   module Logic
     # Handles all game logic related to turn roll-over
     def next_turn
-      move_results = []
-
-      squares.each_with_object([]) do |square, array|
-        square.units.each do |unit| 
-          move_results << unit.apply_turn_rollover_logic
-        end
+      squares.each do |square|
         square.structures.each do |structure|
           structure.apply_turn_rollover_logic
         end
       end
 
       players.update_all(turn_over: false)
+
+      move_results = units.map do |unit|
+        unit.apply_turn_rollover_logic
+      end
+
       move_results
     end
 
