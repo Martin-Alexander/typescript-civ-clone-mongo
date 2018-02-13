@@ -1,3 +1,5 @@
+require "byebug"
+
 class SeedError < StandardError
   class InvalidOptionError < StandardError; end
 end
@@ -15,12 +17,12 @@ def seed_task(message)
 end
 
 allowed_options = ["clean", "spam", "default"]
-$__civ_clone_mongo_seed__option = ENV["options"] || "default"
-if !(allowed_options.include?($__civ_clone_mongo_seed__option) || $__civ_clone_mongo_seed__option.nil?)
-  raise SeedError::InvalidOptionError, "Invalid option: #{$__civ_clone_mongo_seed__option}"
+$option = ENV["options"] || "default"
+if !(allowed_options.include?($option) || $option.nil?)
+  raise SeedError::InvalidOptionError, "Invalid option: #{$option}"
 end
 
-puts "Seeding with `#{$__civ_clone_mongo_seed__option}` option..."
+puts "Seeding with `#{$option}` option..."
 
 seed_task "Clearing database" do
   User.destroy_all
@@ -28,32 +30,48 @@ seed_task "Clearing database" do
   Game.destroy_all
 end
 
-if $__civ_clone_mongo_seed__option == "clean"
+if $option == "clean"
   "Clean seed"
 else
   seed_task "Creating users" do
-    $__civ_clone_mongo_seed__martin = User.create! username: "martin", password: "123456"
-    $__civ_clone_mongo_seed__sophie = User.create! username: "sophie", password: "123456"
-    $__civ_clone_mongo_seed__chloe = User.create! username: "chloe", password: "123456"
-    $__civ_clone_mongo_seed__brittany = User.create! username: "brittany", password: "123456"
-    $__civ_clone_mongo_seed__roxanne = User.create! username: "roxanne", password: "123456"
-  end
-
-  seed_task "Creating players" do
-    $__civ_clone_mongo_seed__new_game = Game.create! state: "lobby"
+    $martin = User.create! username: "martin", password: "123456"
+    $player_two = User.create! username: "player_two", password: "123456"
+    $player_three = User.create! username: "player_three", password: "123456"
+    $player_four = User.create! username: "player_four", password: "123456"
+    $player_five = User.create! username: "player_five", password: "123456"
   end
 
   seed_task "Creating games" do
-    Player.create! user: $__civ_clone_mongo_seed__martin, game: $__civ_clone_mongo_seed__new_game, host: true
-    Player.create! user: $__civ_clone_mongo_seed__sophie, game: $__civ_clone_mongo_seed__new_game
-    Player.create! user: $__civ_clone_mongo_seed__chloe, game: $__civ_clone_mongo_seed__new_game
-    Player.create! user: $__civ_clone_mongo_seed__brittany, game: $__civ_clone_mongo_seed__new_game
-    Player.create! user: $__civ_clone_mongo_seed__roxanne, game: $__civ_clone_mongo_seed__new_game
+    $new_game = Game.create! state: "lobby"
   end
-  seed_task("Starting game") { $__civ_clone_mongo_seed__new_game.start }
-  seed_task("Generating board") { $__civ_clone_mongo_seed__new_game.generate_game_data }
-  if $__civ_clone_mongo_seed__option == "spam"
-    seed_task("Spamming board with units") { generate_units($__civ_clone_mongo_seed__new_game, 50) }
+
+  if ENV["players"].nil?
+    2
+  else
+    $number_of_players = ENV["players"].to_i
+  end
+
+  seed_task "Creating #{$number_of_players} player(s)" do
+    Player.create! user: $martin
+    Player.create! user: $player_two
+    Player.create! user: $player_three
+    Player.create! user: $player_four
+    Player.create! user: $player_five
+
+    if $number_of_players > Player.count || $number_of_players < 1
+      raise SeedError::InvalidOptionError, "Invalid number of players: #{$number_of_players}"
+    end
+
+    Player.first.update! host: true
+
+    Player.all[0...$number_of_players].each do |player|
+      player.update! game: $new_game
+    end
+  end
+  seed_task("Starting game") { $new_game.start }
+  seed_task("Generating board") { $new_game.generate_game_data }
+  if $option == "spam"
+    seed_task("Spamming board with units") { generate_units($new_game, 50) }
   end
 end
 
