@@ -46,26 +46,29 @@ else
   end
 
   if ENV["players"].nil?
-    2
+    $number_of_players = 2
   else
     $number_of_players = ENV["players"].to_i
   end
 
   seed_task "Creating #{$number_of_players} player(s)" do
-    Player.create! user: $martin
-    Player.create! user: $player_two
-    Player.create! user: $player_three
-    Player.create! user: $player_four
-    Player.create! user: $player_five
+    players = []
 
-    if $number_of_players > Player.count || $number_of_players < 1
+    players << Player.new(user: $martin)
+    players << Player.new(user: $player_two)
+    players << Player.new(user: $player_three)
+    players << Player.new(user: $player_four)
+    players << Player.new(user: $player_five)
+
+    if $number_of_players > players.length || $number_of_players < 1
       raise SeedError::InvalidOptionError, "Invalid number of players: #{$number_of_players}"
     end
 
-    Player.first.update! host: true
+    players.first.host = true
 
-    Player.all[0...$number_of_players].each do |player|
-      player.update! game: $new_game
+    players[0...$number_of_players].each do |player|
+      player.game = $new_game
+      player.save!
     end
   end
   seed_task("Starting game") { $new_game.start }
