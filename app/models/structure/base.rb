@@ -28,6 +28,6 @@ module Structure
       end
     end
 
-    def apply_turn_rollover_logic; end
+    def apply_turn_rollover_logic(x); end
   end
 end
