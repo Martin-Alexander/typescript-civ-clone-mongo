@@ -9,7 +9,6 @@ export default class SelectionDetails extends React.Component {
       UI: this.props.UI,
       currentPlayer: this.props.currentPlayer
     };
-    this.rules = rules;
   }
 
   render() {
@@ -92,15 +91,9 @@ export default class SelectionDetails extends React.Component {
       let listOfOrders = [];
 
       if (this.state.UI.selection.unit) {
-        listOfOrders = this.rules.units[this.state.UI.selection.unit.type].allowed_orders.map((order) => {
-          if (
-            !(this.rules.orders[order].type == "construction" && 
-            this.state.UI.selection.square.hasCompletedStructure(this.rules.orders[order].structure)) &&
-            order !== this.state.UI.selection.unit.order &&
-            this.state.currentPlayer.number === this.state.UI.selection.unit.player_number
-          ) {
-            return <Order key={order} inputController={this.props.inputController} name={order}/>;
-          }
+        listOfOrders = Rules.ordersForUnit(this.state.UI.selection.unit, this.state.UI.selection.square, gameData.getCurrentPlayer())
+        .map((order) => {
+          return <Order key={order} inputController={this.props.inputController} name={order}/>;
         });
       }
 

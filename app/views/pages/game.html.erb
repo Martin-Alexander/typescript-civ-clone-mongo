@@ -3,7 +3,7 @@
 <script>
   var gameId = "<%= @game.id %>";
   var rawGameData = "<%= j @game.client_game_data(current_user).to_json.html_safe %>";
-  var rules = JSON.parse("<%= j Rules.to_json.html_safe %>");
+  var rulesJSON = JSON.parse("<%= j Rules.to_json.html_safe %>");
 </script>
 
 <%= javascript_pack_tag "app/app" %>

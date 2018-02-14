@@ -11,6 +11,7 @@ import { GameDataController }  from "./game_data_controller";
 import { AnimationController } from "./animation_controller";
 import { TurnTransitioner }    from "./turn_transitioner";
 import { ReactController }     from "./react_controller";
+import { Rules }               from "./rules";
 
 import ReactUserInterface      from "./react_ui/components/ReactUserInterface";
 
@@ -28,6 +29,7 @@ const turnTransitioner       = new TurnTransitioner(UI, reactController);
 const networkController      = new NetworkController(turnTransitioner, gameDataController, animationController);
 const inputController        = new InputController(UI, gameData, networkController, reactController);
 const eventRouter            = new EventRouter(UI, inputController);
+global.Rules                 = Rules;
 
 gameData.initialize();
 renderer.run();

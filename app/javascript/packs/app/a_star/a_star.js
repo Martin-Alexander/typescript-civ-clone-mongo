@@ -14,8 +14,6 @@ AStar.prototype.run = function() {
   this.start.currentPathCost = 0;
 
   while (openedSquares.length > 0) {
-    // debugger
-
     this.sortSquares(openedSquares);
     const currentSquare = openedSquares[0];
 
