@@ -40,9 +40,4 @@ class Player < MongoidModel
   def toggle_turn_over
     update(turn_over: !turn_over)
   end
-
-  # def apply_turn_rollover_logic
-    # update(turn_over: false)
-  # end
-  
 end

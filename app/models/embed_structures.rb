@@ -30,6 +30,15 @@ module EmbedStructures
   end
 
   module InstanceMethods
+
+    def supply_provided(player_number)
+      city = structures.find do |structure|
+        structure.type == "city" && structure.player_number == player_number
+      end
+
+      city ? city.size * Rules["supply_per_city_size"] : 0
+    end
+
     # Returns an array of all units embedded in the square
     def structures
       Square::Global.structure_types.each_with_object([]) do |type, array|

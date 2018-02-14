@@ -1,3 +1,4 @@
+supply_per_city_size: 10
 orders:
   none:
     type: unit_state_transform

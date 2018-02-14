@@ -4,17 +4,21 @@ module GameModules
     def next_turn
       squares.each do |square|
         square.structures.each do |structure|
-          structure.apply_turn_rollover_logic
+          structure.apply_turn_rollover_logic(player_resources)
         end
       end
 
-      players.update_all(turn_over: false)
+      move_animations = units.map(&:apply_turn_rollover_logic)
 
-      move_results = units.map do |unit|
-        unit.apply_turn_rollover_logic
+      players.includes(:user, :game).each do |player|
+        player.update!({
+          turn_over: false,
+          supply:count_player_supply(player),
+          military_count: count_player_units(player)
+        })
       end
 
-      move_results
+      move_animations
     end
 
     # Returns whether or not all players are ready'd up
@@ -44,6 +48,35 @@ module GameModules
       squares.each_with_object([]) do |square, array|
         square.units.each { |unit| array << unit }
       end
+    end
+
+    def count_player_supply(player)
+      running_total = 0
+      squares.each do |square|
+        running_total += square.supply_provided(player.number)
+      end
+      running_total
+    end
+
+    def count_player_units(player)
+      unit_count = 0
+      units.each do |unit|
+        unit_count += 1 if unit.player_number == player.number
+      end
+      unit_count
+    end
+
+    def player_resources
+      results = {}
+
+      players.includes(:user, :game).each do |player|
+        results[player.number] = {
+          supply: count_player_supply(player),
+          unit_count: count_player_units(player)
+        }
+      end
+
+      results
     end
   end
 end

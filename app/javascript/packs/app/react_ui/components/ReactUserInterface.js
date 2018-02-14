@@ -23,7 +23,10 @@ export default class ReactUserInterface extends React.Component {
     }
 
     global.updateGameData = (gameData) => {
-      this.setState({ gameData: gameData });
+      this.setState({ 
+        gameData: gameData,
+        currentPlayer: gameData.getCurrentPlayer()
+      });
     }
   }  
 
@@ -55,7 +58,7 @@ export default class ReactUserInterface extends React.Component {
 
     return(
       <div id="react-user-interface" style={userInterfaceStyle}>
-        <MenuBar toggleMenu={this.toggleMenu.bind(this)} currentPlayer={this.props.currentPlayer}/>
+        <MenuBar toggleMenu={this.toggleMenu.bind(this)} currentPlayer={this.state.currentPlayer}/>
         {this.renderCityUI()}
         <SelectionDetails currentPlayer={this.props.currentPlayer} UI={this.props.UI} inputController={this.props.inputController}/>
         <TurnTimer players={this.state.gameData.players} ongoingTurnTransition={this.state.UI.ongoingTurnTransition}/>

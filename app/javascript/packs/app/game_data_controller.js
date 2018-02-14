@@ -39,6 +39,7 @@ GameDataController.prototype.newGameData = function(rawGameData) {
   this.gameData.newGameData(rawGameData);
   this.updateSelectedSquare();
   this.UI.ongoingTurnTransition = false;
+  this.reactController.updateGameData(gameData);
 }
 
 GameDataController.prototype.updateSelectedSquare = function(newSelectionSquare = false) {
