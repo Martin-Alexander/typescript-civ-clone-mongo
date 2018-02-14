@@ -1,5 +1,3 @@
-require "byebug"
-
 class SeedError < StandardError
   class InvalidOptionError < StandardError; end
 end
