@@ -6,7 +6,6 @@ export default class CityOptions extends React.Component {
     this.state = {structure: this.props.structure};
 
     this.handleChange = this.handleChange.bind(this);
-    this.rules = rules;
   }
 
   componentWillReceiveProps() {
