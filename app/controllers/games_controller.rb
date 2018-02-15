@@ -29,9 +29,8 @@ class GamesController < ApplicationController
 
   def piece_move
     @path = @permitted_params[:data][:path]
-    @unit = @game.find_square(@path[0]).units.to_a.find do |unit|
-      unit.id.to_s == @permitted_params[:data][:unit]
-    end
+
+    @unit = @game.find_square(@path[0]).units.find(BSON::ObjectId.from_string(@permitted_params[:data][:unit])).first
 
     if @game.players.where(number: @unit.player_number).first.user == current_user
       move_result = @unit.move(@path)
