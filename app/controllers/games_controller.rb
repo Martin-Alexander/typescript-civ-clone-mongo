@@ -49,7 +49,7 @@ class GamesController < ApplicationController
   end
 
   def next_turn
-    player = $players.find { |player| player.user == current_user }
+    player = $players.find { |player| player.user_id == current_user.id }
     player.toggle_turn_over
 
     if @game.all_players_ready_for_next_turn

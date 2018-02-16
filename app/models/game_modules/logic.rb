@@ -13,7 +13,7 @@ module GameModules
       $players.each do |player|
         player.update!({
           turn_over: false,
-          supply:count_player_supply(player),
+          supply: count_player_supply(player),
           military_count: count_player_units(player)
         })
       end
