@@ -2,13 +2,20 @@ module GameModules
   module Logic
     # Handles all game logic related to turn roll-over
     def next_turn
+      update(turn: turn + 1)
+
+      Console.log "structure START"
+      player_resources = collect_player_resources
       squares.each do |square|
         square.structures.each do |structure|
           structure.apply_turn_rollover_logic(player_resources)
         end
       end
+      Console.log "structure END"
 
+      Console.log "units START"
       move_animations = units.map(&:apply_turn_rollover_logic)
+      Console.log "units END"
 
       $players.each do |player|
         player.update!({
@@ -17,7 +24,8 @@ module GameModules
           military_count: count_player_units(player)
         })
       end
-
+      Console.log "players END"
+      
       move_animations
     end
 
@@ -66,7 +74,7 @@ module GameModules
       unit_count
     end
 
-    def player_resources
+    def collect_player_resources
       results = {}
 
       $players.each do |player|
