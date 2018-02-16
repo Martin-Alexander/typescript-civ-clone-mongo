@@ -21,8 +21,8 @@ class GamesController < ApplicationController
     @permitted_params = params.permit(:method, :game, data: {}).to_h
 
     @game = Game.find(@permitted_params[:game])
-
-    current_user.alive_in_game?(@game) ? send(@permitted_params[:method].to_sym) : respond_with_failure
+    $players = @game.players.to_a
+    current_user.alive_in_game?($players) ? send(@permitted_params[:method].to_sym) : respond_with_failure
   end
 
   private
@@ -33,7 +33,7 @@ class GamesController < ApplicationController
       unit.id.to_s == @permitted_params[:data][:unit]
     end
 
-    if @game.players.where(number: @unit.player_number).first.user == current_user
+    if $players.find { |player| player.number == @unit.player_number }.user_id == current_user.id
       move_result = @unit.move(@path)
       
       if move_result[:success]
@@ -45,12 +45,11 @@ class GamesController < ApplicationController
         })
       end
     end
-
     respond_with_success
   end
 
   def next_turn
-    player = @game.players.where(user: current_user).first
+    player = $players.find { |player| player.user == current_user }
     player.toggle_turn_over
 
     if @game.all_players_ready_for_next_turn
