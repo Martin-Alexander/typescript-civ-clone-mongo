@@ -3,7 +3,7 @@ class MongoidModel
 
   # Provides a method for declaring an objects children
   def self.direct_children(*args)
-    class_eval(__FILE__, __LINE__) %Q(
+    class_eval %Q(
       def get_direct_children
         #{args}
       end

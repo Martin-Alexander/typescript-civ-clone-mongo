@@ -146,10 +146,10 @@ class Board
       square.neighbouring_terrain("mountains", 1).zero? &&
       square.neighbouring_terrain("desert", 2).zero? &&
       square.neighbours(3).length > 40
-        if sorted_squares[square.desirability(size / 10)]
-          sorted_squares[square.desirability(size / 10)] << square
+        if sorted_squares[square.desirability(10)]
+          sorted_squares[square.desirability(10)] << square
         else 
-          sorted_squares[square.desirability(size / 10)] = [square]
+          sorted_squares[square.desirability(10)] = [square]
         end
       end
     end
@@ -169,7 +169,7 @@ class Board
         minimum_distance: minimum_distance
       }
     end
-
+    
     starting_locations.sort { |a, b| b[:minimum_distance] <=> a[:minimum_distance] }.first[:squares]
   end
 
@@ -239,7 +239,7 @@ class Board
         running_total += desirability_lookup(neighbour.terrain)
       end
 
-      (running_total * 1000) / 1000
+      (running_total / 1000) * 1000
     end
 
     def desirability_lookup(terrain)
