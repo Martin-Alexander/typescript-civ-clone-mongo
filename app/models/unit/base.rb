@@ -1,5 +1,8 @@
 module Unit
-  class Base < MongoidModel
+  class Base
+    include Mongoid::Document
+    include CivCloneMongoModel
+    
     include UnitModules::Moving
     include UnitModules::MoveValidations
     include UnitModules::Orders

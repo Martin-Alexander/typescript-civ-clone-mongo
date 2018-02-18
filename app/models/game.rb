@@ -1,4 +1,7 @@
-class Game < MongoidModel
+class Game
+  include Mongoid::Document
+  include CivCloneMongoModel
+  
   include Math
 
   include GameModules::Setup

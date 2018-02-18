@@ -1,4 +1,7 @@
-class User < MongoidModel
+class User
+  include Mongoid::Document
+  include CivCloneMongoModel
+  
   devise :database_authenticatable, :registerable,
          :rememberable, authentication_keys: [:username]
 

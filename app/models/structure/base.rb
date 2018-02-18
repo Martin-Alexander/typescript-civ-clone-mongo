@@ -1,5 +1,8 @@
 module Structure
-  class Base < MongoidModel
+  class Base
+    include Mongoid::Document
+    include CivCloneMongoModel
+        
     embedded_in :square, class_name: "Square::Global"
 
     field :player_number, type: Integer, default: 0

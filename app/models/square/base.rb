@@ -1,5 +1,8 @@
 module Square
-  class Base < MongoidModel
+  class Base
+    include Mongoid::Document
+    include CivCloneMongoModel
+    
     field :x, type: Integer
     field :y, type: Integer
 

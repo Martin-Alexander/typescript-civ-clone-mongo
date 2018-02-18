@@ -1,4 +1,7 @@
-class Player < MongoidModel
+class Player
+  include Mongoid::Document
+  include CivCloneMongoModel
+
   belongs_to :user
   belongs_to :game
 
