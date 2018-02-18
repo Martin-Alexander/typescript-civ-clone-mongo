@@ -41,8 +41,8 @@ module CivCloneMongo
             new_message = trimmed_message
           end
           "QUERY | #{new_message}\n"
-        elsif message.split(" | ")[3] == "SUCCEEDED"
-          ""
+        # elsif message.split(" | ")[3] == "SUCCEEDED"
+        #   ""
         else
           "#{message}\n"
         end
