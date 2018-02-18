@@ -2,14 +2,30 @@ class Player
   include Mongoid::Document
   include CivCloneMongoModel
 
-  belongs_to :user
-  belongs_to :game
+  embedded_in :game
 
   field :role, type: String, default: "player"
   field :host, type: Boolean, default: false
+  field :raw_user_id, type: String
 
   validates :role, inclusion: { in: ["player", "dead_player", "observer"] }
   validates :user, uniqueness: { scope: :game }
+
+  def user
+    User.find(user_id)
+  end
+
+  def user_id
+    BSON::ObjectId.from_string(raw_user_id)
+  end
+
+  def user=(user)
+    self.raw_user_id = user.id.to_s
+  end
+
+  def user_id=(user_id)
+    self.raw_user_id = user_id.to_s
+  end
 
   # Toggle role between "player" and "observer"
   def swap_role

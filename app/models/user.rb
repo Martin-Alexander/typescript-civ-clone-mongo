@@ -12,7 +12,13 @@ class User
   def email_required?; false; end
   def email_changed?; false; end
 
-  has_many :players
+  def players
+    players_belonging_to_user = []
+    Game.all.each do |game|
+      players_belonging_to_user << game.players.find { |player| player.user == self }
+    end
+    players_belonging_to_user
+  end
 
   # ==== Methods that return games ====
 
@@ -61,8 +67,8 @@ class User
   # ==== Validation methods ====
 
   # Is the user a living play in the game
-  def alive_in_game?(players)
-    players.select { |player| player.role == "player"}.pluck(:user_id).include?(id)
+  def alive_in_game?(game)
+    game.players.select { |player| player.role == "player"}.map(&:user_id).include?(id)
   end
 
   # Is the user in a specific game (filter)

@@ -21,8 +21,8 @@ class GamesController < ApplicationController
     @permitted_params = params.permit(:method, :game, data: {}).to_h
 
     @game = Game.find(@permitted_params[:game])
-    $players = @game.players.to_a
-    current_user.alive_in_game?($players) ? send(@permitted_params[:method].to_sym) : respond_with_failure
+
+    current_user.alive_in_game?(@game) ? send(@permitted_params[:method].to_sym) : respond_with_failure
   end
 
   private
@@ -32,7 +32,7 @@ class GamesController < ApplicationController
 
     @unit = @game.find_square(@path[0]).units.find(BSON::ObjectId.from_string(@permitted_params[:data][:unit])).first
 
-    if $players.find { |player| player.number == @unit.player_number }.user_id == current_user.id
+    if @game.players.to_a.find { |player| player.number == @unit.player_number }.user_id == current_user.id
       move_result = @unit.move(@path)
       
       if move_result[:success]
@@ -48,7 +48,8 @@ class GamesController < ApplicationController
   end
 
   def next_turn
-    player = $players.find { |player| player.user_id == current_user.id }
+    #                      ↓ I want to user Array#find not Mongoid::Criteria#find
+    player = @game.players.to_a.find { |player| player.user_id == current_user.id }
     player.toggle_turn_over
 
     if @game.all_players_ready_for_next_turn

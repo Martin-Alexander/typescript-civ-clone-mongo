@@ -3,9 +3,9 @@ module GameModules
     # Returns a hash of game data that is prepared for the client
     def client_game_data(current_user)
       game_data = to_hash
-
+      
       game_data[:players].map! do |player|
-        if player[:user_id] == current_user.id
+        if player[:raw_user_id] == current_user.id.to_s
           client_current_player_data(player)
         else
           client_player_data(player)

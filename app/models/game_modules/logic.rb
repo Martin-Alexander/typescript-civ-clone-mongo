@@ -13,7 +13,7 @@ module GameModules
 
       move_animations = units.map(&:apply_turn_rollover_logic)
 
-      $players.each do |player|
+      players.each do |player|
         player.update!({
           turn_over: false,
           supply: count_player_supply(player),
@@ -32,7 +32,7 @@ module GameModules
 
     # Returns a list of players who are ready'd up
     def who_is_ready_for_next_turn
-      $players.each_with_object([]) do |player, output|
+      players.each_with_object([]) do |player, output|
         output << { number: player.number, turn_over: player.turn_over }
       end
     end
@@ -72,7 +72,7 @@ module GameModules
     def collect_player_resources
       results = {}
 
-      $players.each do |player|
+      players.each do |player|
         results[player.number] = {
           supply: count_player_supply(player),
           unit_count: count_player_units(player)
