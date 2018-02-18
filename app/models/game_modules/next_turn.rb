@@ -4,17 +4,13 @@ module GameModules
     def next_turn
       update(turn: turn + 1)
 
-      game_resources = GameResources.new(self)
-
-      move_animations = []
+      move_animations = update_all_squares(GameResources.new(self))
+      update_all_players(GameResources.new(self))
       
-      squares.each do |square|
-        square.structures.each { |structure| structure.apply_turn_rollover_logic(game_resources) }
-        move_animations << square.units.map(&:apply_turn_rollover_logic)
-      end
-
-      game_resources = GameResources.new(self)
-
+      move_animations
+    end
+    
+    def update_all_players(game_resources)
       players.each do |player|
         player.update!({
           turn_over: false,
@@ -22,6 +18,15 @@ module GameModules
           military_count: game_resources.player(player).unit_count,
           growth: game_resources.player(player).growth
         })
+      end
+    end
+    
+    def update_all_squares(game_resources)
+      move_animations = []
+
+      squares.each do |square|
+        square.structures.each { |structure| structure.apply_turn_rollover_logic(game_resources) }
+        move_animations << square.units.map(&:apply_turn_rollover_logic)
       end
 
       move_animations.flatten
