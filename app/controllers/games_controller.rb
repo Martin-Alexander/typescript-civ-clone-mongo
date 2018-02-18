@@ -48,7 +48,6 @@ class GamesController < ApplicationController
   end
 
   def next_turn
-    #                      ↓ I want to user Array#find not Mongoid::Criteria#find
     player = @game.players.to_a.find { |player| player.user_id == current_user.id }
     player.toggle_turn_over
 

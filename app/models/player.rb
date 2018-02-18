@@ -9,7 +9,7 @@ class Player
   field :raw_user_id, type: String
 
   validates :role, inclusion: { in: ["player", "dead_player", "observer"] }
-  validates :user, uniqueness: { scope: :game }
+  # validates :user, uniqueness: { scope: :game }
 
   def user
     User.find(user_id)
