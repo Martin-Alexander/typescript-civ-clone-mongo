@@ -1,29 +1,6 @@
 module GameModules
   module Logic
-    # Handles all game logic related to turn roll-over
-    def next_turn
-      update(turn: turn + 1)
-
-      player_resources = collect_player_resources
-      squares.each do |square|
-        square.structures.each do |structure|
-          structure.apply_turn_rollover_logic(player_resources)
-        end
-      end
-
-      move_animations = units.map(&:apply_turn_rollover_logic)
-
-      players.each do |player|
-        player.update!({
-          turn_over: false,
-          supply: count_player_supply(player),
-          military_count: count_player_units(player)
-        })
-      end
-
-      move_animations
-    end
-
+    include NextTurn
     # Returns whether or not all players are ready'd up
     def all_players_ready_for_next_turn
       true
@@ -53,33 +30,11 @@ module GameModules
       end
     end
 
-    def count_player_supply(player)
-      running_total = 0
-      squares.each do |square|
-        running_total += square.supply_provided(player.number)
+    # Returns an array of all structures on the board
+    def structures
+      squares.each_with_object([]) do |square, array|
+        square.structures.each { |structures| array << structures }
       end
-      running_total
-    end
-
-    def count_player_units(player)
-      unit_count = 0
-      units.each do |unit|
-        unit_count += 1 if unit.player_number == player.number
-      end
-      unit_count
-    end
-
-    def collect_player_resources
-      results = {}
-
-      players.each do |player|
-        results[player.number] = {
-          supply: count_player_supply(player),
-          unit_count: count_player_units(player)
-        }
-      end
-
-      results
-    end
+    end    
   end
 end

@@ -3,13 +3,14 @@ module Structure
     field :production, type: String, default: "nothing"
     field :size, type: Integer, default: 1
 
-    def apply_turn_rollover_logic(player_resources)
-      if production == "nothing" || player_resources[player_number][:unit_count] >= player_resources[player_number][:supply]
-        return false 
-      end
+    def apply_turn_rollover_logic(game_resources)
+      unit_count = game_resources.player(player_number).unit_count
+      supply = game_resources.player(player_number).supply
+
+      return false if production == "nothing" || unit_count >= supply
 
       square.create_unit(production, player_number: player_number)
-      player_resources[player_number][:unit_count] += 1
+      game_resources.player(player_number).unit_count += 1
     end
 
     def build
