@@ -63,9 +63,9 @@ class Board
           when 3
             square.terrain = "water" if rand(3).zero?
           else
-            square.terrain = "water" 
+            square.terrain = "water"
           end
-        end          
+        end
       end
     end
 
@@ -79,10 +79,11 @@ class Board
     # Create some plains roots
     ((size / 2)..(size)).to_a.sample.times do
       square = squares.sample
-      if (square.neighbouring_terrain("water", 3).zero? || rand(2).zero?) &&
+      if square.terrain == "grass" &&
+      (square.neighbouring_terrain("water", 3).zero? || rand(2).zero?) &&
       (square.neighbouring_terrain("water", 2).zero? || rand(4).zero?) &&
       (square.neighbouring_terrain("water").zero? || rand(8).zero?)
-        square.terrain = "plains" 
+        square.terrain = "plains"
       end
     end
 
@@ -102,19 +103,19 @@ class Board
           when 3
             square.terrain = "plains" if rand(4).zero?
           else
-            square.terrain = "plains" 
+            square.terrain = "plains"
           end
-        end          
+        end
       end
     end
-    
+
     # Create some desert roots
     ((size / 4)..(size)).to_a.sample.times do
       square = squares.sample
       if square.terrain == "plains" &&
       (square.neighbouring_terrain("grass", 2).zero? || rand(4).zero?) &&
       (square.neighbouring_terrain("grass").zero? || rand(8).zero?)
-        square.terrain = "desert" 
+        square.terrain = "desert"
       end
     end
 
@@ -130,47 +131,43 @@ class Board
           when 3
             square.terrain = "desert" if rand(2).zero?
           else
-            square.terrain = "desert" 
+            square.terrain = "desert"
           end
-        end          
+        end
       end
     end
   end
 
   def player_starting_locations(number_of_players)
-    squares.map { |square| [square, square.desirability(size / 5)] }.sort { |a, b| b[1] <=> a[1] }
-    
-    sorted_squares = {}
-    squares.each do |square|
-      if !["water", "desert", "mountains"].include?(square.terrain) && 
-      square.neighbouring_terrain("mountains", 1).zero? &&
-      square.neighbouring_terrain("desert", 2).zero? &&
-      square.neighbours(3).length > 40
-        if sorted_squares[square.desirability(10)]
-          sorted_squares[square.desirability(10)] << square
-        else 
-          sorted_squares[square.desirability(10)] = [square]
-        end
-      end
-    end
-
-    enough_squares = {}
-    sorted_squares.each do |desirability_of_squares, all_squares|
-      if all_squares.length >= number_of_players
-        enough_squares[desirability_of_squares] = all_squares[0...number_of_players]
-      end
+    suitable_squares = squares.select do |square|
+      !["water", "desert", "mountains"].include?(square.terrain) &&
+        square.neighbouring_terrain("mountains", 1).zero? &&
+        square.neighbouring_terrain("desert", 2).zero? &&
+        square.neighbours(3).length > 40
     end
 
     starting_locations = []
-    enough_squares.each do |desirability_of_squares, all_squares|
-      minimum_distance = all_squares.combination(2).map { |pair| distance(pair[0], pair[1]) }.min
-      starting_locations << {
-        squares: all_squares,
-        minimum_distance: minimum_distance
-      }
+    10.times do
+      suitable_squares.shuffle.each_slice(number_of_players) do |slice|
+        starting_locations.push(slice) if slice.length == number_of_players
+      end
     end
-    
-    starting_locations.sort { |a, b| b[:minimum_distance] <=> a[:minimum_distance] }.first[:squares]
+
+    sorted_starting_locations = starting_locations.sort_by do |group_of_squares|
+      group_of_squares.combination(2).map { |pair| distance(pair[0], pair[1]) }.min
+    end
+
+    tenth_percentile = sorted_starting_locations[-(sorted_starting_locations.length / 100)..-1]
+
+    final_sort = tenth_percentile.sort_by do |group_of_squares|
+      group_of_squares.combination(2).map { |pair| desirability_difference(pair[0], pair[1]) }.max
+    end
+
+    final_sort.first
+  end
+
+  def desirability_difference(a, b)
+    (a.desirability(3) - b.desirability(3)).abs
   end
 
   def distance(a, b)
@@ -178,18 +175,14 @@ class Board
   end
 
   def find_square(col, row = false)
-    if col.respond_to?(:keys) 
+    if col.respond_to?(:keys)
       row = col[:y] || col["y"]
       col = col[:x] || col["x"]
     end
     if row && (row > size || col > size)
       raise ArgumentError, "Invalid row #{row} or col #{col} for board size of #{size}"
     end
-    if row
-      squares[row * (size + 1) + col]
-    else
-      squares[col.to_i]
-    end
+    row ? squares[row * (size + 1) + col] : squares[col.to_i]
   end
 
   def squares_within(radius)
@@ -251,7 +244,7 @@ class Board
         mountains: 10
       }[terrain.to_sym]
     end
-    
+
     def to_s
       "<Square: x: #{@x}, y: #{@y}, terrain: #{@terrain}>"
     end
