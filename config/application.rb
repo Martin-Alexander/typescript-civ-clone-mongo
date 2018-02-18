@@ -12,6 +12,8 @@ require "action_cable/engine"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
+require 'logger'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -25,5 +27,30 @@ module CivCloneMongo
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    logger = Logger.new(STDOUT)
+    logger.level = Logger::DEBUG
+    logger.formatter = proc do |severity, datetime, progname, message|
+      trimmed_message = message.split(" | ")[-1]
+      begin
+        if message.split(" | ")[3] == "STARTED"
+          if message.split(" | ")[4].include?("{\"find")
+            new_message = "\e[1;94m#{trimmed_message}\e[0;97m"
+          elsif message.split(" | ")[4].include?("{\"update")
+            new_message = "\e[1;93m#{trimmed_message}\e[0;97m"
+          else
+            new_message = trimmed_message
+          end
+          "QUERY | #{new_message}\n"
+        elsif message.split(" | ")[3] == "SUCCEEDED"
+          ""
+        else
+          "#{message}\n"
+        end
+      rescue
+        "#{message}\n"
+      end
+    end
+
+    Mongoid.logger = logger
   end
 end
