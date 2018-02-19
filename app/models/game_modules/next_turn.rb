@@ -22,20 +22,14 @@ module GameModules
     end
     
     def update_all_squares(game_resources)
-      move_animations = []
-
-      squares.each do |square|
-        square.structures.each { |structure| structure.apply_turn_rollover_logic(game_resources) }
-        move_animations << square.units.map(&:apply_turn_rollover_logic)
-      end
-
-      move_animations.flatten
+      structures.each { |structure| structure.apply_turn_rollover_logic(game_resources) }
+      units.map(&:apply_turn_rollover_logic)
     end
     
     class GameResources
       attr_reader :player_resources
-      
-      class PlayerResources        
+
+      class PlayerResources
         attr_accessor :player, :supply, :production, :growth, :unit_count
 
         def initialize(player)
@@ -43,7 +37,7 @@ module GameModules
           @supply = 0
           @production = 0
           @growth = player.growth
-          
+
           # @military_count = 0
           # @civilian_count = 0
           @unit_count = 0
@@ -56,7 +50,7 @@ module GameModules
         
         calculate_all_player_resources
       end
-      
+
       # Get the resources of a given player by number of object
       def player(criteria)
         if criteria.is_a?(Integer)

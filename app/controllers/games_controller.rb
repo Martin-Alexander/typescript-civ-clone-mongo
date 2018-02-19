@@ -51,6 +51,11 @@ class GamesController < ApplicationController
     player = @game.players.to_a.find { |player| player.user_id == current_user.id }
     player.toggle_turn_over
 
+    broadcast({
+      type: "player_ready",
+      players_ready: @game.who_is_ready_for_next_turn
+    })
+
     if @game.all_players_ready_for_next_turn
       move_animations = @game.next_turn
       broadcast({
@@ -60,11 +65,6 @@ class GamesController < ApplicationController
         end
       })
     end
-
-    broadcast({
-      type: "player_ready",
-      players_ready: @game.who_is_ready_for_next_turn
-    })
 
     respond_with_success
   end
