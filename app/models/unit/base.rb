@@ -23,7 +23,7 @@ module Unit
 
     # The base movement value of a unit
     def base_moves
-      Rules["units"][type]["movement"]["base"]
+      Rules.raw["units"][type]["movement"]["base"]
     end
 
     # returns string representation of unit type
@@ -33,7 +33,7 @@ module Unit
 
     # Returns the rules for unit
     def unit_rules
-      Rules["units"][type]
+      Rules.raw["units"][type]
     end
   end
 end

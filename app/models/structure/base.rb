@@ -16,7 +16,7 @@ module Structure
 
     # Returns the rules for structure
     def structure_rules
-      Rules["structures"][type]
+      Rules.raw["structures"][type]
     end
 
     # Implements logic related to a worker spending a turn building a structure
