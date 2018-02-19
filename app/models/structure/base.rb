@@ -32,5 +32,9 @@ module Structure
     end
 
     def apply_turn_rollover_logic(x); end
+
+    def player
+      square.game.player(player_number)
+    end
   end
 end

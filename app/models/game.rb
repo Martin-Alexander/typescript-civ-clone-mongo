@@ -23,4 +23,8 @@ class Game
   def users
     players.map(&:user)
   end
+
+  def player(number)
+    players.to_a.find { |player| player.number == number }
+  end
 end

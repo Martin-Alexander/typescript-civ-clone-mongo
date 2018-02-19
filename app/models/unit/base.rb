@@ -35,5 +35,9 @@ module Unit
     def unit_rules
       Rules.raw["units"][type]
     end
+
+    def player
+      square.game.player(player_number)
+    end
   end
 end
