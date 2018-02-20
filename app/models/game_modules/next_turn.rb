@@ -101,7 +101,7 @@ module GameModules
         city = square.cities.first
         if city
           player_resources = player_resource(city.player_number)
-          player_resources.supply += city.size * Rules.raw["supply_per_city_size"]
+          player_resources.supply += Rules.raw["supply_per_city_size"]
           player_resources.production += 1
         end
       end

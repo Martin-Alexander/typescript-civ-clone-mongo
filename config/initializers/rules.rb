@@ -45,6 +45,11 @@ class Rules
       end
     end
 
+    # For a given city returns its production capabilities
+    def city_production_level(city)
+      city.size / raw["production_levels"]
+    end
+
     private
 
     # For a given worker returns whether or not its contruction order is valid
