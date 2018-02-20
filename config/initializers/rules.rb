@@ -1,7 +1,7 @@
 class Rules
-  class RuleError < StandardError; end
-
   module ClassMethods
+    class RuleError < StandardError; end
+
     # Returns raw hash of rules
     def raw
       YAML.safe_load(File.open(File.join(Rails.root, "config/rules.yml")))
@@ -33,17 +33,19 @@ class Rules
       validate_state_transform_order!(order)
     end
 
-    private
-
     # For a given worker returns all its available orders based on the state of its owner and the
     # square that it's in
     def orders_for_worker(unit)
       raw["units"]["worker"]["allowed_orders"].each_with_object([]) do |order, allowed_orders|
-        if order_type(order) != "construction" || valid_contruction_order?(unit, order)
+        if order_type(order) != "construction" || 
+           (order_type(order) == "construction" && 
+           valid_contruction_order?(unit, order))
           allowed_orders << order
         end
       end
     end
+
+    private
 
     # For a given worker returns whether or not its contruction order is valid
     def valid_contruction_order?(unit, order)
@@ -57,13 +59,13 @@ class Rules
 
     # Raises rule error if order is not a contruction order
     def validate_contruction_order!(order)
-      raise RuleError "#{order} is not a construction order" if order_type(order) != "construction"
+      raise RuleError, "#{order} is not a construction order" if order_type(order) != "construction"
     end
 
     # Raises rule error if order is not a state transform order
     def validate_state_transform_order!(order)
       if order_type(order) != "transform_to"
-        raise RuleError "#{order} is not a state transform order"
+        raise RuleError, "#{order} is not a state transform order"
       end
     end
   end

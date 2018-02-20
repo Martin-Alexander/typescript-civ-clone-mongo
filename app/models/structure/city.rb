@@ -14,11 +14,15 @@ module Structure
     end
 
     def build
-      player = square.game.players.where(number: player_number).first
       if player.growth > 0
         super
-        player.update(growth: player.growth - 1, military_count: player.military_count -= 1)
+        player.update(growth: player.growth - 1)
       end
-    end    
+    end
+
+    def grow
+      update(size: size + 1)
+      player.update(growth: player.growth - 1)
+    end
   end
 end

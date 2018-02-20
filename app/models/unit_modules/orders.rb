@@ -17,6 +17,8 @@ module UnitModules
 
     # Applies game logic turning an order into state, and, importantly can return a move result that
     # will be used by the front end to animate the moved unit
+
+    # Only called on turn roll over
     def execute_order
       move_result = nil
       case Rules.order_type(order)
