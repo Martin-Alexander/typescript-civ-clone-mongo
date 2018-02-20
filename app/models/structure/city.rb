@@ -10,7 +10,7 @@ module Structure
     end
 
     def build
-      return false if player.growth > 0
+      return false if player.growth < 0
 
       super
       player.update(growth: player.growth - 1)
