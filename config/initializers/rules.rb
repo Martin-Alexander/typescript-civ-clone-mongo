@@ -8,7 +8,7 @@ class Rules
     end
 
     # Given a unit, the square it one, and the player who owns it: What are it's available orders
-    def orders_for_unit(unit)
+    def allowed_orders(unit)
       case unit.type
       when "worker"
         orders_for_worker(unit)
@@ -23,9 +23,14 @@ class Rules
     end
 
     # Returns the structure of a given construction order
-    def construction_order_structure(order)
+    def order_structure(order)
       validate_contruction_order!(order)
       raw["orders"][order]["structure"]
+    end
+
+    # Returns the state result of a given state transform order
+    def order_state(order)
+      validate_state_transform_order!(order)
     end
 
     private
@@ -33,9 +38,9 @@ class Rules
     # For a given worker returns all its available orders based on the state of its owner and the
     # square that it's in
     def orders_for_worker(unit)
-      raw["units"]["worker"]["allowed_orders"].each_with_object do |order, allowed_orders|
+      raw["units"]["worker"]["allowed_orders"].each_with_object([]) do |order, allowed_orders|
         if order_type(order) != "construction" || valid_contruction_order?(unit, order)
-          allowed_orders << orders
+          allowed_orders << order
         end
       end
     end
@@ -46,13 +51,20 @@ class Rules
       if order == "build_city"
         unit.player.growth > 0
       else
-        !unit.square.complete_structure(construction_order_structure(order))
+        !unit.square.complete_structure?(order_structure(order))
       end
     end
 
     # Raises rule error if order is not a contruction order
     def validate_contruction_order!(order)
-      raise RuleError "#{order} is not a contr order" if order_type(order) != "construction"
+      raise RuleError "#{order} is not a construction order" if order_type(order) != "construction"
+    end
+
+    # Raises rule error if order is not a state transform order
+    def validate_state_transform_order!(order)
+      if order_type(order) != "transform_to"
+        raise RuleError "#{order} is not a state transform order"
+      end
     end
   end
 

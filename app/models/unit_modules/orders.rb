@@ -7,29 +7,28 @@ module UnitModules
 
     # Updates a unit's orders after rule checking
     def give_order(order_name)
-      if unit_rules["allowed_orders"].include?(order_name)
-        new_order = order == order_name ? "none" : order_name
-        update(order: new_order)
+      if Rules.allowed_orders(self).include?(order_name)
+        update!(order: order == order_name ? "none" : order_name)
         true
       else
         false
       end
     end
 
-    # Applies game logic turning an order into state
+    # Applies game logic turning an order into state, and, importantly can return a move result that
+    # will be used by the front end to animate the moved unit
     def execute_order
-      result = nil
-      case Rules.raw["orders"][order]["type"]
+      move_result = nil
+      case Rules.order_type(order)
       when "unit_state_transform"
         update(state: Rules.raw["orders"][order]["transform_to"])
       when "construction"
-        structure_type = Rules.raw["orders"][order]["structure"]
-        execute_construction_order(structure_type)
+        execute_construction_order(Rules.order_structure(order))
       when "action"
-        result = move(go_to)
+        move_result = move(go_to)
       end
 
-      result
+      move_result
     end
   end
 end
