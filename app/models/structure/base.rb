@@ -2,7 +2,7 @@ module Structure
   class Base
     include Mongoid::Document
     include CivCloneMongoModel
-        
+
     embedded_in :square, class_name: "Square::Global"
 
     field :player_number, type: Integer, default: 0
@@ -21,14 +21,9 @@ module Structure
 
     # Implements logic related to a worker spending a turn building a structure
     def build
-      if complete
-        raise ArgumentError, "structure is already complete"
-      else
-        update(construction_level: construction_level + 1)
-        if construction_level >= structure_rules["time_cost"]
-          update(complete: true)
-        end
-      end
+      raise ArgumentError, "structure is already complete" if complete
+      update(construction_level: construction_level + 1)
+      update(complete: true) if construction_level >= structure_rules["time_cost"]
     end
 
     def apply_turn_rollover_logic(x); end
