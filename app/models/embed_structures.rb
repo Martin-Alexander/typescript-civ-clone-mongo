@@ -46,6 +46,11 @@ module EmbedStructures
       structures.find { |structure| structure.type == type }
     end
 
+    # Duplicate of Square::Global#get_structure but respects ruby naming convention
+    def structure(type)
+      structures.find { |structure| structure.type == type }
+    end
+
     def complete_structure?(type)
       structures.any? do |structure| 
         structure.type == type && structure.complete
