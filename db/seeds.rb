@@ -37,6 +37,7 @@ else
     $player_three = User.create! username: "player_three", password: "123456"
     $player_four = User.create! username: "player_four", password: "123456"
     $player_five = User.create! username: "player_five", password: "123456"
+    $player_six = User.create! username: "player_six", password: "123456"
   end
 
   seed_task "Creating games" do
@@ -57,6 +58,7 @@ else
     players << Player.new(user: $player_three)
     players << Player.new(user: $player_four)
     players << Player.new(user: $player_five)
+    players << Player.new(user: $player_six)
 
     if $number_of_players > players.length || $number_of_players < 1
       raise SeedError::InvalidOptionError, "Invalid number of players: #{$number_of_players}"
