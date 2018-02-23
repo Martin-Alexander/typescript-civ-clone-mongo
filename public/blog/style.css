@@ -13,8 +13,14 @@ h1, h2, h3 {
   font-family: 'Roboto Slab', serif;
 }
 
+@media only screen and (max-width: 400px) {
+  h1 {
+    font-size: 38px;
+  }
+}
+
 #wrapper {
-  width: 800px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
