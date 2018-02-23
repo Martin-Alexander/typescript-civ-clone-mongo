@@ -31,16 +31,27 @@ Structure.prototype.playerColor = function() {
   return structurePlayerColorLookup[this.player_number];
 }
 
-
+// This is all going away when artwork is done, so I'm not going to bother making it look nice
 Structure.prototype.render = function(context, UI) {
-  context.beginPath();
-  context.ellipse(0, UI.tileHeight / 2, UI.tileWidth / 3, UI.tileHeight / 3, 0, Math.PI * 1.25, Math.PI * 0.25);
-  context.fillStyle = this.typeColor();
-  context.fill();
-  context.beginPath();
-  context.ellipse(0, UI.tileHeight / 2, UI.tileWidth / 3, UI.tileHeight / 3, 0, Math.PI * 0.25, Math.PI * 1.25);
-  context.fillStyle = this.playerColor();
-  context.fill();
+  if (this.type === "city") {
+    context.beginPath();
+    context.ellipse(0, UI.tileHeight / 2, UI.tileWidth / 3, UI.tileHeight / 3, 0, Math.PI * 1.25, Math.PI * 0.25);
+    context.fillStyle = this.typeColor();
+    context.fill();
+    context.beginPath();
+    context.ellipse(0, UI.tileHeight / 2, UI.tileWidth / 3, UI.tileHeight / 3, 0, Math.PI * 0.25, Math.PI * 1.25);
+    context.fillStyle = this.playerColor();
+    context.fill();
+  } else {
+    context.beginPath();
+    context.ellipse(0, UI.tileHeight / 2, UI.tileWidth / 3, UI.tileHeight / 3, 0, Math.PI * 1.25, Math.PI * 0.25);
+    context.fillStyle = this.typeColor();
+    context.fill();
+    context.beginPath();
+    context.ellipse(0, UI.tileHeight / 2, UI.tileWidth / 3, UI.tileHeight / 3, 0, Math.PI * 0.25, Math.PI * 1.25);
+    context.fillStyle = this.playerColor();
+    context.fill();
+  }
 }
 
 export { Structure };
