@@ -92,8 +92,9 @@ EventRouter.prototype.initializeEventListener = function() {
   });
 
   window.addEventListener("wheel", function(event) {
-    if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
-
+    // if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
+    if (!self.directMapClick(event)) { return false; }
+    
     const zoomSpeed = 1.1;
     if (event.deltaY < 0 && UI.tileHeight < 100) {
       UI.tileHeight *= zoomSpeed;
