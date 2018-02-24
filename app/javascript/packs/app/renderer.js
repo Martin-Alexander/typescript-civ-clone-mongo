@@ -45,9 +45,19 @@ Renderer.prototype.manageCanvasSize = function(canvas) {
 }
 
 Renderer.prototype.drawAllSquares = function() {
+  const context = this.context;
+  const canvas = this.canvas;
+  const UI = this.UI;
+
   this.clearCanvas();
   this.gameData.squares.forEach((square) => {
     this.drawSquare(square);
+  });
+
+  this.gameData.squares.forEach((square) => {
+    square.structures.forEach((structure) => {
+      structure.renderLabel(square, canvas, context, UI);
+    });
   });
 }
 
