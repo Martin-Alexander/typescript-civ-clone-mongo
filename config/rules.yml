@@ -1,5 +1,6 @@
 supply_per_city_size: 10
 production_levels: 5
+min_city_distance: 4
 orders:
   none:
     type: unit_state_transform
