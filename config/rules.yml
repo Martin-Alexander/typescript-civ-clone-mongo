@@ -1,4 +1,4 @@
-supply_per_city_size: 10
+supply_per_city_size: 5
 production_levels: 5
 min_city_distance: 4
 orders:
