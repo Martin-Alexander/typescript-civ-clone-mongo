@@ -36,6 +36,8 @@ GameData.prototype.square = function(col, row = false) {
   return square;
 };
 
+GameData.prototype.findSquare = GameData.prototype.square;
+
 GameData.prototype.updatePlayersReady = function(playersReady) {
   this.players.forEach((gameDataPlayers) => {
     playersReady.forEach((players) => {
