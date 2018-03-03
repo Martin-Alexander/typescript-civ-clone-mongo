@@ -7,11 +7,11 @@ function Square(rawSquareObject) {
   Object.keys(rawSquareObject).forEach((property) => {
     if (property === "units") {
       rawSquareObject.units.forEach((unit) => {
-        this.units.push(new Unit(unit));
+        this.units.push(new Unit(unit), this);
       });
     } else if (property === "structures") {
       rawSquareObject.structures.forEach((structure) => {
-        this.structures.push(new Structure(structure));
+        this.structures.push(new Structure(structure), this );
       });      
     } else if (property === "_id") {
       this.id = rawSquareObject[property]["$oid"];

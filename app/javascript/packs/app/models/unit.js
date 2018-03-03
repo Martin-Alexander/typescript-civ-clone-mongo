@@ -1,4 +1,5 @@
 function Unit(rawUnitData) {
+  this.square = square;
   Object.keys(rawUnitData).forEach((property) => {
     if (property == "_id") {
       this.id = rawUnitData[property]["$oid"];

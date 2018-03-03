@@ -1,4 +1,5 @@
-function Structure(rawStructureObject) {
+function Structure(rawStructureObject, square) {
+  this.square = square;
   Object.keys(rawStructureObject).forEach((property) => {
   if (property == "_id") {
       this.id = rawStructureObject[property]["$oid"];
