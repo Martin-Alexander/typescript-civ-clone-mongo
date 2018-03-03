@@ -60,6 +60,9 @@ EventRouter.prototype.initializeEventListener = function() {
         mouse.preDragDistance = 0;
         mouse.left.down = false; 
         break;
+      case 1: // wheel click
+        inputController.infoClick();
+        break
       case 2: // right
         inputController.moveUnit();
         mouse.right.down = false;
