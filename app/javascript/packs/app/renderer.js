@@ -107,7 +107,7 @@ Renderer.prototype.drawPathLine = function() {
       context.lineTo(cumulativeTranslationOffset.x, cumulativeTranslationOffset.y);
     }
 
-    context.strokeStyle = "white";
+    context.strokeStyle = "black";
     context.stroke();
     context.restore();
   }

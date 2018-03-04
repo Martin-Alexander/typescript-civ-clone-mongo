@@ -33,7 +33,7 @@ Square.prototype.color = function(selectionSquare) {
     forest: "#086001",
     marsh: "#70876d",
     hill: "#a08a73",
-    mountains: "#c4bfba",
+    mountains: "#848484",
     water: "#2651d3"
   };
 
@@ -79,7 +79,7 @@ Square.prototype.render = function(context, UI) {
     context.lineTo(0, UI.tileHeight);
     context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
     context.closePath();
-    context.fillStyle = "rgba(255, 255, 255, 0.6)";
+    context.fillStyle = "rgba(255, 255, 255, 0.8)";
     context.fill();
   }
 }
