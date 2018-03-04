@@ -17,6 +17,10 @@ Rules.orderType = function(order) {
   return rulesJSON.orders[order].type;
 }
 
+Rules.baseMovementRateForUnit = function(unit) {
+  return rulesJSON.units[unit.type].movement.base;
+}
+
 // Returns the structure of a given construction order
 Rules.constructionOrderStructure = function(order) {
   if (this.orderType(order) !== "construction") {

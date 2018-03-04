@@ -3,15 +3,15 @@ import { BoardMethods } from "./board_methods";
 import { AStarSquareCollection } from "./a_star_square_collection";
 
 function ReachableSquares(gameData, paramaters) {
-  this.unit = paramaters.unit
+  this.unit = paramaters.unit;
+  this.start = paramaters.start;
+  this.freshMoves = paramaters.freshMoves;
   this.gameData = gameData;
   this.squares = [];
 
   gameData.squares.forEach((square) => {
     this.squares.push(new AStarSquare(square, gameData));
   });
-
-  this.start = new AStarSquare(this.unit.square, gameData);
 }
 
 ReachableSquares.prototype.find = function() {
@@ -19,7 +19,13 @@ ReachableSquares.prototype.find = function() {
   const openedSquares = new AStarSquareCollection(this.start);
   const reachableSquares = new AStarSquareCollection();
 
-  const availableMoves = this.unit.moves;
+  let availableMoves;
+
+  if (this.freshMoves) {
+    availableMoves = Rules.baseMovementRateForUnit(this.unit)
+  } else {
+    availableMoves = this.unit.moves
+  }
 
   this.start.currentPathCost = 0;
 
@@ -56,16 +62,16 @@ ReachableSquares.prototype.find = function() {
           neighbour.currentPathCost = neighbour.moveCost() + currentSquare.currentPathCost;
 
           // And add is as a reachable square
-          reachableSquares.push(neighbour);
-
-          // And set it's path to follow from the current square's path
-          neighbour.pathView = currentSquare;          
+          reachableSquares.push(neighbour);      
         }
       } 
     });
   }
 
-  return reachableSquares;
+  return reachableSquares.map((square) => {
+    square.currentPathCost = AStarSquare.infinity()
+    return square;
+  });
 }
 
 ReachableSquares.prototype.neighbours = BoardMethods.neighbours;

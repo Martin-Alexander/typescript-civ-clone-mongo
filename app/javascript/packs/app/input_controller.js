@@ -200,7 +200,10 @@ InputController.prototype._selectStructure = function(selectedSquare) {
 }
 
 InputController.prototype._findReachableSquares = function() {
-  const reachableSquares = new ReachableSquares(this.gameData, { unit: this.UI.selection.unit });
+  const reachableSquares = new ReachableSquares(this.gameData, { 
+    unit: this.UI.selection.unit,
+    start: this.UI.selection.square
+  });
   return reachableSquares.find().map((AStarSquare) => {
     return this.gameData.findSquare(AStarSquare);
   })

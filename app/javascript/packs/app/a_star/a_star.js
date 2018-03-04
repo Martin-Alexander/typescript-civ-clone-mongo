@@ -29,16 +29,56 @@ function AStar(gameData, paramaters) {
     this.squares.push(new AStarSquare(square, gameData));
   });
 
-  this.start = new AStarSquare(this.unit.square, gameData);
+  if (paramaters.startSquare) {
+    this.start = new AStarSquare(paramaters.startSquare, gameData);
+  } else {
+    this.start = new AStarSquare(this.unit.square, gameData);
+  }
   this.finish = new AStarSquare(paramaters.endSquare, gameData);
 }
 
 
 AStar.run = function(gameData, paramaters) {
-  return new AStar(gameData, paramaters).run();
+  const turnLeaps = new AStar(gameData, paramaters).findTurnLeaps();
+  const collector = [];
+
+  let startingMoveTurnNumberIndex;
+  if (paramaters.unit.moves === 0) {
+    startingMoveTurnNumberIndex = 2;
+  } else {
+    startingMoveTurnNumberIndex = 1;
+  }
+
+  for (let i = 0; i < turnLeaps.length - 1; i++) {
+    const leapPath = new AStar(gameData, {
+      startSquare: turnLeaps[i],
+      endSquare: turnLeaps[i + 1],
+      unit: paramaters.unit
+    }).findPath();
+
+    collector.push(leapPath)
+  }
+
+  const flattenedPath = [];
+
+  collector.forEach((subArray, index) => {
+    const choppedArray = subArray.slice(1)
+    choppedArray[choppedArray.length - 1].move = index + startingMoveTurnNumberIndex;
+
+    choppedArray.forEach((square) => {
+      flattenedPath.push(square);
+    });
+  });
+
+  flattenedPath.unshift({
+    x: paramaters.unit.square.x,
+    y: paramaters.unit.square.y
+  })
+
+  return flattenedPath;
 }
 
-AStar.prototype.run = function() {
+AStar.prototype.findPath = function() {
   if (this.finishSquareIsNotReachable(this.finish)) { return []; }
 
   const closedSquares = new AStarSquareCollection();
@@ -51,13 +91,64 @@ AStar.prototype.run = function() {
     const currentSquare = openedSquares[0];
 
     if (currentSquare.equalTo(this.finish)) {
-      return this.findPath(currentSquare);
+      return this.resolvePath(currentSquare);
     }
 
     closedSquares.push(currentSquare);
     openedSquares.splice(0, 1);
 
     const neighbours = this.neighbours(currentSquare);
+
+    for (let i = 0; i < neighbours.length; i++) {
+      const neighbour = neighbours[i];
+
+      if (closedSquares.includes(neighbour)) {
+        continue;
+      }
+
+      if (!openedSquares.includes(neighbour)) {
+        openedSquares.push(neighbour);
+      }
+
+      if (currentSquare.currentPathCost + neighbour.moveCost() >= neighbour.currentPathCost) {
+        continue;
+      }
+
+      neighbour.pathVia = currentSquare;
+      neighbour.currentPathCost = currentSquare.currentPathCost + neighbour.moveCost();
+    }
+  }
+}
+
+AStar.prototype.findTurnLeaps = function() {
+  if (this.finishSquareIsNotReachable(this.finish)) { return []; }
+
+  const closedSquares = new AStarSquareCollection();
+  const openedSquares = new AStarSquareCollection(this.start);
+  var freshMoves = this.unit.moves === 0;
+
+  this.start.currentPathCost = 0;
+
+  while (openedSquares.length > 0) {
+    openedSquares.huristicSort(this.finish);
+    const currentSquare = openedSquares[0];
+
+    if (currentSquare.equalTo(this.finish)) {
+      return this.resolvePath(currentSquare);
+    }
+
+    closedSquares.push(currentSquare);
+    openedSquares.splice(0, 1);
+
+    const reachableSquares = new ReachableSquares(this.gameData, { 
+      unit: this.unit,
+      start: currentSquare,
+      freshMoves: freshMoves
+    });
+
+    freshMoves = true;
+
+    const neighbours = reachableSquares.find();
 
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i];
@@ -90,7 +181,7 @@ AStar.prototype.finishSquareIsNotReachable = function(finishSquare) {
   );
 }
 
-AStar.prototype.findPath = function(square) {
+AStar.prototype.resolvePath = function(square) {
   const path = [];
   let currentSquare = square;
 

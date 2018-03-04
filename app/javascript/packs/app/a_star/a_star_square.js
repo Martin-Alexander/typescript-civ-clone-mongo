@@ -4,7 +4,7 @@ function AStarSquare(gameSquare, gameData) {
   this.x = gameSquare.x;
   this.y = gameSquare.y;
   this.pathVia = null;
-  this.currentPathCost = infinity();
+  this.currentPathCost = AStarSquare.infinity();
 }
 
 AStarSquare.prototype.estimatedTotalCost = function(destinationSquare) {
@@ -20,7 +20,7 @@ AStarSquare.prototype.moveCost = function(fromSquare) {
       this.gameSquare.terrain == "mountains" ||
       this.gameSquare.terrain == "water"
     ) {
-    return infinity();
+    return AStarSquare.infinity();
   } else {
     return Rules.rulesJSON.terrain[this.gameSquare.terrain].move_cost;
   }
@@ -30,6 +30,6 @@ AStarSquare.prototype.distanceToSquare = function(square) {
   return Math.abs(this.x - square.x) + Math.abs(this.y - square.y);
 }
 
-const infinity = () => 9007199254740992;
+AStarSquare.infinity = () => 9007199254740992;
 
 export { AStarSquare };

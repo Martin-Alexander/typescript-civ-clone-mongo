@@ -105,8 +105,13 @@ Renderer.prototype.drawPathLine = function() {
       cumulativeTranslationOffset.x += UI.tileWidth * tranlation.x;
       cumulativeTranslationOffset.y += UI.tileHeight * tranlation.y;
       context.lineTo(cumulativeTranslationOffset.x, cumulativeTranslationOffset.y);
+      if (UI.currentPath[i + 1].move) {
+        context.font = `${(UI.tileHeight / 2)}px sans-serif`;
+        context.fillStyle = "black"
+        context.allignText = "center";
+        context.fillText(`${UI.currentPath[i + 1].move}`, cumulativeTranslationOffset.x, cumulativeTranslationOffset.y);
+      }
     }
-
     context.strokeStyle = "black";
     context.stroke();
     context.restore();
