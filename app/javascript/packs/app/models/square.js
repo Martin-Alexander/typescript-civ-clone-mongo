@@ -72,6 +72,16 @@ Square.prototype.render = function(context, UI) {
   context.closePath();
   context.fillStyle = this.color(UI.selection.square);
   context.fill();
+  if (UI.reachableSquares && UI.reachableSquares.includes(this)) {
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(UI.tileWidth / 2, UI.tileHeight / 2);
+    context.lineTo(0, UI.tileHeight);
+    context.lineTo(-UI.tileWidth / 2, UI.tileHeight / 2);
+    context.closePath();
+    context.fillStyle = "rgba(255, 255, 255, 0.6)";
+    context.fill();
+  }
 }
 
 

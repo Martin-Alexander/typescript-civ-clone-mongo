@@ -12,6 +12,7 @@ function UserInterface() {
   this.size = null;
   this.ongoingTurnTransition = false;
   this.ready = false;
+  this.reachableSquares = null;
 }
 
 UserInterface.prototype.clearAllSelection = function() {

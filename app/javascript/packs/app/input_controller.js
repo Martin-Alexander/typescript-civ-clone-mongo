@@ -1,4 +1,5 @@
 import { AStar } from "./a_star/a_star";
+import { ReachableSquares } from "./a_star/reachable_squares";
 
 function InputController(UI, gameData, networkController, reactController) {
   this.UI = UI;
@@ -31,6 +32,7 @@ InputController.prototype.selectSquare = function() {
     this.UI.selection.structure = null;
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
+    this.UI.reachableSquares= null;
   }
 
   this.reactController.updateUI(this.UI);
@@ -80,6 +82,7 @@ InputController.prototype.moveUnit = function() {
     this.UI.selection.square = null;
     this.UI.selection.unit = null;
     this.UI.currentPath = null;
+    this.UI.reachableSquares= null;
   }
 
   this.reactController.updateUI(this.UI);
@@ -91,8 +94,8 @@ InputController.prototype.drawPathLine = function() {
   if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
   this.UI.currentPath = AStar.run(this.gameData, { 
-    start: this.UI.selection.square,
-    finish: this.squareClickedOn()
+    unit: this.UI.selection.unit,
+    endSquare: this.squareClickedOn()
   });
 
   this.reactController.updateUI(this.UI);
@@ -170,11 +173,16 @@ InputController.prototype._selectUnit = function(selectedSquare) {
     if (indexOfAlreadySelectedUnit == this.UI.selection.square.units.length - 1) {
       this.UI.selection.unit = null;
       this.UI.selection.square = null;
+      this.UI.reachableSquares = null;
     } else {
       this.UI.selection.unit = this.UI.selection.square.units[indexOfAlreadySelectedUnit + 1];
     }
   } else {
     this.UI.selection.unit = this.UI.selection.square.units[0];
+  }
+
+  if (this.UI.selection.unit) {
+    this.UI.reachableSquares = this._findReachableSquares();
   }
 }
 
@@ -191,6 +199,12 @@ InputController.prototype._selectStructure = function(selectedSquare) {
   }
 }
 
+InputController.prototype._findReachableSquares = function() {
+  const reachableSquares = new ReachableSquares(this.gameData, { unit: this.UI.selection.unit });
+  return reachableSquares.find().map((AStarSquare) => {
+    return this.gameData.findSquare(AStarSquare);
+  })
+}
 
 
 export { InputController };

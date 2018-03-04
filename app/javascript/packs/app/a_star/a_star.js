@@ -1,4 +1,6 @@
 import { AStarSquare } from "./a_star_square";
+import { ReachableSquares } from "./reachable_squares";
+import { BoardMethods } from "./board_methods";
 
 /*
 
@@ -17,7 +19,8 @@ import { AStarSquare } from "./a_star_square";
 
 */
 
-function AStar(gameData, squareObjects) {
+function AStar(gameData, paramaters) {
+  this.unit = paramaters.unit
   this.gameData = gameData;
   this.squares = [];
 
@@ -25,13 +28,15 @@ function AStar(gameData, squareObjects) {
     this.squares.push(new AStarSquare(square, gameData));
   });
 
-  this.start = new AStarSquare(squareObjects.start, gameData);
-  this.finish = new AStarSquare(squareObjects.finish, gameData);
+  this.start = new AStarSquare(this.unit.square, gameData);
+  this.finish = new AStarSquare(paramaters.endSquare, gameData);
 }
 
 
-AStar.run = function(gameData, squareObjects) {
-  return new AStar(gameData, squareObjects).run();
+AStar.run = function(gameData, paramaters) {
+  // const reachableSquares = new ReachableSquares(gameData, paramaters);
+  // console.log(reachableSquares.find());
+  return new AStar(gameData, paramaters).run();
 }
 
 AStar.prototype.run = function() {
@@ -43,7 +48,7 @@ AStar.prototype.run = function() {
   this.start.currentPathCost = 0;
 
   while (openedSquares.length > 0) {
-    this.sortSquares(openedSquares);
+    this.sortSquares(openedSquares, this.finish);
     const currentSquare = openedSquares[0];
 
     if (currentSquare.equalTo(this.finish)) {
@@ -76,8 +81,6 @@ AStar.prototype.run = function() {
   }
 }
 
-AStar.prototype.reachableSquares = function() {};
-
 AStar.prototype.finishSquareIsNotReachable = function(finishSquare) {
   const gameSquare = this.gameData.findSquare(finishSquare);
 
@@ -88,9 +91,9 @@ AStar.prototype.finishSquareIsNotReachable = function(finishSquare) {
   );
 }
 
-AStar.prototype.sortSquares = function(squares) {
+AStar.prototype.sortSquares = function(squares, endSquare) {
   squares.sort((a, b) => {
-    const difference = a.estimatedTotalCost(this.finish) - b.estimatedTotalCost(this.finish)
+    const difference = a.estimatedTotalCost(endSquare) - b.estimatedTotalCost(endSquare)
     if (difference > 0) {
       return 1;
     } else if (difference < 0) {
@@ -117,30 +120,8 @@ AStar.prototype.findPath = function(square) {
   return path;
 }
 
-AStar.prototype.neighbours = function(square, radius = 1) {
-  const xRange = Array.from(new Array(radius * 2 + 1), (x, i) => i + -radius);
-  const yRange = Array.from(new Array(radius * 2 + 1), (x, i) => i + -radius);
-  const neighbourSquares = [];
+AStar.prototype.neighbours = BoardMethods.neighbours;
 
-  xRange.forEach((x) => {
-    yRange.forEach((y) => {
-      if (!(                                 // None of the following are true:
-        (x === 0 && y === 0)              || // is original square
-        x + square.x < 0                  || // is...
-        y + square.y < 0                  || // outside...
-        x + square.x > this.gameData.size || // board...
-        y + square.y > this.gameData.size    // bounderies
-      )) {
-        neighbourSquares.push(this.findSquare(x + square.x, y + square.y));
-      }
-    });
-  });
-
-  return neighbourSquares;
-}
-
-AStar.prototype.findSquare = function(x, y) {
-  return this.squares[y * (this.gameData.size + 1) + x];
-}
+AStar.prototype.findSquare = BoardMethods.findSquare;
 
 export { AStar };
