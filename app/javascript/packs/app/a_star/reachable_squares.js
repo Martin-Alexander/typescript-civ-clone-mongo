@@ -1,5 +1,6 @@
 import { AStarSquare } from "./a_star_square";
 import { BoardMethods } from "./board_methods";
+import { AStarSquareCollection } from "./a_star_square_collection";
 
 function ReachableSquares(gameData, paramaters) {
   this.unit = paramaters.unit
@@ -14,9 +15,9 @@ function ReachableSquares(gameData, paramaters) {
 }
 
 ReachableSquares.prototype.find = function() {
-  const closedSquares = [];
-  const openedSquares = [this.start];
-  const reachableSquares = []
+  const closedSquares = new AStarSquareCollection();
+  const openedSquares = new AStarSquareCollection(this.start);
+  const reachableSquares = new AStarSquareCollection();
 
   const availableMoves = this.unit.moves;
 
@@ -56,6 +57,9 @@ ReachableSquares.prototype.find = function() {
 
           // And add is as a reachable square
           reachableSquares.push(neighbour);
+
+          // And set it's path to follow from the current square's path
+          neighbour.pathView = currentSquare;          
         }
       } 
     });

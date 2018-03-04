@@ -1,6 +1,7 @@
 import { AStarSquare } from "./a_star_square";
 import { ReachableSquares } from "./reachable_squares";
 import { BoardMethods } from "./board_methods";
+import { AStarSquareCollection } from "./a_star_square_collection";
 
 /*
 
@@ -34,21 +35,19 @@ function AStar(gameData, paramaters) {
 
 
 AStar.run = function(gameData, paramaters) {
-  // const reachableSquares = new ReachableSquares(gameData, paramaters);
-  // console.log(reachableSquares.find());
   return new AStar(gameData, paramaters).run();
 }
 
 AStar.prototype.run = function() {
   if (this.finishSquareIsNotReachable(this.finish)) { return []; }
 
-  const closedSquares = [];
-  const openedSquares = [this.start];
+  const closedSquares = new AStarSquareCollection();
+  const openedSquares = new AStarSquareCollection(this.start);
 
   this.start.currentPathCost = 0;
 
   while (openedSquares.length > 0) {
-    this.sortSquares(openedSquares, this.finish);
+    openedSquares.huristicSort(this.finish);
     const currentSquare = openedSquares[0];
 
     if (currentSquare.equalTo(this.finish)) {
@@ -89,19 +88,6 @@ AStar.prototype.finishSquareIsNotReachable = function(finishSquare) {
     gameSquare.terrain === "water" ||
     gameSquare.units.length !== 0
   );
-}
-
-AStar.prototype.sortSquares = function(squares, endSquare) {
-  squares.sort((a, b) => {
-    const difference = a.estimatedTotalCost(endSquare) - b.estimatedTotalCost(endSquare)
-    if (difference > 0) {
-      return 1;
-    } else if (difference < 0) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
 }
 
 AStar.prototype.findPath = function(square) {
