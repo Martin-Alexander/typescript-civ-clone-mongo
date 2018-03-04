@@ -28,4 +28,18 @@ AStarSquareCollection.prototype.huristicSort = function(endSquare) {
   });
 }
 
+AStarSquareCollection.prototype.pureHuristicSort = function(endSquare) {
+  this.sort((a, b) => {
+    const difference = a.distanceToSquare(endSquare) - b.distanceToSquare(endSquare)
+    if (difference > 0) {
+      return 1;
+    } else if (difference < 0) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+}
+
+
 export { AStarSquareCollection };

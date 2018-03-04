@@ -69,7 +69,8 @@ ReachableSquares.prototype.find = function() {
   }
 
   return reachableSquares.map((square) => {
-    square.currentPathCost = AStarSquare.infinity()
+    square.moveToCost = square.currentPathCost;
+    square.currentPathCost = AStarSquare.infinity();
     return square;
   });
 }

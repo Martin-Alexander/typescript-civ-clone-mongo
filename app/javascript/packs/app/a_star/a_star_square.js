@@ -4,6 +4,7 @@ function AStarSquare(gameSquare, gameData) {
   this.x = gameSquare.x;
   this.y = gameSquare.y;
   this.pathVia = null;
+  this.moveToCost = null;
   this.currentPathCost = AStarSquare.infinity();
 }
 

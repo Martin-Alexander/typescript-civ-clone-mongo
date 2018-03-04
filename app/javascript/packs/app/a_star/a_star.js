@@ -76,6 +76,7 @@ AStar.run = function(gameData, paramaters) {
   })
 
   return flattenedPath;
+  // return new AStar(gameData, paramaters).findPath();
 }
 
 AStar.prototype.findPath = function() {
@@ -130,7 +131,7 @@ AStar.prototype.findTurnLeaps = function() {
   this.start.currentPathCost = 0;
 
   while (openedSquares.length > 0) {
-    openedSquares.huristicSort(this.finish);
+    openedSquares.pureHuristicSort(this.finish);
     const currentSquare = openedSquares[0];
 
     if (currentSquare.equalTo(this.finish)) {
@@ -161,12 +162,12 @@ AStar.prototype.findTurnLeaps = function() {
         openedSquares.push(neighbour);
       }
 
-      if (currentSquare.currentPathCost + neighbour.moveCost() >= neighbour.currentPathCost) {
+      if (currentSquare.currentPathCost + neighbour.moveToCost >= neighbour.currentPathCost) {
         continue;
       }
 
       neighbour.pathVia = currentSquare;
-      neighbour.currentPathCost = currentSquare.currentPathCost + neighbour.moveCost();
+      neighbour.currentPathCost = currentSquare.currentPathCost + neighbour.moveToCost;
     }
   }
 }
