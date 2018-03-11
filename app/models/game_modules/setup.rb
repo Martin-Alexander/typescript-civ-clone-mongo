@@ -13,7 +13,7 @@ module GameModules
     # Returns the dimension on the board
     def caluculate_board_size
       number_of_players = player_count(role: "player") + player_count(role: "dead_player")
-      sqrt(number_of_players * 750).to_i
+      sqrt(number_of_players * Rules.space_per_player).to_i
     end
 
     private

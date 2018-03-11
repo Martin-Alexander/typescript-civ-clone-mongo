@@ -1,6 +1,7 @@
 supply_per_city_size: 5
 production_levels: 5
 min_city_distance: 4
+space_per_player: 500
 orders:
   none:
     type: unit_state_transform

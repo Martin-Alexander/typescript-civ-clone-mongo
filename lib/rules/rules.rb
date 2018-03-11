@@ -57,6 +57,11 @@ class Rules
       city.size / rules_hash["production_levels"]
     end
 
+    # Space per player on map generation
+    def space_per_player
+      rules_hash["space_per_player"]
+    end
+
     private
 
     # For a given worker returns whether or not its contruction order is valid
