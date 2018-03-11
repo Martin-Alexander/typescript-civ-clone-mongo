@@ -1,5 +1,6 @@
-import { AStar } from "./a_star/a_star";
 import { ReachableSquares } from "./a_star/reachable_squares";
+import { PathFinder }       from "./a_star/path_finder";
+import { AStar }            from "./a_star/a_star";
 
 function InputController(UI, gameData, networkController, reactController) {
   this.UI = UI;
@@ -93,10 +94,11 @@ InputController.prototype.drawPathLine = function() {
   if (!this.UI.selection.unit) { return false; }
   if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
-  this.UI.currentPath = AStar.run(this.gameData, { 
-    unit: this.UI.selection.unit,
-    endSquare: this.squareClickedOn()
-  });
+  this.UI.currentPath = PathFinder.run(
+    this.gameData,
+    this.UI.selection.unit,
+    this.squareClickedOn()
+  );
 
   this.reactController.updateUI(this.UI);
 }
@@ -200,13 +202,12 @@ InputController.prototype._selectStructure = function(selectedSquare) {
 }
 
 InputController.prototype._findReachableSquares = function() {
-  const reachableSquares = new ReachableSquares(this.gameData, { 
-    unit: this.UI.selection.unit,
-    start: this.UI.selection.square
-  });
-  return reachableSquares.find().map((AStarSquare) => {
-    return this.gameData.findSquare(AStarSquare);
-  })
+  const reachableSquares = ReachableSquares.run(
+    this.gameData.squares,
+    this.UI.selection.unit, 
+    this.UI.selection.square
+  );
+  return reachableSquares.map(squareCooridinates => gameData.findSquare(squareCooridinates));
 }
 
 

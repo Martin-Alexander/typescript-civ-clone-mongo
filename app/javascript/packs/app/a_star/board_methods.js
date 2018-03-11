@@ -11,8 +11,8 @@ BoardMethods.neighbours = function(square, radius = 1) {
         (x === 0 && y === 0)              || // is original square
         x + square.x < 0                  || // is...
         y + square.y < 0                  || // outside...
-        x + square.x > this.gameData.size || // board...
-        y + square.y > this.gameData.size    // bounderies
+        x + square.x > this.squares.size  || // board...
+        y + square.y > this.squares.size     // bounderies
       )) {
         neighbourSquares.push(this.findSquare(x + square.x, y + square.y));
       }
@@ -23,7 +23,7 @@ BoardMethods.neighbours = function(square, radius = 1) {
 }
 
 BoardMethods.findSquare = function(x, y) {
-  return this.squares[y * (this.gameData.size + 1) + x];
+  return this.squares[y * (this.squares.size + 1) + x];
 }
 
 export { BoardMethods };

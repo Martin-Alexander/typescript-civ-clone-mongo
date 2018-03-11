@@ -1,82 +1,58 @@
-import { AStarSquare } from "./a_star_square";
-import { BoardMethods } from "./board_methods";
+import { AStarSquare }           from "./a_star_square";
+import { BoardMethods }          from "./board_methods";
 import { AStarSquareCollection } from "./a_star_square_collection";
+import { findAvailableMoves }    from "./find_available_moves";
 
-function ReachableSquares(gameData, paramaters) {
-  this.unit = paramaters.unit;
-  this.start = paramaters.start;
-  this.freshMoves = paramaters.freshMoves;
-  this.gameData = gameData;
-  this.squares = [];
+function ReachableSquares(squares, unit, startSquare, freshMoves) {
+  this.unit        = unit;
+  this.startSquare = new AStarSquare(startSquare);
+  this.squares     = squares;
+  this.freshMoves  = freshMoves;
+}
 
-  gameData.squares.forEach((square) => {
-    this.squares.push(new AStarSquare(square, gameData));
-  });
+ReachableSquares.run = function(squares, unit, square, freshMoves) {
+  const aStarSquares = new AStarSquareCollection(squares.map(square => new AStarSquare(square)));
+  return new ReachableSquares(aStarSquares, unit, square, freshMoves).find();
 }
 
 ReachableSquares.prototype.find = function() {
-  const closedSquares = new AStarSquareCollection();
-  const openedSquares = new AStarSquareCollection(this.start);
+  const closedSquares    = new AStarSquareCollection();
+  const openedSquares    = new AStarSquareCollection([this.startSquare]);
   const reachableSquares = new AStarSquareCollection();
+  const availableMoves   = findAvailableMoves(this.unit, this.freshMoves)
 
-  let availableMoves;
+  this.startSquare.currentPathCost = 0;
 
-  if (this.freshMoves) {
-    availableMoves = Rules.baseMovementRateForUnit(this.unit)
-  } else {
-    availableMoves = this.unit.moves
-  }
+  while (openedSquares.stillHasSquaresLeft()) {
+    const currentSquare = openedSquares.getNewCurrentSquare();
+    closedSquares.addSquare(currentSquare);
 
-  this.start.currentPathCost = 0;
-
-  while (openedSquares.length > 0) {
-    const currentSquare = openedSquares[0];
-
-    closedSquares.push(currentSquare);
-    openedSquares.splice(0, 1);
-
-    const neighbours = this.neighbours(currentSquare);
+    const neighbours = this.getNeighboursOf(currentSquare);
 
     neighbours.forEach((neighbour) => {
-      if (
-          !openedSquares.includes(neighbour) &&
-          // If the neighbour is not an openned square
+      if (openedSquares.doesNotInclude(neighbour) && closedSquares.doesNotInclude(neighbour) &&
+          neighbour.moveCost() + currentSquare.currentPathCost <= availableMoves) {
+        
+        openedSquares.addSquare(neighbour);
 
-          !closedSquares.includes(neighbour) &&
-          // AND the neighbour is not a closed square
+        if (neighbour.moveCost() + currentSquare.currentPathCost < neighbour.currentPathCost) {
 
-          neighbour.moveCost() + currentSquare.currentPathCost <= availableMoves
-          // AND the unit has enough moves to reach the neighbour square
-         ) {
-
-        // Add it to the open squares list 
-        openedSquares.push(neighbour);
-
-        if (
-            neighbour.moveCost() + currentSquare.currentPathCost < neighbour.currentPathCost
-            // If the move cost plus the current path cost of the current square is better than 
-            // what the current path cost of the square is
-           ) {
-
-          // Update its current path cost
           neighbour.currentPathCost = neighbour.moveCost() + currentSquare.currentPathCost;
-
-          // And add is as a reachable square
-          reachableSquares.push(neighbour);      
+          reachableSquares.addSquare(neighbour);      
         }
-      } 
+      }
     });
   }
 
-  return reachableSquares.map((square) => {
-    square.moveToCost = square.currentPathCost;
-    square.currentPathCost = AStarSquare.infinity();
-    return square;
-  });
+  return this.transformToCoordinates(reachableSquares);
 }
 
-ReachableSquares.prototype.neighbours = BoardMethods.neighbours;
+ReachableSquares.prototype.transformToCoordinates = function(squares) {
+  return squares.map(square => ({ x: square.x, y: square.y, moveToCost: square.currentPathCost }));
+}
 
 ReachableSquares.prototype.findSquare = BoardMethods.findSquare;
+
+ReachableSquares.prototype.getNeighboursOf = BoardMethods.neighbours;
 
 export { ReachableSquares };

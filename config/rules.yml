@@ -36,7 +36,7 @@ units:
       # - siege
   worker:
     movement: 
-      base: 4
+      base: 2
     allowed_orders:
       - none
       - go

@@ -15,6 +15,16 @@ function EventRouter(UI, inputController, canvas) {
   this.initializeEventListeners();
 };
 
+EventRouter.prototype.initializeEventListeners = function() {
+  this.preventBrowserMenu();
+  // this.disableTextSelection();
+  this.initializeMouseDownEvent();
+  this.initializeMouseUpEvent();
+  this.initializeMouseMoveEvent();
+  this.initializeWheelScrollEvent();
+  this.initializeKeyUpEvent();
+}
+
 EventRouter.prototype.preventBrowserMenu = function() {
   document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
@@ -143,16 +153,6 @@ EventRouter.prototype.initializeKeyUpEvent = function() {
         break;
     }
   });
-}
-
-EventRouter.prototype.initializeEventListeners = function() {
-  // this.preventBrowserMenu();
-  this.disableTextSelection();
-  this.initializeMouseDownEvent();
-  this.initializeMouseUpEvent();
-  this.initializeMouseMoveEvent();
-  this.initializeWheelScrollEvent();
-  this.initializeKeyUpEvent();
 }
 
 EventRouter.prototype.setMousePosition = function(event) {
