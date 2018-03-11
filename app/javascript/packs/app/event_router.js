@@ -12,146 +12,176 @@ function EventRouter(UI, inputController, canvas) {
     preDragDistance: 0
   };
 
-  this.initializeEventListener();
+  this.initializeEventListeners();
 };
 
-EventRouter.prototype.initializeEventListener = function() {
-  const self = this;
-  const mouse = self.mouse;
-  const UI = self.UI;
-  const inputController = self.inputController;
-
+EventRouter.prototype.preventBrowserMenu = function() {
   document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
     return false; 
   });
+}
 
-  // Disabling all text selection
-  function disableselect(e) {return false};
-  // document.onselectstart = disableselect;
-  // document.onmousedown = disableselect;
+EventRouter.prototype.disableTextSelection = function() {
+  function disableselect(event) { return false };
+  document.onselectstart = disableselect;
+  document.onmousedown = disableselect;
+}
+
+EventRouter.prototype.initializeMouseDownEvent = function() {
+  const self = this;
 
   window.addEventListener("mousedown", function(event) {
     if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
-
+  
     switch (event.button) {
       case 0: // left
-        mouse.left.down = true;
-        mouse.positionOnLastDown = {
-          x: mouse.rawPosition.x,
-          y: mouse.rawPosition.y
+        self.mouse.left.down = true;
+        self.mouse.positionOnLastDown = {
+          x: self.mouse.rawPosition.x,
+          y: self.mouse.rawPosition.y
         };
         break;
       case 2: // right
-        inputController.pathFindBegin();
-        mouse.right.down = true;
+        self.inputController.pathFindBegin();
+        self.mouse.right.down = true;
         break;
     }
   });
+}
+
+EventRouter.prototype.initializeMouseUpEvent = function() {
+  const self = this;
 
   window.addEventListener("mouseup", function(event) {
     if (self.outOfBounds()) { return false; }
 
     switch (event.button) {
       case 0: // left
-        if (mouse.preDragDistance < 10 && self.directMapClick(event)) {
-          inputController.selectSquare();
+        if (self.mouse.preDragDistance < 10 && self.directMapClick(event)) {
+          self.inputController.selectSquare();
         }
-        mouse.preDragDistance = 0;
-        mouse.left.down = false; 
+        self.mouse.preDragDistance = 0;
+        self.mouse.left.down = false; 
         break;
       case 1: // wheel click
-        inputController.infoClick();
+        self.inputController.infoClick();
         break
       case 2: // right
-        inputController.moveUnit();
-        mouse.right.down = false;
-        break;
-    }
-  });
-
-  window.addEventListener("mousemove", function(event) {
-    if (mouse.left.down) {
-      const dragDistance = {
-        x: (mouse.rawPosition.x - event.clientX),
-        y: (mouse.rawPosition.y - event.clientY)
-      };
-      if (mouse.preDragDistance > 2) {
-        UI.offset.x -= dragDistance.x;
-        UI.offset.y -= dragDistance.y;
-      } else {
-        mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
-      }
-    }
-
-    const oldtileMousePosition = UI.tileMousePosition;
-    self.setMousePosition(event);
-        
-    if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
-
-    if (mouse.right.down && !haveSameCoords(oldtileMousePosition, UI.tileMousePosition)) {
-      inputController.pathUpdate();
-    }
-  });
-
-  window.addEventListener("wheel", function(event) {
-    // if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
-    if (!self.directMapClick(event)) { return false; }
-    
-    const zoomSpeed = 1.1;
-    if (event.deltaY < 0 && UI.tileHeight < 100) {
-      UI.tileHeight *= zoomSpeed;
-      UI.tileWidth *= zoomSpeed;
-      UI.offset.x = (UI.offset.x * zoomSpeed) - (mouse.centerRelativePosition.x / 10);
-      UI.offset.y = (UI.offset.y * zoomSpeed) - (mouse.centerRelativePosition.y / 10);
-    } else if (event.deltaY > 0 && UI.tileHeight > 15) {
-      UI.tileHeight /= zoomSpeed;
-      UI.tileWidth /= zoomSpeed;
-      UI.offset.x = (UI.offset.x / zoomSpeed) + (mouse.centerRelativePosition.x / 11);
-      UI.offset.y = (UI.offset.y / zoomSpeed) + (mouse.centerRelativePosition.y / 11);
-    }
-  });
-
-  window.addEventListener("keyup", function(event) {
-    switch (event.keyCode) {
-      case 13: // Enter
-        inputController.nextTurn();
-        break;
-      case 70: // f
-        inputController.giveOrder("fortify");
+        self.inputController.moveUnit();
+        self.mouse.right.down = false;
         break;
     }
   });
 }
 
-EventRouter.prototype.setMousePosition = function(event) {
-  const mouse = this.mouse;
-  const UI = this.UI;
+EventRouter.prototype.initializeMouseMoveEvent = function() {
+  const self = this;
 
-  mouse.rawPosition = { 
+  window.addEventListener("mousemove", function(event) {
+    if (self.mouse.left.down) {
+      const dragDistance = {
+        x: (self.mouse.rawPosition.x - event.clientX),
+        y: (self.mouse.rawPosition.y - event.clientY)
+      };
+
+      if (self.mouse.preDragDistance > 2) {
+        self.UI.offset.x -= dragDistance.x;
+        self.UI.offset.y -= dragDistance.y;
+      } else {
+        self.mouse.preDragDistance += Math.abs(dragDistance.x + dragDistance.y);
+      }
+    }
+  
+    const oldtileMousePosition = self.UI.tileMousePosition;
+    self.setMousePosition(event);
+        
+    if (self.outOfBounds() || !self.directMapClick(event)) { return false; }
+  
+    if (self.mouse.right.down && !haveSameCoords(oldtileMousePosition, self.UI.tileMousePosition)) {
+      self.inputController.pathUpdate();
+    }
+  });
+}
+
+EventRouter.prototype.initializeWheelScrollEvent = function() {
+  const self = this;
+
+  window.addEventListener("wheel", function(event) {
+    // if (this.outOfBounds() || !this.directMapClick(event)) { return false; }
+    if (!self.directMapClick(event)) { return false; }
+    
+    const zoomSpeed = 1.1;
+    if (event.deltaY < 0 && self.UI.tileHeight < 100) {
+      self.UI.tileHeight *= zoomSpeed;
+      self.UI.tileWidth *= zoomSpeed;
+      self.UI.offset.x = (self.UI.offset.x * zoomSpeed) - 
+        (self.mouse.centerRelativePosition.x / 10);
+      self.UI.offset.y = (self.UI.offset.y * zoomSpeed) - 
+        (self.mouse.centerRelativePosition.y / 10);
+    } else if (event.deltaY > 0 && self.UI.tileHeight > 15) {
+      self.UI.tileHeight /= zoomSpeed;
+      self.UI.tileWidth /= zoomSpeed;
+      self.UI.offset.x = (self.UI.offset.x / zoomSpeed) + 
+        (self.mouse.centerRelativePosition.x / 11);
+      self.UI.offset.y = (self.UI.offset.y / zoomSpeed) + 
+        (self.mouse.centerRelativePosition.y / 11);
+    }
+  });
+}
+
+EventRouter.prototype.initializeKeyUpEvent = function() {
+  const self = this;
+
+  window.addEventListener("keyup", function(event) {
+    switch (event.keyCode) {
+      case 13: // Enter
+        self.inputController.nextTurn();
+        break;
+      case 70: // f
+        self.inputController.giveOrder("fortify");
+        break;
+    }
+  });
+}
+
+EventRouter.prototype.initializeEventListeners = function() {
+  // this.preventBrowserMenu();
+  this.disableTextSelection();
+  this.initializeMouseDownEvent();
+  this.initializeMouseUpEvent();
+  this.initializeMouseMoveEvent();
+  this.initializeWheelScrollEvent();
+  this.initializeKeyUpEvent();
+}
+
+EventRouter.prototype.setMousePosition = function(event) {
+  this.mouse.rawPosition = { 
     x: event.clientX, 
     y: event.clientY 
   };
 
-  mouse.centerRelativePosition = {
-    x: (mouse.rawPosition.x - (window.innerWidth / 2)),
-    y: (mouse.rawPosition.y - (window.innerHeight / 2))
+  this.mouse.centerRelativePosition = {
+    x: (this.mouse.rawPosition.x - (window.innerWidth / 2)),
+    y: (this.mouse.rawPosition.y - (window.innerHeight / 2))
   };
 
   const offsetCoords = {
-    x: mouse.rawPosition.x - UI.offset.x,
-    y: mouse.rawPosition.y - UI.offset.y - ((window.innerHeight - 15 * UI.tileHeight) / 2)
+    x: this.mouse.rawPosition.x - this.UI.offset.x,
+    y: this.mouse.rawPosition.y - this.UI.offset.y - (
+      (window.innerHeight - 15 * this.UI.tileHeight) / 2
+    )
   };
 
-  mouse.rawIsoPosition = { 
-    x: ((offsetCoords.x - window.innerWidth / 2) + 2 * offsetCoords.y) / 2 ,
+  this.mouse.rawIsoPosition = { 
+    x: ((offsetCoords.x - window.innerWidth / 2) + 2 * offsetCoords.y) / 2,
     y: (2 * offsetCoords.y - (offsetCoords.x - window.innerWidth / 2)) / 2 
   };
 
   if (!this.outOfBounds()) {
     this.inputController.setTileMousePosition({
-      x: Math.floor(mouse.rawIsoPosition.x / UI.tileHeight),
-      y: Math.floor(mouse.rawIsoPosition.y / UI.tileHeight)
+      x: Math.floor(this.mouse.rawIsoPosition.x / this.UI.tileHeight),
+      y: Math.floor(this.mouse.rawIsoPosition.y / this.UI.tileHeight)
     });
   }
 }
