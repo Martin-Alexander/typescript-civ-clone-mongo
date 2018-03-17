@@ -20,8 +20,6 @@ TotalPathFinder.prototype.buildFinalMovePath = function(moves) {
   const movePaths = [];
 
   moves.forEach((move, index) => {
-    // this.gameData.squares.map()
-
     const startSquare = this.gameData.findSquare(move.coordinates.start);
     const finishSquare = this.gameData.findSquare(move.coordinates.finish);
     
