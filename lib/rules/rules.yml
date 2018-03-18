@@ -30,7 +30,7 @@ orders:
 units:
   infantry:
     movement: 
-      base: 4
+      base: 2
     allowed_orders:
       - none
       - go

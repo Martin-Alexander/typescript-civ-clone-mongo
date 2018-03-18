@@ -4,7 +4,7 @@ class Rules
 
     # Returns raw hash of rules
     def raw
-      YAML.safe_load(File.open(File.join(Rails.root, "config/rules.yml")))
+      YAML.safe_load(File.open(File.join(Rails.root, "lib/rules/rules.yml")))
     end
 
     # Returns raw hash of rules
