@@ -1,5 +1,5 @@
-import { Square } from "./models/square";
-import { MoveAnimation } from "./models/move_animation";
+import { Square } from "./../models/square";
+import { MoveAnimation } from "./../models/move_animation";
 
 function AnimationController(renderer) {
   this.renderer = renderer;

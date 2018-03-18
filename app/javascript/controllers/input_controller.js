@@ -1,6 +1,6 @@
-import { ReachableSquares } from "./a_star/reachable_squares";
-import { PathFinder }       from "./a_star/path_finder";
-import { AStar }            from "./a_star/a_star";
+import { ReachableSquares } from "./../a_star/reachable_squares";
+import { PathFinder }       from "./../a_star/path_finder";
+import { AStar }            from "./../a_star/a_star";
 
 function InputController(UI, gameData, networkController, reactController) {
   this.UI = UI;
