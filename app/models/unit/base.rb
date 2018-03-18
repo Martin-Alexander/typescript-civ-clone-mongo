@@ -10,7 +10,7 @@ module Unit
     embedded_in :square, class_name: "Square::Global"
 
     field :player_number, type: Integer, default: 0
-    field :moves,         type: Integer, default: 0
+    field :moves,         type: Float, default: 0
     field :order,         type: String,  default: "none"
     field :state,         type: String,  default: "none"
     field :go_to,         type: Array,   default: []

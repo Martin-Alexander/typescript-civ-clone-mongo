@@ -19,6 +19,7 @@ TotalPathFinder.prototype.find = function() {
 TotalPathFinder.prototype.buildFinalMovePath = function(moves) {
   const movePaths = [];
 
+
   moves.forEach((move, index) => {
     const startSquare = this.gameData.findSquare(move.coordinates.start);
     const finishSquare = this.gameData.findSquare(move.coordinates.finish);
@@ -26,7 +27,7 @@ TotalPathFinder.prototype.buildFinalMovePath = function(moves) {
     const path = new AStar(this.gameData.squares, this.unit, startSquare, finishSquare).find();
 
     path[path.length - 1].moveNumber = move.moveNumber;
-
+    
     if (index === 0) {
       movePaths.push(path);
     } else {
@@ -50,6 +51,10 @@ TotalPathFinder.prototype.splitCoordinatesIntoSqaurePairs = function() {
 
   this.coordinatePath.forEach((coordinate, index) => {
     if (this.coordinatePath[index + 1] === undefined) { return false; }
+
+    let moveIndexModifier = 1;
+
+    if (this.unit.moves === 0) { moveIndexModifier = 2; }
     
     collector.push(
       {
@@ -57,7 +62,7 @@ TotalPathFinder.prototype.splitCoordinatesIntoSqaurePairs = function() {
           start: coordinate,
           finish: this.coordinatePath[index + 1]
         },
-        moveNumber: index + 1
+        moveNumber: index + moveIndexModifier
       }
     );
   });

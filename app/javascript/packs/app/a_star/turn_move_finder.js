@@ -4,12 +4,13 @@ import { ReachableSquares }      from "./reachable_squares";
 import { AStarSquare }           from "./a_star_square";
 
 function TurnMoveFinder(gameData, unit, finishSquare) {
-  this.gameData     = gameData;
-  this.unit         = unit;
-  this.startSquare  = new AStarSquare(this.unit.square);
-  this.finishSquare = new AStarSquare(finishSquare);
-  this.freshMoves   = this.unit.moves === 0;
-  this.squares      = new AStarSquareCollection(
+  this.gameData      = gameData;
+  this.unit          = unit;
+  this.startSquare   = new AStarSquare(this.unit.square);
+  this.finishSquare  = new AStarSquare(finishSquare);
+  this.freshMoves    = this.unit.moves === 0;
+  this.firstMoveOver = false;
+  this.squares       = new AStarSquareCollection(
     gameData.squares.map(square => new AStarSquare(square))
   );
 }
@@ -26,10 +27,10 @@ TurnMoveFinder.prototype.find = function() {
 
   this.startSquare.currentPathCost = 0;
 
-  while (openedSquares.stillHasSquaresLeft()) {
+  while (openedSquares.stillHasSquaresLeft() || this.firstMoveOver === false) {
     openedSquares.huristicSort(this.finishSquare);
 
-    const currentSquare = openedSquares.getNewCurrentSquare();
+    let currentSquare = openedSquares.getNewCurrentSquare();
     closedSquares.addSquare(currentSquare);
 
     if (currentSquare.equalTo(this.finishSquare)) { return this.resolvePath(currentSquare); }
@@ -44,8 +45,9 @@ TurnMoveFinder.prototype.find = function() {
     const availableMoves = findAvailableMoves(this.unit, this.freshMoves);
 
     reachableSquares.forEach((square) => {
-      if (openedSquares.doesNotInclude(square) && closedSquares.doesNotInclude(square)) {
-        
+      if ((currentSquare.equalTo(square) && openedSquares.length == 1) || 
+          (openedSquares.doesNotInclude(square) && closedSquares.doesNotInclude(square))) {
+
         openedSquares.addSquare(square);
 
         if (currentSquare.currentPathCost < square.currentPathCost) {
@@ -64,7 +66,9 @@ TurnMoveFinder.prototype.getReachableSquares = function(squares, unit, currentSq
   const neighbourCoordinates = ReachableSquares.run(squares, unit, currentSquare, freshMoves);
 
   return neighbourCoordinates.map((coordinates) => { 
-    return this.squares.findSquare(coordinates.x, coordinates.y);
+    const square = this.squares.findSquare(coordinates.x, coordinates.y);
+    square.moveToCost = coordinates.moveToCost
+    return square;
   });
 }
 

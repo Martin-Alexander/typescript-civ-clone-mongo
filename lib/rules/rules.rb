@@ -12,6 +12,10 @@ class Rules
       raw
     end
 
+    def move_cost_of_roads
+      rules_hash["move_cost_of_roads"]
+    end
+
     # Given a unit, the square it one, and the player who owns it: What are it's available orders
     def allowed_orders(unit)
       case unit.type

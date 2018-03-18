@@ -30,16 +30,16 @@ ReachableSquares.prototype.find = function() {
     const neighbours = this.getNeighboursOf(currentSquare);
 
     neighbours.forEach((neighbour) => {
-      if (openedSquares.doesNotInclude(neighbour) && closedSquares.doesNotInclude(neighbour) &&
-          neighbour.moveCost() + currentSquare.currentPathCost <= availableMoves) {
-        
-        openedSquares.addSquare(neighbour);
+      if (currentSquare.equalTo(neighbour) ||
+          (neighbour.moveCost(this.unit, currentSquare) + currentSquare.currentPathCost < neighbour.currentPathCost
+          && neighbour.moveCost(this.unit, currentSquare) + currentSquare.currentPathCost <= availableMoves)) {
 
-        if (neighbour.moveCost() + currentSquare.currentPathCost < neighbour.currentPathCost) {
-
-          neighbour.currentPathCost = neighbour.moveCost() + currentSquare.currentPathCost;
-          reachableSquares.addSquare(neighbour);      
+        if (openedSquares.doesNotInclude(neighbour) && closedSquares.doesNotInclude(neighbour)) {
+          openedSquares.addSquare(neighbour);
         }
+
+        neighbour.currentPathCost = neighbour.moveCost(this.unit, currentSquare) + currentSquare.currentPathCost;
+        reachableSquares.addSquare(neighbour); 
       }
     });
   }
@@ -53,6 +53,6 @@ ReachableSquares.prototype.transformToCoordinates = function(squares) {
 
 ReachableSquares.prototype.findSquare = BoardMethods.findSquare;
 
-ReachableSquares.prototype.getNeighboursOf = BoardMethods.neighbours;
+ReachableSquares.prototype.getNeighboursOf = BoardMethods.neighboursAndCurrentSquare;
 
 export { ReachableSquares };

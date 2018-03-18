@@ -2,6 +2,7 @@ supply_per_city_size: 5
 production_levels: 5
 min_city_distance: 4
 space_per_player: 500
+move_cost_of_roads: 0.25
 orders:
   none:
     type: unit_state_transform
@@ -97,7 +98,7 @@ terrain:
   #   fortification_bonus: 2
 structures:
   road:
-    time_cost: 2
+    time_cost: 1
   fortress:
     time_cost: 8
   farm:

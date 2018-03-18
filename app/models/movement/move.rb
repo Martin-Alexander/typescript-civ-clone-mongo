@@ -14,7 +14,7 @@ module Movement
     def cost
       if @from.structures.any? { |s| s.type == "road" && s.complete } &&
          @to.structures.any? { |s| s.type == "road" && s.complete }
-        0
+        Rules.move_cost_of_roads
       else
         Rules.raw["terrain"][@to.terrain]["move_cost"]
       end

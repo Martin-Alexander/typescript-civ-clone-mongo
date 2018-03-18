@@ -22,6 +22,14 @@ BoardMethods.neighbours = function(square, radius = 1) {
   return neighbourSquares;
 }
 
+BoardMethods.neighboursAndCurrentSquare = function(square, radius = 1) {
+  const neighbourSquares = BoardMethods.neighbours.call(this, square, radius);
+  neighbourSquares.push(square);
+
+  return neighbourSquares;
+}
+
+
 BoardMethods.findSquare = function(x, y) {
   return this.squares[y * (this.squares.size + 1) + x];
 }

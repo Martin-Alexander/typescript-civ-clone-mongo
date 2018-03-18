@@ -10,7 +10,7 @@ function AStar(squares, unit, startSquare, finishSquare) {
 }
 
 AStar.prototype.find = function() {
-  if (this.finishSquare.isUnreachable()) { return []; }
+  if (this.finishSquare.isUnreachable() && !this.startSquare.equalTo(this.finishSquare)) { return []; }
 
   const closedSquares = new AStarSquareCollection();
   const openedSquares = new AStarSquareCollection([this.startSquare]);
@@ -28,23 +28,23 @@ AStar.prototype.find = function() {
     const neighbours = this.getNeighboursOf(currentSquare);
 
     neighbours.forEach((neighbour) => {
-      if (openedSquares.doesNotInclude(neighbour) && closedSquares.doesNotInclude(neighbour)) {
-        
-        openedSquares.addSquare(neighbour);
-
-        if (currentSquare.currentPathCost < neighbour.currentPathCost) {
-
-          neighbour.pathVia = currentSquare;
-          neighbour.currentPathCost = neighbour.moveCost() + currentSquare.currentPathCost;
+      if (currentSquare.currentPathCost + neighbour.moveCost(this.unit, currentSquare) < neighbour.currentPathCost) {
+        if (openedSquares.doesNotInclude(neighbour) && closedSquares.doesNotInclude(neighbour)) { 
+          openedSquares.addSquare(neighbour);
         }
+
+        neighbour.pathVia = currentSquare;
+        neighbour.currentPathCost = neighbour.moveCost(this.unit, currentSquare) + currentSquare.currentPathCost;
       }
     });
   }
+
+  return this.resolvePath(currentSquare);
 }
 
 AStar.prototype.findSquare = BoardMethods.findSquare;
 
-AStar.prototype.getNeighboursOf = BoardMethods.neighbours;
+AStar.prototype.getNeighboursOf = BoardMethods.neighboursAndCurrentSquare;
 
 AStar.prototype.resolvePath = function(square) {
   const path = [];

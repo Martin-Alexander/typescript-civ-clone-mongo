@@ -17,6 +17,40 @@ AStarSquareCollection.prototype.includes = function(AStarSquareObject) {
   return false;
 }
 
+AStarSquareCollection.prototype.moveCostSort = function() {
+  this.sort((a, b) => {
+    const difference = a.currentPathCost - b.currentPathCost;
+    if (difference > 0) {
+      return 1;
+    } else if (difference < 0) {
+      return -1;
+    } else if (difference == 0){
+      return 0;
+    }
+  });
+}
+
+AStarSquareCollection.prototype.turnMoveHuristicSort = function(endSquare) {
+  this.sort((a, b) => {
+    const difference = a.estimatedTotalCost(endSquare) - b.estimatedTotalCost(endSquare);
+    if (difference > 0) {
+      return 1;
+    } else if (difference < 0) {
+      return -1;
+    } else if (difference == 0) {
+    //   const moveCostDifference = a.moveToCost - b.moveToCost;
+    //   if (moveCostDifference > 0) {
+    //     return 1;
+    //   } else if (moveCostDifference < 0) {
+    //     return -1;
+    //   } else {
+    //     return 0;
+    //   }
+      return 0;
+    }
+  });
+}
+
 AStarSquareCollection.prototype.huristicSort = function(endSquare) {
   this.sort((a, b) => {
     const difference = a.estimatedTotalCost(endSquare) - b.estimatedTotalCost(endSquare);
