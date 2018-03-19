@@ -65,10 +65,10 @@ module Movement
         out_of_moves = move.cost > @moves_left || out_of_moves
 
         if out_of_moves
-          @go_to_path << move.to
+          @go_to_path << move.to_square
         else
           @moves_left -= move.cost
-          @immediate_path << move.to
+          @immediate_path << move.to_square
         end
       end
     end

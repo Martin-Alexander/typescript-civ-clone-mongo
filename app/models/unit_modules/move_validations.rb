@@ -3,14 +3,14 @@ module UnitModules
     # All moves are to adjacent squares
     def are_adjacent(moves)
       moves.all? do |move|
-        move.from.neighbours.include?(move.to)
+        move.from_square.neighbours.include?(move.to_square)
       end
     end
 
     # All moves are to squares with no units
     def are_free_of_units(moves)
       moves.all? do |move|
-        move.to.units.empty?
+        move.to_square.units.empty?
       end
     end
   end
