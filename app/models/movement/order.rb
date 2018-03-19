@@ -45,7 +45,7 @@ module Movement
         break if i == path.length - 1
         from_square = @game.find_square(coords)
         to_square = @game.find_square(path[i + 1])
-        @moves << Move.new(@unit, from_square, to_square)
+        @moves << AtomicMove.new(@unit, from_square, to_square)
       end
     end
 

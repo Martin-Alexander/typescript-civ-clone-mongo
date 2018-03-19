@@ -1,23 +1,19 @@
 module Movement
-  # Represents a move from one square to another
+  # Represents a move by a unit along a given path within a single turn
   class Move
-    attr_reader :unit, :from, :to
+    attr_reader :unit, :coordinate_path
 
-    def initialize(unit, from, to)
+    def initialize(unit, coordinate_path)
       @unit = unit
-      @from = from
-      @to = to
+      @coordinate_path = coordinate_path
+
+      initialize_coordinate_path_as_atomic_move_array
     end
 
-    # TODO: consider whether or not the from and to squares are connected by
-    #       a road
-    def cost
-      if @from.structures.any? { |s| s.type == "road" && s.complete } &&
-         @to.structures.any? { |s| s.type == "road" && s.complete }
-        Rules.move_cost_of_roads
-      else
-        Rules.raw["terrain"][@to.terrain]["move_cost"]
-      end
+    private
+
+    def initialize_coordinate_path_as_atomic_move_array
+      # TODO: Convert each consecutice pair of coordinates into AtomicMoves
     end
   end
 end
