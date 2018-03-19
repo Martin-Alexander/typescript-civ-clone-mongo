@@ -93,24 +93,12 @@ module Movement
 
     # Calculating the move-to square
     def calculate_move_to_square
-      if @immediate_path.any? && @go_to_path.any?
-        @immediate_path.last
-      elsif @immediate_path.any? && @go_to_path.empty?
-        @immediate_path.last
-      else
-        @to_square
-      end
+      @immediate_path.any? ? @immediate_path.last : @to_square
     end
 
     # Calculating the new order
     def calculate_new_order
-      if @immediate_path.any? && @go_to_path.any?
-        "go"
-      elsif @go_to_path.empty?
-        "none"
-      else
-        "go"
-      end
+      @go_to_path.empty? ? "none" : "go"
     end
   end
 end
