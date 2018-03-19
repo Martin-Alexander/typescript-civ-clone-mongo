@@ -1,4 +1,4 @@
-import { AStar } from "./a_star";
+import { AStar } from "./calculations/a_star";
 
 function TotalPathFinder(gameData, unit, coordinatePath) {
   this.gameData       = gameData;
