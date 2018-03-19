@@ -12,8 +12,14 @@ class Rules
       raw
     end
 
+    # Returns the move cost of traverseing between two squares connected by a road
     def move_cost_of_roads
       rules_hash["move_cost_of_roads"]
+    end
+
+    # Given a unit, returns the move cost of moving into a given square    
+    def move_cost_of_square(square, unit = nil)
+      rules_hash["terrain"][square.terrain]["move_cost"]
     end
 
     # Given a unit, the square it one, and the player who owns it: What are it's available orders
