@@ -1,4 +1,4 @@
-import { TurnMoveFinder }        from "./turn_move_finder";
+import { TurnMoveFinder }        from "./calculations/turn_move_finder";
 import { TotalPathFinder }       from "./total_path_finder";
 
 const PathFinder = {};
