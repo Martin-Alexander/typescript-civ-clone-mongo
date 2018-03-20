@@ -13,6 +13,10 @@ module Movement
       connected_by_a_road? ? Rules.move_cost_of_roads : Rules.move_cost_of_square(@to_square)
     end
     
+    def coordinates
+      [{ x: from_square.x, y: from_square.y }, { x: to_square.x, y: to_square.y }]
+    end
+
     private
 
     def connected_by_a_road?

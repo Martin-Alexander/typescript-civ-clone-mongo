@@ -12,6 +12,11 @@ class Rules
       raw
     end
 
+    # Returns the base movement rate of a given unit
+    def base_movement_rate(unit)
+      rules_hash["units"][unit.type]["movement"]["base"]
+    end
+
     # Returns the move cost of traverseing between two squares connected by a road
     def move_cost_of_roads
       rules_hash["move_cost_of_roads"]

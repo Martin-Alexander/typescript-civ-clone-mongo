@@ -39,6 +39,7 @@ class GamesController < ApplicationController
         broadcast({
           type: "piece_move",
           path: move_result[:path],
+          success: move_result[:success],
           moved_unit: move_result[:moved_unit],
           new_squares: move_result[:new_squares]
         })

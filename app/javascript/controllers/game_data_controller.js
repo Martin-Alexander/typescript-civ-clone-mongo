@@ -7,6 +7,8 @@ function GameDataController(gameData, UI, reactController) {
 }
 
 GameDataController.prototype.pieceMove = function(data, animationCallback) {
+  if (!data.success) { return false; }
+
   this.replaceSquare(data.new_squares[0])
   if (data.new_squares[1]) {
     animationCallback(data, () => {

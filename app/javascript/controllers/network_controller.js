@@ -8,6 +8,8 @@ function NetworkController(turnTransitioner, gameDataController, animationContro
 
   App.cable.subscriptions.create({ channel: "GameChannel", room: gameId}, {
     received: (data) => {
+      console.log(data);
+      
       switch (data.type) {
         case "piece_move":
           this.gameDataController.pieceMove(data, this.animationController.pieceMove.bind(this.animationController));

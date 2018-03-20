@@ -13,13 +13,7 @@ module UnitModules
     # Should be only move function
     # TODO: Refactor this abomination
     def move(path)
-      move_path = Movement::Order.new(
-        unit: self,
-        path: path,
-        validations: validations
-      )
-
-      move_path.execute.to_hash
+      Movement::Input.new(self, path, validations).front_end_move_result
     end
   end
 end
