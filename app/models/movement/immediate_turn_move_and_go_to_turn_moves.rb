@@ -65,7 +65,7 @@ module Movement
 
     def add_to_go_to_turn_move(atomic_move)
       @has_ran_out_of_moves = true
-      if create_new_go_to_turn_move?(atomic_move)
+      if can_create_new_go_to_turn_move?(atomic_move)
         @go_to_turn_moves << TurnMove.new(@unit, [atomic_move])
       else
         @go_to_turn_moves.last.add_atomic_move(atomic_move)
@@ -76,7 +76,7 @@ module Movement
       @immediate_turn_move.add_atomic_move(atomic_move)
     end
 
-    def create_new_go_to_turn_move?(atomic_move)
+    def can_create_new_go_to_turn_move?(atomic_move)
       @go_to_turn_moves.empty? || 
       @go_to_turn_moves.last.total_move_cost + atomic_move.cost > Rules.base_movement_rate(@unit)
     end
