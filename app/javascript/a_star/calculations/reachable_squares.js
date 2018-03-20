@@ -19,6 +19,14 @@ ReachableSquares.run = function(squares, unit, square, freshMoves) {
   return new ReachableSquares(aStarSquares, unit, square, freshMoves).find();
 }
 
+ReachableSquares.canReach = function(unit, square) {
+  const squares = square.game.squares;
+  const aStarSquares = new AStarSquareCollection(squares.map(square => new AStarSquare(square)));
+
+  const reachableCoordinates = new ReachableSquares(aStarSquares, unit, square, freshMoves).find();
+  return reachableCoordinates.some(square => square.equalTo(square));
+}
+
 // The heavy lifting happens here
 ReachableSquares.prototype.find = function() {
 
