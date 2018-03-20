@@ -27,6 +27,8 @@ TurnMoveFinder.prototype.find = function() {
 
   this.startSquare.currentPathCost = 0;
 
+  let counter = 0;
+
   while (openedSquares.stillHasSquaresLeft() || this.firstMoveOver === false) {
     openedSquares.huristicSort(this.finishSquare);
 
@@ -45,7 +47,7 @@ TurnMoveFinder.prototype.find = function() {
     const availableMoves = findAvailableMoves(this.unit, this.freshMoves);
 
     reachableSquares.forEach((square) => {
-      if ((currentSquare.equalTo(square) && openedSquares.length == 1) || 
+      if ((currentSquare.equalTo(square) && counter == 0) || 
           (openedSquares.doesNotInclude(square) && closedSquares.doesNotInclude(square))) {
 
         openedSquares.addSquare(square);
@@ -58,6 +60,7 @@ TurnMoveFinder.prototype.find = function() {
       }
     });
 
+    counter++;
     this.freshMoves = true;
   }
 }
