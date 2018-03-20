@@ -70,7 +70,7 @@ AStarSquare.prototype.isUnreachable = function() {
 
 // Returns whether or no two square are connected by a road
 AStarSquare.prototype.isConnectedToByARoad = function(otherSquare) {
-  this.gameSquare.hasCompletedStructure("road") && this.findGameSquare(otherSquare).hasCompletedStructure("road")
+  return this.gameSquare.hasCompletedStructure("road") && this.findGameSquare(otherSquare).hasCompletedStructure("road")
 }
 
 AStarSquare.infinity = () => 9007199254740992;
