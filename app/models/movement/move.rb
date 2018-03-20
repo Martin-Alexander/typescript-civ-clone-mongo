@@ -1,3 +1,5 @@
+# NOT IN USE
+
 module Movement
   # Represents a move by a unit along a given path within a single turn
   class Move

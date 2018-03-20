@@ -1,3 +1,5 @@
+# NOT IN USE
+
 module Movement
   # Represents a users movement command
   class Input
