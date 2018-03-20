@@ -2,6 +2,12 @@ const Rules = {};
 
 Rules.rulesJSON = rulesJSON;
 
+// For a given unit and square returns whether or not the terrain of the square prohibits entery
+Rules.passableTerrain = function(unit, square) {
+  const impassableTerrain = ["mountains", "water"];
+  return !impassableTerrain.includes(square.terrain)
+}
+
 // Given a unit, the square it one, and the player who owns it: What are it's available orders
 Rules.ordersForUnit = function(unit, square = null, player = null) {
   switch(unit.type) {
