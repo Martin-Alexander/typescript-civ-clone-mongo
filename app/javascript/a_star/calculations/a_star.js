@@ -16,7 +16,7 @@ AStar.prototype.find = function() {
   // has the same destination and origin (i.e., there is no actual move), then the finish square
   // contains the unit that is doing the movement. So, in this case, we want to avoid returning an
   // empty path
-  if (this.finishSquare.isUnreachable() && !this.startSquare.equalTo(this.finishSquare)) { return []; }
+  if (this.finishSquare.isUnsuitableForPathfinding(this.unit) && !this.startSquare.equalTo(this.finishSquare)) { return []; }
 
   // Represents all squares connected to our exploration network, but have get to be full explored
   const openedSquares = new AStarSquareCollection([this.startSquare]);

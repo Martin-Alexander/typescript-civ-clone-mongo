@@ -28,6 +28,12 @@ AStarSquare.prototype.findGameSquare = function(square) {
   }
 }
 
+// Returns whether or not a given square is a valid pathfinding destination
+// For now it will just be a matter of terrain until non-move pathfinding is implemented (i.e., attcking and merging)
+AStarSquare.prototype.isUnsuitableForPathfinding = function(unit) {
+  return !Rules.passableTerrain(unit, this.gameSquare);
+}
+
 // Returns whether or not a given square has the same coordinates
 // Workds with any object that has an `x` and `y` property
 AStarSquare.prototype.equalTo = function(otherSquare) {
@@ -41,7 +47,7 @@ AStarSquare.prototype.moveCost = function(unit, fromSquare) {
     return unit.moves;
 
   // You cannot move to an unreachable square
-  } else if (this.isUnreachable()) {
+  } else if (this.isUnsuitableForPathfinding(unit)) {
     return AStarSquare.infinity();
 
   // Is connected to the from square by a road
@@ -60,13 +66,14 @@ AStarSquare.prototype.distanceToSquare = function(square) {
 
 // Returns whether or not the given square is unreachable
 // Returns false negatives
-AStarSquare.prototype.isUnreachable = function() {
-  return(
-    this.gameSquare.terrain === "mountains" ||
-    this.gameSquare.terrain === "water" ||
-    this.gameSquare.units.length !== 0
-  );
-}
+// REPLACED WITH `AStarSquare.prototype.isUnsuitableForPathfinding`
+// AStarSquare.prototype.isUnreachable = function() {
+//   return(
+//     this.gameSquare.terrain === "mountains" ||
+//     this.gameSquare.terrain === "water" ||
+//     this.gameSquare.units.length !== 0
+//   );
+// }
 
 // Returns whether or no two square are connected by a road
 AStarSquare.prototype.isConnectedToByARoad = function(otherSquare) {

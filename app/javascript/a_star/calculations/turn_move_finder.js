@@ -20,7 +20,7 @@ TurnMoveFinder.run = function(squares, unit, finishSquare) {
 }
 
 TurnMoveFinder.prototype.find = function() {
-  if (this.finishSquare.isUnreachable()) { return []; }
+  if (this.finishSquare.isUnsuitableForPathfinding(this.unti)) { return []; }
 
   const closedSquares = new AStarSquareCollection();
   const openedSquares = new AStarSquareCollection([this.startSquare]);
