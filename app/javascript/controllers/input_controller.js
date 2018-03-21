@@ -73,6 +73,9 @@ InputController.prototype.moveUnit = function() {
   if (!this.UI.selection.unit) { return false; }
   if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
+  // STARTING HERE
+  // This should probably all be handled by the new unit orders controller
+
   if (this.UI.selection.square && this.UI.currentPath.length > 1) { 
     this.networkController.pieceMove({
       unit: this.UI.selection.unit.id,
@@ -87,6 +90,7 @@ InputController.prototype.moveUnit = function() {
   }
 
   this.reactController.updateUI(this.UI);
+  // AND FINISHING HERE
 };
 
 InputController.prototype.drawPathLine = function() {
