@@ -7,7 +7,7 @@ function Renderer(UI, gameData, parentElement) {
   this.animations = [];
 }
 
-Renderer.prototype.run = function() {
+Renderer.prototype.initialize = function() {
   [this.canvas, this.context] = this.initializeCanvasContext();
 
   const self = this;

@@ -1,12 +1,13 @@
-import { ReachableSquares } from "./../a_star/calculations/reachable_squares";
-import { PathFinder }       from "./../a_star/path_finder";
-import { AStar }            from "./../a_star/calculations/a_star";
+import { ReachableSquares } from "./../services/a_star/calculations/reachable_squares";
+import { PathFinder }       from "./../services/a_star/path_finder";
+import { AStar }            from "./../services/a_star/calculations/a_star";
 
-function InputController(UI, gameData, networkController, reactController) {
-  this.UI = UI;
-  this.gameData = gameData;
-  this.networkController = networkController;
-  this.reactController = reactController;
+function InputController(UI, gameData, networkController, reactController, unitsController) {
+  this.UI                   = UI;
+  this.gameData             = gameData;
+  this.networkController    = networkController;
+  this.reactController      = reactController;
+  this.unitsController = unitsController
 }
 
 InputController.prototype.setTileMousePosition = function(squareCoordinates) {
@@ -73,24 +74,9 @@ InputController.prototype.moveUnit = function() {
   if (!this.UI.selection.unit) { return false; }
   if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
 
-  // STARTING HERE
-  // This should probably all be handled by the new unit orders controller
-
-  if (this.UI.selection.square && this.UI.currentPath.length > 1) { 
-    this.networkController.pieceMove({
-      unit: this.UI.selection.unit.id,
-      path: this.UI.currentPath
-    });
-
-    this.UI.selection.structure = null;
-    this.UI.selection.square = null;
-    this.UI.selection.unit = null;
-    this.UI.currentPath = null;
-    this.UI.reachableSquares= null;
-  }
+  this.unitsController.move();
 
   this.reactController.updateUI(this.UI);
-  // AND FINISHING HERE
 };
 
 InputController.prototype.drawPathLine = function() {

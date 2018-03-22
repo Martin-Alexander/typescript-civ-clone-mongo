@@ -1,6 +1,3 @@
-/*global App*/
-/*global gameId*/
-
 function NetworkController(turnTransitioner, gameDataController, animationController) {
   this.turnTransitioner = turnTransitioner;
   this.gameDataController = gameDataController;

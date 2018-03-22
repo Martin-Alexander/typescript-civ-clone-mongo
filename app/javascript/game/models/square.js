@@ -1,4 +1,4 @@
-import { Unit } from "./unit";
+import { Unit }      from "./unit";
 import { Structure } from "./structure";
 
 function Square(rawSquareObject) {

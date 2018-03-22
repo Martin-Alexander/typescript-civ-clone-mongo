@@ -1,4 +1,4 @@
-import { Square } from "./../models/square";
+import { Square } from "./models/square";
 
 function GameData(UI, rawGameData) {
   this.UI = UI;
