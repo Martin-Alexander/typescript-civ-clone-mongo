@@ -7,7 +7,7 @@ function TurnMoveFinder(gameData, unit, finishSquare) {
   this.gameData      = gameData;
   this.unit          = unit;
   this.startSquare   = new AStarSquare(this.unit.square);
-  this.finishSquare  = new AStarSquare(finishSquare);
+  this.finishSquare  = new AStarSquare(finishSquare, true);
   this.freshMoves    = this.unit.moves === 0;
   this.firstMoveOver = false;
   this.squares       = new AStarSquareCollection(
@@ -41,7 +41,8 @@ TurnMoveFinder.prototype.find = function() {
       this.gameData.squares,
       this.unit,
       currentSquare,
-      this.freshMoves
+      this.freshMoves,
+      this.finishSquare
     )
 
     const availableMoves = findAvailableMoves(this.unit, this.freshMoves);
@@ -65,8 +66,8 @@ TurnMoveFinder.prototype.find = function() {
   }
 }
 
-TurnMoveFinder.prototype.getReachableSquares = function(squares, unit, currentSquare, freshMoves) {
-  const neighbourCoordinates = ReachableSquares.run(squares, unit, currentSquare, freshMoves);
+TurnMoveFinder.prototype.getReachableSquares = function(squares, unit, currentSquare, freshMoves, finishSquare) {
+  const neighbourCoordinates = ReachableSquares.run(squares, unit, currentSquare, freshMoves, finishSquare);
 
   return neighbourCoordinates.map((coordinates) => { 
     const square = this.squares.findSquare(coordinates.x, coordinates.y);

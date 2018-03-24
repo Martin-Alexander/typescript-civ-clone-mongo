@@ -1,3 +1,5 @@
+import { AStarSquare } from "./a_star_square";
+
 // Represents a collection of AStarSquares
 function AStarSquareCollection(seedArray) {
   const array = seedArray ? seedArray : [];
@@ -6,6 +8,12 @@ function AStarSquareCollection(seedArray) {
   array.size = Math.sqrt(array.length) - 1;
   
   return array;
+}
+
+AStarSquareCollection.generateFromGameSquares = function(gameSquares, finishSquare = false) {
+  return new AStarSquareCollection(gameSquares.map((square) => {
+    return new AStarSquare(square, (finishSquare && finishSquare.equalTo(square)));
+  }));  
 }
 
 // For Delegating all array methods to the array of AStarSquares contained within it

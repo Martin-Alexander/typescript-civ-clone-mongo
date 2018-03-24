@@ -14,8 +14,8 @@ function ReachableSquares(squares, unit, startSquare, freshMoves) {
 
 // ReachableSquares is used by calling the method `run` which takes in an array of game squares,
 // converts them into a grid of AStarSquares, and returns all reachable squares of a given unit
-ReachableSquares.run = function(squares, unit, square, freshMoves) {
-  const aStarSquares = new AStarSquareCollection(squares.map(square => new AStarSquare(square)));
+ReachableSquares.run = function(squares, unit, square, freshMoves, finishSquare = null) {
+  const aStarSquares = AStarSquareCollection.generateFromGameSquares(squares, finishSquare);
   return new ReachableSquares(aStarSquares, unit, square, freshMoves).find();
 }
 

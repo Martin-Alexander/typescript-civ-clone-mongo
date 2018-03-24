@@ -6,9 +6,9 @@ import { AStarSquare }           from "./../a_star_square";
 // squares. It is only used to connect "turn-moves".
 function AStar(squares, unit, startSquare, finishSquare) {
   this.unit         = unit;
+  this.squares      = AStarSquareCollection.generateFromGameSquares(squares, finishSquare);
   this.startSquare  = new AStarSquare(startSquare);
-  this.finishSquare = new AStarSquare(finishSquare);
-  this.squares      = new AStarSquareCollection(squares.map(square => new AStarSquare(square)));
+  this.finishSquare = new AStarSquare(finishSquare, true);
 }
 
 AStar.prototype.find = function() {

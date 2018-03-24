@@ -1,10 +1,11 @@
-function AStarSquare(gameSquare) {
-  this.gameSquare      = this.findGameSquare(gameSquare);
-  this.x               = gameSquare.x;
-  this.y               = gameSquare.y;
-  this.pathVia         = null;
-  this.moveToCost      = null;
-  this.currentPathCost = AStarSquare.infinity();
+function AStarSquare(gameSquare, isDestinationSquare = false) {
+  this.x                   = gameSquare.x;
+  this.y                   = gameSquare.y;
+  this.pathVia             = null;
+  this.gameSquare          = this.findGameSquare(gameSquare);
+  this.moveToCost          = null;
+  this.currentPathCost     = AStarSquare.infinity();
+  this.isDestinationSquare = isDestinationSquare
 }
 
 // The method that AStarCollection uses to make the AStar sort
@@ -31,7 +32,11 @@ AStarSquare.prototype.findGameSquare = function(square) {
 // Returns whether or not a given square is a valid pathfinding destination
 // For now it will just be a matter of terrain until non-move pathfinding is implemented (i.e., attcking and merging)
 AStarSquare.prototype.isUnsuitableForPathfinding = function(unit) {
-  return !Rules.passableTerrain(unit, this.gameSquare);
+  return !Rules.passableTerrain(unit, this.gameSquare) || !this.isFreeOfUnitsOrIsTheDestinationSquare();
+}
+
+AStarSquare.prototype.isFreeOfUnitsOrIsTheDestinationSquare = function() {
+  return this.gameSquare.units.length === 0 || this.isDestinationSquare;
 }
 
 // Returns whether or not a given square has the same coordinates
