@@ -192,11 +192,12 @@ InputController.prototype._selectStructure = function(selectedSquare) {
 }
 
 InputController.prototype._findReachableSquares = function() {
-  const reachableSquares = ReachableSquares.run(
-    this.gameData.squares,
-    this.UI.selection.unit, 
-    this.UI.selection.square
-  );
+  const reachableSquares = ReachableSquares.run({
+    squares: this.gameData.squares,
+    unit: this.UI.selection.unit,
+    startSquare: this.UI.selection.square,
+    allSquaresAreDestinations: true
+  });
   return reachableSquares.map(squareCooridinates => gameData.findSquare(squareCooridinates));
 }
 

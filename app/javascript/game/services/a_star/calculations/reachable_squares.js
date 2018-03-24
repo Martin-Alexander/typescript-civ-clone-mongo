@@ -14,9 +14,10 @@ function ReachableSquares(squares, unit, startSquare, freshMoves) {
 
 // ReachableSquares is used by calling the method `run` which takes in an array of game squares,
 // converts them into a grid of AStarSquares, and returns all reachable squares of a given unit
-ReachableSquares.run = function(squares, unit, square, freshMoves, finishSquare = null) {
-  const aStarSquares = AStarSquareCollection.generateFromGameSquares(squares, finishSquare);
-  return new ReachableSquares(aStarSquares, unit, square, freshMoves).find();
+// squares :gameData.squares, unit :unit, startSquare :aStarSquare, freshMoves :bool, finishSquare :bool, allSquaresAreDestinations :bool
+ReachableSquares.run = function(params) {
+  const aStarSquares = AStarSquareCollection.generateFromGameSquares(params.squares, params.finishSquare, params.allSquaresAreDestinations);
+  return new ReachableSquares(aStarSquares, params.unit, params.startSquare, params.freshMoves).find();
 }
 
 // The heavy lifting happens here

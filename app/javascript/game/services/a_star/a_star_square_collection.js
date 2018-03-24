@@ -10,9 +10,9 @@ function AStarSquareCollection(seedArray) {
   return array;
 }
 
-AStarSquareCollection.generateFromGameSquares = function(gameSquares, finishSquare = false) {
+AStarSquareCollection.generateFromGameSquares = function(gameSquares, finishSquare = false, allSquaresAreDestinations = false) {
   return new AStarSquareCollection(gameSquares.map((square) => {
-    return new AStarSquare(square, (finishSquare && finishSquare.equalTo(square)));
+    return new AStarSquare(square, ((finishSquare && finishSquare.equalTo(square)) || allSquaresAreDestinations));
   }));  
 }
 

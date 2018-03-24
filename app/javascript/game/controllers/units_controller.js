@@ -11,7 +11,8 @@ UnitsController.prototype.move = function() {
   if (this.UI.currentPath.length > 1) { 
     this.networkController.pieceMove({
       unit: this.UI.selection.unit.id,
-      path: this.UI.currentPath
+      path: this.UI.currentPath,
+      moveType: this.calculateMoveType()
     });
 
     this.UI.selection.structure = null;
@@ -20,6 +21,19 @@ UnitsController.prototype.move = function() {
     this.UI.currentPath = null;
     this.UI.reachableSquares= null;
   }  
+}
+
+UnitsController.prototype.calculateMoveType = function() {
+  const destinationSquare = gameData.findSquare(this.UI.currentPath[this.UI.currentPath.length - 1]);
+  if (this.destinationIsImmediatelyReachable(destinationSquare) && destinationSquare.units[0]) {
+    return "attack";
+  } else {
+    return "move";
+  }
+}
+
+UnitsController.prototype.destinationIsImmediatelyReachable = function(destinationSquare) {
+  return this.UI.reachableSquares.includes(destinationSquare);
 }
 
 UnitsController.prototype.order = function() {

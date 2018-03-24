@@ -67,7 +67,13 @@ TurnMoveFinder.prototype.find = function() {
 }
 
 TurnMoveFinder.prototype.getReachableSquares = function(squares, unit, currentSquare, freshMoves, finishSquare) {
-  const neighbourCoordinates = ReachableSquares.run(squares, unit, currentSquare, freshMoves, finishSquare);
+  const neighbourCoordinates = ReachableSquares.run({
+    squares: squares,
+    unit: unit,
+    startSquare: currentSquare,
+    freshMoves: freshMoves,
+    finishSquare: finishSquare
+  });
 
   return neighbourCoordinates.map((coordinates) => { 
     const square = this.squares.findSquare(coordinates.x, coordinates.y);
