@@ -33,6 +33,7 @@ module Merging
     def execute
       target_unit = to_square.send(@unit.type.pluralize.to_sym).first
       target_unit.strength += @unit.strength
+      target_unit.moves = [target_unit.moves, @unit.moves].min
       target_unit.save
       @unit.delete
     end
