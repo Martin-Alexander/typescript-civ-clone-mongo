@@ -7,6 +7,7 @@ class Player
   field :role, type: String, default: "player"
   field :host, type: Boolean, default: false
   field :raw_user_id, type: String
+  field :username
 
   validates :role, inclusion: { in: ["player", "dead_player", "observer"] }
   # validates :user, uniqueness: { scope: :game }

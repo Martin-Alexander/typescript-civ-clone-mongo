@@ -104,7 +104,7 @@ class User
 
   # Creates a new player for a given game
   def join_game(game)
-    Player.create!(user: self, game: game) 
+    Player.create!(user: self, game: game, username: username) 
   end
 
   # Changes player role to 'dead_player'
