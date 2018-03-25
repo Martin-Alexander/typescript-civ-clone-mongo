@@ -47,23 +47,23 @@ units:
       - build_road
       # - build_fortress
       # - build_farm
-  # tank:
-  #   movement: 
-  #     base: 2
-  #     penalty_terrain: 
-  #       marsh: null
-  #       forest: 4
-  #   allowed_orders:
-  #     - none
-  #     - go
-  #     - fortify
-      # - siege
-  # ship:
-  #   movement:
-  #     base: 6
-  #   allowed_orders:
-  #     - none
-  #     - go
+  tank:
+    movement: 
+      base: 2
+      penalty_terrain: 
+        marsh: null
+        forest: 4
+    allowed_orders:
+      - none
+      - go
+      - fortify
+      - siege
+  ship:
+    movement:
+      base: 6
+    allowed_orders:
+      - none
+      - go
 terrain:
   grass:
     type: land
