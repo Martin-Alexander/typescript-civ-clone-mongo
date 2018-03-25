@@ -9,7 +9,7 @@ class PagesController < ApplicationController
     redirect_to home_path unless current_user.lobby
     @lobby = Game.find(params[:id])
     @players = @lobby.players.sort_by { |player| player.host ? 0 : 1 }
-    @current_player = Player.where(game: @lobby, user: current_user).first
+    @current_player = @lobby.players.to_a.find { |player| player.user == current_user }
   end
 
   def game
