@@ -29,21 +29,10 @@ class GamesController < ApplicationController
 
   def piece_move
     @path = @permitted_params[:data][:path]
-
     @unit = @game.find_square(@path[0]).units.find(BSON::ObjectId.from_string(@permitted_params[:data][:unit])).first
 
     if @game.players.to_a.find { |player| player.number == @unit.player_number }.user_id == current_user.id
-      if params[:data][:moveType] == "move"
-        move_result = @unit.move(@path)
-      elsif params[:data][:moveType] == "merge"
-        move_result = @unit.merge(@path)
-      elsif params[:data][:moveType] == "attack"
-        respond_with_failure
-        return false
-      else
-        respond_with_failure
-        return false
-      end
+      move_result = @unit.move(@path)
       
       if move_result[:success]
         broadcast({
@@ -56,6 +45,25 @@ class GamesController < ApplicationController
       end
     end
     respond_with_success
+  end
+
+  def piece_merge
+    @path = @permitted_params[:data][:path]
+    @unit = @game.find_square(@path[0]).units.find(BSON::ObjectId.from_string(@permitted_params[:data][:unit])).first
+    if @game.players.to_a.find { |player| player.number == @unit.player_number }.user_id == current_user.id
+      merge_result = @unit.merge(@path)
+
+      if merge_result[:success]
+        broadcast({
+          type: "piece_merge",
+          path: merge_result[:path],
+          success: merge_result[:success],
+          moved_unit: merge_result[:moved_unit],
+          new_squares: merge_result[:new_squares]
+        })
+      end
+    end
+    respond_with_success      
   end
 
   def next_turn

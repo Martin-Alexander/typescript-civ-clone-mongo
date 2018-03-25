@@ -9,6 +9,9 @@ function NetworkController(turnTransitioner, gameDataController, animationContro
         case "piece_move":
           this.gameDataController.pieceMove(data, this.animationController.pieceMove.bind(this.animationController));
           break;
+        case "piece_merge":
+          this.gameDataController.pieceMove(data, this.animationController.pieceMove.bind(this.animationController));
+          break;          
         case "next_turn":
           this.turnTransitioner.begin();
           data.move_animations.forEach((moveAnimation) => {
@@ -32,6 +35,13 @@ function NetworkController(turnTransitioner, gameDataController, animationContro
 NetworkController.prototype.pieceMove = function(pieceMoveData) {
   const payload = { method: "piece_move" };
   payload.data = pieceMoveData;
+
+  this.send(payload);
+}
+
+NetworkController.prototype.pieceMerge = function(pieceMergeData) {
+  const payload = { method: "piece_merge" };
+  payload.data = pieceMergeData;
 
   this.send(payload);
 }

@@ -9,13 +9,9 @@ function UnitsController(UI, gameData, networkController) {
 
 UnitsController.prototype.move = function() {
   this.destinationSquare = gameData.findSquare(this.UI.currentPath[this.UI.currentPath.length - 1]);
-  
+
   if (this.UI.currentPath.length > 1) { 
-    this.networkController.pieceMove({
-      unit: this.UI.selection.unit.id,
-      path: this.UI.currentPath,
-      moveType: this.calculateMoveType()
-    });
+    this.determineAndSendUnitCommand();
 
     this.UI.selection.structure = null;
     this.UI.selection.square = null;
@@ -25,12 +21,26 @@ UnitsController.prototype.move = function() {
   }  
 }
 
-UnitsController.prototype.calculateMoveType = function() {
+UnitsController.prototype.determineAndSendUnitCommand = function() {
   if (this.allowedToMerge()) {
-    return "merge";
+    this.pieceMerge();
   } else {
-    return "move";
+    this.pieceMove();
   }
+}
+
+UnitsController.prototype.pieceMove = function() {
+  this.networkController.pieceMove({
+    unit: this.UI.selection.unit.id,
+    path: this.UI.currentPath,
+  });  
+}
+
+UnitsController.prototype.pieceMerge = function() {
+  this.networkController.pieceMerge({
+    unit: this.UI.selection.unit.id,
+    path: this.UI.currentPath,
+  });  
 }
 
 UnitsController.prototype.destinationIsImmediatelyReachable = function() {
