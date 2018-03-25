@@ -1,5 +1,9 @@
 module Unit
   class Worker < Base
+    def combat?
+      false
+    end
+
     # Creates a structure object in the workers square
     def create_structure(structure_name)
       square.create_structure(structure_name, player_number: player_number)
