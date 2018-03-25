@@ -77,7 +77,13 @@ Renderer.prototype.drawSquare = function(square) {
     ((square.y + square.x) * UI.tileHeight / 2) + UI.offset.y + ((canvas.height - 15 * UI.tileHeight) / 2)
   );
   square.render(context, UI);
-  if (square.structures[0]) { square.structures[0].render(context, UI); }
+  if (square.structures[0]) { 
+    if (square.hasStructure("city")) {
+      square.getStructure("city").render(context, UI);
+    } else {
+      square.structures[0].render(context, UI);
+    }
+  }
   if (UI.selection.square == square && UI.selection.unit)
     UI.selection.unit.render(context, UI);
   else if (square.units[0]) {

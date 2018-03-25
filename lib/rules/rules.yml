@@ -1,5 +1,6 @@
-supply_per_city_size: 5
-production_levels: 5
+supply_per_city_size: 2
+production_levels: 2
+turns_for_growth: 4
 min_city_distance: 4
 space_per_player: 500
 move_cost_of_roads: 0.25

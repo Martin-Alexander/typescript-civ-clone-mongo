@@ -5,6 +5,10 @@ module Unit
 
     def combat?
       true
-    end    
+    end
+
+    def supply_cost
+      strength
+    end
   end
 end

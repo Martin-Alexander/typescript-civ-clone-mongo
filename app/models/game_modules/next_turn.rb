@@ -78,7 +78,7 @@ module GameModules
 
       # Calculates each players growth
       def growth
-        if @game.turn % 2 == 0
+        if @game.turn % Rules.raw["turns_for_growth"] == 0
           @player_resources.each { |player_resource| player_resource.growth += 1 }
         end
       end
@@ -92,7 +92,7 @@ module GameModules
           # else
           #   player_resources.military_count += 1
           # end
-          player_resources.unit_count += 1
+          player_resources.unit_count += unit.supply_cost
         end
       end
 

@@ -1,5 +1,9 @@
 module Unit
   class Worker < Base
+    def supply_cost
+      1
+    end
+
     def combat?
       false
     end

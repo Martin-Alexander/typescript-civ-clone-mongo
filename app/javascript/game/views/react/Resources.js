@@ -8,10 +8,10 @@ export default class Resources extends React.Component {
 
     return(
       <div style={resourcesStyle}>
-        <span>Military: {this.props.militaryCount} </span>
-        <span>Civilian: {this.props.civilianCount} </span>
-        <span>Supply: {this.props.supply} </span>
-        <span>Growth: {this.props.growth}</span>
+        <span>Military: <strong>{this.props.militaryCount}</strong> </span>
+        {/*<span>Civilian: {this.props.civilianCount} </span>*/}
+        <span>Supply: <strong>{this.props.supply}</strong> </span>
+        <span>Growth: <strong>{this.props.growth}</strong> </span>
       </div>
     );
   }
