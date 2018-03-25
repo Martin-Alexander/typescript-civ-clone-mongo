@@ -34,7 +34,8 @@ module GameModules
         host: player[:host],
         role: player[:role],
         turn_over: player[:turn_over],
-        current_player: false
+        current_player: false,
+        username: player[:username]
       }
     end
   end

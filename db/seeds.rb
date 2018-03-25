@@ -53,12 +53,12 @@ else
   seed_task "Creating #{$number_of_players} player(s)" do
     players = []
 
-    players << Player.new(user: $martin)
-    players << Player.new(user: $player_two)
-    players << Player.new(user: $player_three)
-    players << Player.new(user: $player_four)
-    players << Player.new(user: $player_five)
-    players << Player.new(user: $player_six)
+    players << Player.new(user: $martin, username: $martin.username)
+    players << Player.new(user: $player_two, username: $player_two.username)
+    players << Player.new(user: $player_three, username: $player_three.username)
+    players << Player.new(user: $player_four, username: $player_four.username)
+    players << Player.new(user: $player_five, username: $player_five.username)
+    players << Player.new(user: $player_six, username: $player_six.username)
 
     if $number_of_players > players.length || $number_of_players < 1
       raise SeedError::InvalidOptionError, "Invalid number of players: #{$number_of_players}"
