@@ -10,6 +10,9 @@ function Renderer(UI, gameData, parentElement) {
 Renderer.prototype.initialize = function() {
   [this.canvas, this.context] = this.initializeCanvasContext();
 
+  this.UI.canvas = this.canvas;
+  this.UI.context = this.context;
+
   const self = this;
 
   window.setInterval(function() {

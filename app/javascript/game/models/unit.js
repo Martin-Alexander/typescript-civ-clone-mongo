@@ -41,6 +41,15 @@ Unit.prototype.render = function(context, UI) {
   context.ellipse(0, UI.tileHeight / 2, UI.tileWidth / 4, UI.tileHeight / 4, 0, Math.PI * 0.25, Math.PI * 1.25);
   context.fillStyle = this.typeColor();
   context.fill();
+  this.drawStrength(context, UI)
+}
+
+Unit.prototype.drawStrength = function(context, UI) {
+  if (this.type === "worker") return false;
+  context.font = `${(UI.tileHeight / 2)}px sans-serif`;
+  context.fillStyle = "white";
+  context.allignText = "center";
+  context.fillText(`${this.strength}`, -(UI.tileHeight / 7), UI.tileHeight * 0.65);
 }
 
 export { Unit };
