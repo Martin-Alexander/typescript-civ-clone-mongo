@@ -9,7 +9,7 @@ module Movement
       @path = coordinate_path
       @validations = validations
 
-      @atomic_moves = create_array_of_atomic_moves
+      @atomic_moves = TurnMoveBuilder.build(@path, @unit, game)
 
       build_immediate_turn_move_and_go_to_turn_moves
       validate_immediate_turn_move
@@ -20,7 +20,7 @@ module Movement
     def validate_immediate_turn_move
       @success = @validations.all? do |validation|
         @unit.send(validation, @immediate_turn_move.atomic_moves)
-      end   
+      end
     end
     
     # Updated database
@@ -62,14 +62,6 @@ module Movement
     
     def game
       @unit.square.game
-    end
-
-    def create_array_of_atomic_moves
-      @path.each_cons(2).map do |coordinate_pair|
-        from_square = game.find_square(coordinate_pair.first)
-        to_square = game.find_square(coordinate_pair.last)
-        AtomicMove.new(@unit, from_square, to_square)
-      end
     end
     
     def build_immediate_turn_move_and_go_to_turn_moves

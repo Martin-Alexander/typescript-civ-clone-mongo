@@ -33,7 +33,17 @@ class GamesController < ApplicationController
     @unit = @game.find_square(@path[0]).units.find(BSON::ObjectId.from_string(@permitted_params[:data][:unit])).first
 
     if @game.players.to_a.find { |player| player.number == @unit.player_number }.user_id == current_user.id
-      move_result = @unit.move(@path)
+      if params[:data][:moveType] == "move"
+        move_result = @unit.move(@path)
+      elsif params[:data][:moveType] == "merge"
+        move_result = @unit.merge(@path)
+      elsif params[:data][:moveType] == "attack"
+        respond_with_failure
+        return false
+      else
+        respond_with_failure
+        return false
+      end
       
       if move_result[:success]
         broadcast({

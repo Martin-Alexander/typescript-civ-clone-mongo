@@ -4,7 +4,7 @@ module Unit
     include CivCloneMongoModel
     
     include UnitModules::Moving
-    include UnitModules::MoveValidations
+    include UnitModules::Validations
     include UnitModules::Orders
 
     embedded_in :square, class_name: "Square::Global"

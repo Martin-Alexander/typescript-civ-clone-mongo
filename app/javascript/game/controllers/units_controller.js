@@ -8,6 +8,8 @@ function UnitsController(UI, gameData, networkController) {
 }
 
 UnitsController.prototype.move = function() {
+  this.destinationSquare = gameData.findSquare(this.UI.currentPath[this.UI.currentPath.length - 1]);
+  
   if (this.UI.currentPath.length > 1) { 
     this.networkController.pieceMove({
       unit: this.UI.selection.unit.id,
@@ -24,16 +26,22 @@ UnitsController.prototype.move = function() {
 }
 
 UnitsController.prototype.calculateMoveType = function() {
-  const destinationSquare = gameData.findSquare(this.UI.currentPath[this.UI.currentPath.length - 1]);
-  if (this.destinationIsImmediatelyReachable(destinationSquare) && destinationSquare.units[0]) {
-    return "attack";
+  if (this.allowedToMerge()) {
+    return "merge";
   } else {
     return "move";
   }
 }
 
-UnitsController.prototype.destinationIsImmediatelyReachable = function(destinationSquare) {
-  return this.UI.reachableSquares.includes(destinationSquare);
+UnitsController.prototype.destinationIsImmediatelyReachable = function() {
+  return this.UI.reachableSquares.includes(this.destinationSquare);
+}
+
+UnitsController.prototype.allowedToMerge = function() {
+  return this.destinationIsImmediatelyReachable(this.destinationSquare) && 
+  this.destinationSquare.units[0] &&
+  this.UI.selection.unit.type !== "worker" &&
+  this.destinationSquare.units[0].player_number == this.UI.selection.unit.player_number;
 }
 
 UnitsController.prototype.order = function() {
