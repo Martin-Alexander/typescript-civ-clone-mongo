@@ -199,8 +199,7 @@ InputController.prototype._findReachableSquares = function() {
   const reachableSquares = ReachableSquares.run({
     squares: this.gameData.squares,
     unit: this.UI.selection.unit,
-    startSquare: this.UI.selection.square,
-    allSquaresAreDestinations: true
+    startSquare: this.UI.selection.square
   });
   return reachableSquares.map(squareCooridinates => gameData.findSquare(squareCooridinates));
 }
