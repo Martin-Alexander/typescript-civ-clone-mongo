@@ -21,6 +21,9 @@ UserInterface.prototype.clearAllSelection = function() {
     unit: null,
     structure: null
   };
+
+  this.currentPath = null;
+  this.reachableSquares = null;
 }
 
 export { UserInterface };

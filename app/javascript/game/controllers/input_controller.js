@@ -73,6 +73,10 @@ InputController.prototype.moveUnit = function() {
   if (!this._authorized("moveUnit")) { return false; }
   if (!this.UI.selection.unit) { return false; }
   if (!this.UI.selection.square.isOwnedBy(this.gameData.getCurrentPlayer())) { return false; }
+  if (this.UI.selection.square.equalTo(this.UI.tileMousePosition)) { 
+    this.UI.clearAllSelection();
+    return false;
+  }
 
   this.unitsController.move();
 
