@@ -57,9 +57,17 @@ UnitsController.prototype.destinationIsImmediatelyReachable = function() {
 
 UnitsController.prototype.allowedToMerge = function() {
   return this.destinationIsImmediatelyReachable(this.destinationSquare) && 
-  this.destinationSquare.units[0] &&
-  this.UI.selection.unit.type !== "worker" &&
-  this.destinationSquare.units[0].player_number == this.UI.selection.unit.player_number;
+  this.destinationSquare.hasMilitaryUnit() &&
+  this.areOwnedBySamePlayer(this.destinationSquare.getMilitaryUnit(), this.UI.selection.unit) &&
+  this.areTheSameUnit(this.destinationSquare.getMilitaryUnit(), this.UI.selection.unit);
+}
+
+UnitsController.prototype.areOwnedBySamePlayer = function(firstUnit, secondUnit) {
+  return firstUnit.player_number === secondUnit.player_number;
+}
+
+UnitsController.prototype.areTheSameUnit = function (firstUnit, secondUnit) {
+  return firstUnit.type === secondUnit.type;
 }
 
 UnitsController.prototype.order = function() {
