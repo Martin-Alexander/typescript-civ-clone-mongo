@@ -2,7 +2,7 @@ function UserInterface() {
   this.tileHeight = 40;
   this.tileWidth = 80;
   this.offset = { x: 0, y: 0 };
-  this.tileMousePosition = {};
+  this.tileMousePosition = { x: 0, y: 0 };
   this.selection = {
     square: null,
     unit: null,
