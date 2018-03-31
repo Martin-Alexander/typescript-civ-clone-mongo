@@ -84,7 +84,6 @@ Square.prototype.render = function(context, UI) {
   }
 }
 
-
 Square.prototype.hasStructure = function(structureName) {
   for (let i = 0; i < this.structures.length; i++) {
     const structure = this.structures[i];
@@ -106,6 +105,22 @@ Square.prototype.getStructure = function(structureName) {
   }
 
   return false;
+}
+
+Square.prototype.getMilitaryUnit = function() {
+  return this.units.find(unit => unit.type !== "worker");
+}
+
+Square.prototype.getCivilianUnit = function() {
+  return this.units.find(unit => unit.type === "worker");
+}
+
+Square.prototype.hasMilitaryUnit = function() {
+  return this.units.some(unit => unit.type !== "worker");
+}
+
+Square.prototype.hasCivilianUnit = function() {
+  return this.units.some(unit => unit.type === "worker");
 }
 
 export { Square };
